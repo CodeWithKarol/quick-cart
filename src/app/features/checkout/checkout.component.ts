@@ -7,7 +7,7 @@ import { CartService } from '../../core/services/cart.service';
 @Component({
   selector: 'app-checkout',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [CommonModule, ReactiveFormsModule],
   template: `
     <div class="bg-gray-50 min-h-screen pb-24 pt-16">
       <div class="mx-auto max-w-2xl px-4 pt-16 pb-24 sm:px-6 lg:max-w-7xl lg:px-8">
@@ -81,21 +81,44 @@ import { CartService } from '../../core/services/cart.service';
                       <label for="email-address" class="block text-sm font-medium text-gray-700"
                         >Email address</label
                       >
-                      <div class="mt-1">
+                      <div class="relative mt-1 rounded-md shadow-sm">
+                        <div
+                          class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
+                        >
+                          <svg
+                            class="h-5 w-5 text-gray-400"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                            aria-hidden="true"
+                          >
+                            <path
+                              d="M3 4a2 2 0 00-2 2v1.161l8.441 4.221a1.25 1.25 0 001.118 0L19 7.162V6a2 2 0 00-2-2H3z"
+                            />
+                            <path
+                              d="M19 8.839l-7.77 3.885a2.75 2.75 0 01-2.46 0L1 8.839V14a2 2 0 002 2h14a2 2 0 002-2V8.839z"
+                            />
+                          </svg>
+                        </div>
                         <input
                           type="email"
                           id="email-address"
                           formControlName="email"
-                          class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                          [class.border-red-300]="
+                          class="block w-full rounded-md border-0 py-1.5 pl-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                          [class.ring-red-300]="
+                            checkoutForm.get('email')?.touched && checkoutForm.get('email')?.invalid
+                          "
+                          [class.text-red-900]="
+                            checkoutForm.get('email')?.touched && checkoutForm.get('email')?.invalid
+                          "
+                          [class.placeholder-red-300]="
                             checkoutForm.get('email')?.touched && checkoutForm.get('email')?.invalid
                           "
                         />
-                        @if (checkoutForm.get('email')?.touched &&
-                        checkoutForm.get('email')?.invalid) {
-                        <p class="mt-2 text-sm text-red-600">Valid email is required</p>
-                        }
                       </div>
+                      @if (checkoutForm.get('email')?.touched && checkoutForm.get('email')?.invalid)
+                      {
+                      <p class="mt-2 text-sm text-red-600">Valid email is required</p>
+                      }
                     </div>
                   </div>
 
@@ -109,87 +132,149 @@ import { CartService } from '../../core/services/cart.service';
                         <label for="full-name" class="block text-sm font-medium text-gray-700"
                           >Full name</label
                         >
-                        <div class="mt-1">
+                        <div class="relative mt-1 rounded-md shadow-sm">
+                          <div
+                            class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
+                          >
+                            <svg
+                              class="h-5 w-5 text-gray-400"
+                              viewBox="0 0 20 20"
+                              fill="currentColor"
+                              aria-hidden="true"
+                            >
+                              <path
+                                d="M10 8a3 3 0 100-6 3 3 0 000 6zM3.465 14.493a1.23 1.23 0 00.41 1.412A9.957 9.957 0 0010 18c2.31 0 4.438-.784 6.131-2.1.43-.333.604-.903.408-1.41a7.002 7.002 0 00-13.074.003z"
+                              />
+                            </svg>
+                          </div>
                           <input
                             type="text"
                             id="full-name"
                             formControlName="fullName"
-                            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                            [class.border-red-300]="
+                            class="block w-full rounded-md border-0 py-1.5 pl-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                            [class.ring-red-300]="
                               checkoutForm.get('fullName')?.touched &&
                               checkoutForm.get('fullName')?.invalid
                             "
                           />
-                          @if (checkoutForm.get('fullName')?.touched &&
-                          checkoutForm.get('fullName')?.invalid) {
-                          <p class="mt-2 text-sm text-red-600">Name is required</p>
-                          }
                         </div>
+                        @if (checkoutForm.get('fullName')?.touched &&
+                        checkoutForm.get('fullName')?.invalid) {
+                        <p class="mt-2 text-sm text-red-600">Name is required</p>
+                        }
                       </div>
 
                       <div class="sm:col-span-3">
                         <label for="address" class="block text-sm font-medium text-gray-700"
                           >Address</label
                         >
-                        <div class="mt-1">
+                        <div class="relative mt-1 rounded-md shadow-sm">
+                          <div
+                            class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
+                          >
+                            <svg
+                              class="h-5 w-5 text-gray-400"
+                              viewBox="0 0 20 20"
+                              fill="currentColor"
+                              aria-hidden="true"
+                            >
+                              <path
+                                fill-rule="evenodd"
+                                d="M9.293 2.293a1 1 0 011.414 0l7 7A1 1 0 0117 11h-1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-3a1 1 0 00-1-1H9a1 1 0 00-1 1v3a1 1 0 01-1 1H5a1 1 0 01-1-1v-6H3a1 1 0 01-.707-1.707l7-7z"
+                                clip-rule="evenodd"
+                              />
+                            </svg>
+                          </div>
                           <input
                             type="text"
                             id="address"
                             formControlName="address"
-                            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                            [class.border-red-300]="
+                            class="block w-full rounded-md border-0 py-1.5 pl-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                            [class.ring-red-300]="
                               checkoutForm.get('address')?.touched &&
                               checkoutForm.get('address')?.invalid
                             "
                           />
-                          @if (checkoutForm.get('address')?.touched &&
-                          checkoutForm.get('address')?.invalid) {
-                          <p class="mt-2 text-sm text-red-600">Address is required</p>
-                          }
                         </div>
+                        @if (checkoutForm.get('address')?.touched &&
+                        checkoutForm.get('address')?.invalid) {
+                        <p class="mt-2 text-sm text-red-600">Address is required</p>
+                        }
                       </div>
 
                       <div class="sm:col-span-1">
                         <label for="city" class="block text-sm font-medium text-gray-700"
                           >City</label
                         >
-                        <div class="mt-1">
+                        <div class="relative mt-1 rounded-md shadow-sm">
+                          <div
+                            class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
+                          >
+                            <svg
+                              class="h-5 w-5 text-gray-400"
+                              viewBox="0 0 20 20"
+                              fill="currentColor"
+                              aria-hidden="true"
+                            >
+                              <path
+                                fill-rule="evenodd"
+                                d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4zm3 1h6v4H7V5zm0 6h6v4H7v-4z"
+                                clip-rule="evenodd"
+                              />
+                            </svg>
+                          </div>
                           <input
                             type="text"
                             id="city"
                             formControlName="city"
-                            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                            [class.border-red-300]="
+                            class="block w-full rounded-md border-0 py-1.5 pl-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                            [class.ring-red-300]="
                               checkoutForm.get('city')?.touched && checkoutForm.get('city')?.invalid
                             "
                           />
-                          @if (checkoutForm.get('city')?.touched &&
-                          checkoutForm.get('city')?.invalid) {
-                          <p class="mt-2 text-sm text-red-600">Required</p>
-                          }
                         </div>
+                        @if (checkoutForm.get('city')?.touched && checkoutForm.get('city')?.invalid)
+                        {
+                        <p class="mt-2 text-sm text-red-600">Required</p>
+                        }
                       </div>
 
                       <div class="sm:col-span-1">
                         <label for="postal-code" class="block text-sm font-medium text-gray-700"
                           >Zip Code</label
                         >
-                        <div class="mt-1">
+                        <div class="relative mt-1 rounded-md shadow-sm">
+                          <div
+                            class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
+                          >
+                            <svg
+                              class="h-5 w-5 text-gray-400"
+                              viewBox="0 0 20 20"
+                              fill="currentColor"
+                              aria-hidden="true"
+                            >
+                              <path
+                                fill-rule="evenodd"
+                                d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
+                                clip-rule="evenodd"
+                              />
+                            </svg>
+                          </div>
                           <input
                             type="text"
                             id="postal-code"
                             formControlName="zipCode"
-                            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                            [class.border-red-300]="
+                            class="block w-full rounded-md border-0 py-1.5 pl-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                            [class.ring-red-300]="
                               checkoutForm.get('zipCode')?.touched &&
                               checkoutForm.get('zipCode')?.invalid
                             "
                           />
-                          @if (checkoutForm.get('zipCode')?.touched &&
-                          checkoutForm.get('zipCode')?.invalid) {
-                          <p class="mt-2 text-sm text-red-600">Required</p>
-                          }
                         </div>
+                        @if (checkoutForm.get('zipCode')?.touched &&
+                        checkoutForm.get('zipCode')?.invalid) {
+                        <p class="mt-2 text-sm text-red-600">Required</p>
+                        }
                       </div>
                     </div>
                   </div>
@@ -296,66 +381,113 @@ import { CartService } from '../../core/services/cart.service';
                         <label for="card-number" class="block text-sm font-medium text-gray-700"
                           >Card number</label
                         >
-                        <div class="mt-1">
+                        <div class="relative mt-1 rounded-md shadow-sm">
+                          <div
+                            class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
+                          >
+                            <svg
+                              class="h-5 w-5 text-gray-400"
+                              viewBox="0 0 20 20"
+                              fill="currentColor"
+                              aria-hidden="true"
+                            >
+                              <path
+                                fill-rule="evenodd"
+                                d="M1 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-1 1H2a1 1 0 01-1-1V4zm12 4a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 01-1 1h-2a1 1 0 01-1-1V8zM2 10a1 1 0 011-1h14a1 1 0 011 1v6a1 1 0 01-1 1H3a1 1 0 01-1-1v-6z"
+                                clip-rule="evenodd"
+                              />
+                            </svg>
+                          </div>
                           <input
                             type="text"
                             id="card-number"
                             formControlName="cardNumber"
-                            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                            class="block w-full rounded-md border-0 py-1.5 pl-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             placeholder="0000 0000 0000 0000"
-                            [class.border-red-300]="
+                            [class.ring-red-300]="
                               checkoutForm.get('cardNumber')?.touched &&
                               checkoutForm.get('cardNumber')?.invalid
                             "
                           />
-                          @if (checkoutForm.get('cardNumber')?.touched &&
-                          checkoutForm.get('cardNumber')?.invalid) {
-                          <p class="mt-2 text-sm text-red-600">Valid card number is required</p>
-                          }
                         </div>
+                        @if (checkoutForm.get('cardNumber')?.touched &&
+                        checkoutForm.get('cardNumber')?.invalid) {
+                        <p class="mt-2 text-sm text-red-600">Valid card number is required</p>
+                        }
                       </div>
 
                       <div class="col-span-2 sm:col-span-3">
                         <label for="expiration-date" class="block text-sm font-medium text-gray-700"
                           >Expiration date (MM/YY)</label
                         >
-                        <div class="mt-1">
+                        <div class="relative mt-1 rounded-md shadow-sm">
+                          <div
+                            class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
+                          >
+                            <svg
+                              class="h-5 w-5 text-gray-400"
+                              viewBox="0 0 20 20"
+                              fill="currentColor"
+                              aria-hidden="true"
+                            >
+                              <path
+                                fill-rule="evenodd"
+                                d="M5.75 2a.75.75 0 01.75.75V4h7V2.75a.75.75 0 011.5 0V4h.25A2.75 2.75 0 0118 6.75v8.5A2.75 2.75 0 0115.25 18H4.75A2.75 2.75 0 012 15.25v-8.5A2.75 2.75 0 014.75 4H5V2.75A.75.75 0 015.75 2zm-1 5.5c-.69 0-1.25.56-1.25 1.25v6.5c0 .69.56 1.25 1.25 1.25h10.5c.69 0 1.25-.56 1.25-1.25v-6.5c0-.69-.56-1.25-1.25-1.25H4.75z"
+                                clip-rule="evenodd"
+                              />
+                            </svg>
+                          </div>
                           <input
                             type="text"
                             id="expiration-date"
                             formControlName="expiry"
-                            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                            class="block w-full rounded-md border-0 py-1.5 pl-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             placeholder="MM/YY"
-                            [class.border-red-300]="
+                            [class.ring-red-300]="
                               checkoutForm.get('expiry')?.touched &&
                               checkoutForm.get('expiry')?.invalid
                             "
                           />
-                          @if (checkoutForm.get('expiry')?.touched &&
-                          checkoutForm.get('expiry')?.invalid) {
-                          <p class="mt-2 text-sm text-red-600">Required</p>
-                          }
                         </div>
+                        @if (checkoutForm.get('expiry')?.touched &&
+                        checkoutForm.get('expiry')?.invalid) {
+                        <p class="mt-2 text-sm text-red-600">Required</p>
+                        }
                       </div>
 
                       <div>
                         <label for="cvc" class="block text-sm font-medium text-gray-700">CVC</label>
-                        <div class="mt-1">
+                        <div class="relative mt-1 rounded-md shadow-sm">
+                          <div
+                            class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
+                          >
+                            <svg
+                              class="h-5 w-5 text-gray-400"
+                              viewBox="0 0 20 20"
+                              fill="currentColor"
+                              aria-hidden="true"
+                            >
+                              <path
+                                fill-rule="evenodd"
+                                d="M10 1a4.5 4.5 0 00-4.5 4.5V9H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-.5V5.5A4.5 4.5 0 0010 1zm3 8V5.5a3 3 0 10-6 0V9h6z"
+                                clip-rule="evenodd"
+                              />
+                            </svg>
+                          </div>
                           <input
                             type="text"
                             id="cvc"
                             formControlName="cvv"
-                            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                            class="block w-full rounded-md border-0 py-1.5 pl-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             placeholder="123"
-                            [class.border-red-300]="
+                            [class.ring-red-300]="
                               checkoutForm.get('cvv')?.touched && checkoutForm.get('cvv')?.invalid
                             "
                           />
-                          @if (checkoutForm.get('cvv')?.touched && checkoutForm.get('cvv')?.invalid)
-                          {
-                          <p class="mt-2 text-sm text-red-600">Required</p>
-                          }
                         </div>
+                        @if (checkoutForm.get('cvv')?.touched && checkoutForm.get('cvv')?.invalid) {
+                        <p class="mt-2 text-sm text-red-600">Required</p>
+                        }
                       </div>
                     </div>
                   </div>
