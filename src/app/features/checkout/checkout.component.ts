@@ -1,4 +1,4 @@
-import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -49,12 +49,12 @@ import { CartService } from '../../core/services/cart.service';
 
                 <div class="flex items-center justify-between">
                   <dt class="text-gray-600">Shipping</dt>
-                  <dd>$5.00</dd>
+                  <dd>{{ shippingCost() | currency }}</dd>
                 </div>
 
                 <div class="flex items-center justify-between border-t border-gray-200 pt-6">
                   <dt class="text-base">Total</dt>
-                  <dd class="text-base">{{ cartTotal() + 5 | currency }}</dd>
+                  <dd class="text-base">{{ total() | currency }}</dd>
                 </div>
               </dl>
             </div>
@@ -194,6 +194,98 @@ import { CartService } from '../../core/services/cart.service';
                     </div>
                   </div>
 
+                  <!-- Delivery Method -->
+                  <div class="mt-10">
+                    <h3 class="text-lg font-medium text-gray-900">Delivery method</h3>
+                    <div class="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
+                      <!-- Standard -->
+                      <label
+                        class="relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none"
+                        [class.border-indigo-500]="deliveryMethod() === 'standard'"
+                        [class.ring-2]="deliveryMethod() === 'standard'"
+                        [class.ring-indigo-500]="deliveryMethod() === 'standard'"
+                        [class.border-gray-300]="deliveryMethod() !== 'standard'"
+                        (click)="setDeliveryMethod('standard')"
+                      >
+                        <span class="flex flex-1">
+                          <span class="flex flex-col">
+                            <span class="block text-sm font-medium text-gray-900">Standard</span>
+                            <span class="mt-1 flex items-center text-sm text-gray-500"
+                              >4–10 business days</span
+                            >
+                            <span class="mt-6 text-sm font-medium text-gray-900">$5.00</span>
+                          </span>
+                        </span>
+                        <span
+                          class="h-5 w-5 text-indigo-600"
+                          [class.invisible]="deliveryMethod() !== 'standard'"
+                        >
+                          <svg
+                            class="h-5 w-5"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                            aria-hidden="true"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                              clip-rule="evenodd"
+                            />
+                          </svg>
+                        </span>
+                        <span
+                          class="pointer-events-none absolute -inset-px rounded-lg border-2"
+                          aria-hidden="true"
+                          [class.border-indigo-500]="deliveryMethod() === 'standard'"
+                          [class.border-transparent]="deliveryMethod() !== 'standard'"
+                        ></span>
+                      </label>
+
+                      <!-- Express -->
+                      <label
+                        class="relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none"
+                        [class.border-indigo-500]="deliveryMethod() === 'express'"
+                        [class.ring-2]="deliveryMethod() === 'express'"
+                        [class.ring-indigo-500]="deliveryMethod() === 'express'"
+                        [class.border-gray-300]="deliveryMethod() !== 'express'"
+                        (click)="setDeliveryMethod('express')"
+                      >
+                        <span class="flex flex-1">
+                          <span class="flex flex-col">
+                            <span class="block text-sm font-medium text-gray-900">Express</span>
+                            <span class="mt-1 flex items-center text-sm text-gray-500"
+                              >2–5 business days</span
+                            >
+                            <span class="mt-6 text-sm font-medium text-gray-900">$15.00</span>
+                          </span>
+                        </span>
+                        <span
+                          class="h-5 w-5 text-indigo-600"
+                          [class.invisible]="deliveryMethod() !== 'express'"
+                        >
+                          <svg
+                            class="h-5 w-5"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                            aria-hidden="true"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                              clip-rule="evenodd"
+                            />
+                          </svg>
+                        </span>
+                        <span
+                          class="pointer-events-none absolute -inset-px rounded-lg border-2"
+                          aria-hidden="true"
+                          [class.border-indigo-500]="deliveryMethod() === 'express'"
+                          [class.border-transparent]="deliveryMethod() !== 'express'"
+                        ></span>
+                      </label>
+                    </div>
+                  </div>
+
                   <div class="mt-10">
                     <h3 id="payment-heading" class="text-lg font-medium text-gray-900">
                       Payment details
@@ -302,16 +394,24 @@ export class CheckoutComponent {
   cartTotal = this.cartService.cartTotal;
   isProcessing = false;
 
+  deliveryMethod = signal<'standard' | 'express'>('standard');
+  shippingCost = computed(() => (this.deliveryMethod() === 'express' ? 15.0 : 5.0));
+  total = computed(() => this.cartTotal() + this.shippingCost());
+
   checkoutForm = this.fb.group({
     fullName: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
     address: ['', Validators.required],
     city: ['', Validators.required],
     zipCode: ['', Validators.required],
-    cardNumber: ['', [Validators.required, Validators.pattern(/^\d{16}$/)]],
+    cardNumber: ['', [Validators.required, Validators.pattern(/^\\d{16}$/)]],
     expiry: ['', Validators.required],
-    cvv: ['', [Validators.required, Validators.pattern(/^\d{3,4}$/)]],
+    cvv: ['', [Validators.required, Validators.pattern(/^\\d{3,4}$/)]],
   });
+
+  setDeliveryMethod(method: 'standard' | 'express') {
+    this.deliveryMethod.set(method);
+  }
 
   onSubmit() {
     if (this.checkoutForm.valid) {
