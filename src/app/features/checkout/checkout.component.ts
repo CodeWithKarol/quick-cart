@@ -536,9 +536,9 @@ export class CheckoutComponent {
     address: ['', Validators.required],
     city: ['', Validators.required],
     zipCode: ['', Validators.required],
-    cardNumber: ['', [Validators.required, Validators.pattern(/^\\d{16}$/)]],
-    expiry: ['', Validators.required],
-    cvv: ['', [Validators.required, Validators.pattern(/^\\d{3,4}$/)]],
+    cardNumber: ['', [Validators.required, Validators.pattern(/^\d{16}$/)]],
+    expiry: ['', [Validators.required, Validators.pattern(/^(0[1-9]|1[0-2])\/\d{2}$/)]],
+    cvv: ['', [Validators.required, Validators.pattern(/^\d{3,4}$/)]],
   });
 
   setDeliveryMethod(method: 'standard' | 'express') {

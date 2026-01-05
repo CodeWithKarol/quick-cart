@@ -42,4 +42,30 @@ describe('CheckoutComponent', () => {
     emailControl?.setValue('test@example.com');
     expect(emailControl?.valid).toBe(true);
   });
+
+  it('should validate payment fields', () => {
+    const cardControl = component.checkoutForm.get('cardNumber');
+    const expiryControl = component.checkoutForm.get('expiry');
+    const cvvControl = component.checkoutForm.get('cvv');
+
+    // Invalid cases
+    cardControl?.setValue('123'); // Too short
+    expect(cardControl?.valid).toBe(false);
+
+    expiryControl?.setValue('13/25'); // Invalid month
+    expect(expiryControl?.valid).toBe(false);
+
+    cvvControl?.setValue('12'); // Too short
+    expect(cvvControl?.valid).toBe(false);
+
+    // Valid cases
+    cardControl?.setValue('1234567812345678');
+    expect(cardControl?.valid).toBe(true);
+
+    expiryControl?.setValue('12/25');
+    expect(expiryControl?.valid).toBe(true);
+
+    cvvControl?.setValue('123');
+    expect(cvvControl?.valid).toBe(true);
+  });
 });

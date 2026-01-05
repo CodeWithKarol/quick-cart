@@ -45,13 +45,27 @@ import { Product } from '../../core/models/product.model';
               <select
                 [value]="selectedCategory()"
                 (change)="updateCategory($event)"
-                class="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6 shadow-sm"
+                class="block w-full appearance-none rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6 shadow-sm"
               >
                 <option value="">All Categories</option>
                 @for (cat of categories(); track cat) {
                 <option [value]="cat">{{ cat }}</option>
                 }
               </select>
+              <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                <svg
+                  class="h-5 w-5 text-gray-400"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              </div>
             </div>
           </div>
         </div>
