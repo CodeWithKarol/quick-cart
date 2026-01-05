@@ -1,210 +1,296 @@
 import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { CartService } from '../../core/services/cart.service';
 
 @Component({
   selector: 'app-checkout',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
   template: `
-    <div class="checkout-container">
-      <h2>Checkout</h2>
+    <div class="bg-gray-50 min-h-screen pb-24 pt-16">
+      <div class="mx-auto max-w-2xl px-4 pt-16 pb-24 sm:px-6 lg:max-w-7xl lg:px-8">
+        <h2 class="sr-only">Checkout</h2>
 
-      <div class="checkout-content">
-        <form [formGroup]="checkoutForm" (ngSubmit)="onSubmit()">
-          <div class="form-section">
-            <h3>Shipping Information</h3>
+        <div class="lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16">
+          <!-- Order Summary (Right Column on Desktop, Top on Mobile) -->
+          <section aria-labelledby="summary-heading" class="lg:col-start-2">
+            <div class="mx-auto max-w-lg px-4 lg:max-w-none lg:px-0">
+              <h2 id="summary-heading" class="text-lg font-medium text-gray-900">Order summary</h2>
 
-            <div class="form-group">
-              <label for="fullName">Full Name</label>
-              <input id="fullName" type="text" formControlName="fullName" />
-              @if (checkoutForm.get('fullName')?.touched && checkoutForm.get('fullName')?.invalid) {
-              <span class="error">Name is required</span>
-              }
-            </div>
-
-            <div class="form-group">
-              <label for="email">Email</label>
-              <input id="email" type="email" formControlName="email" />
-              @if (checkoutForm.get('email')?.touched && checkoutForm.get('email')?.invalid) {
-              <span class="error">Valid email is required</span>
-              }
-            </div>
-
-            <div class="form-group">
-              <label for="address">Address</label>
-              <input id="address" type="text" formControlName="address" />
-              @if (checkoutForm.get('address')?.touched && checkoutForm.get('address')?.invalid) {
-              <span class="error">Address is required</span>
-              }
-            </div>
-
-            <div class="form-row">
-              <div class="form-group">
-                <label for="city">City</label>
-                <input id="city" type="text" formControlName="city" />
-                @if (checkoutForm.get('city')?.touched && checkoutForm.get('city')?.invalid) {
-                <span class="error">City is required</span>
+              <ul role="list" class="divide-y divide-gray-200 text-sm font-medium text-gray-900">
+                @for (item of cartItems(); track item.product.id) {
+                <li class="flex items-start space-x-4 py-6">
+                  <img
+                    [src]="item.product.imageUrl"
+                    [alt]="item.product.name"
+                    class="h-20 w-20 flex-none rounded-md object-cover object-center"
+                  />
+                  <div class="flex-auto space-y-1">
+                    <h3>{{ item.product.name }}</h3>
+                    <p class="text-gray-500">{{ item.product.category }}</p>
+                    <p class="text-gray-500">Qty {{ item.quantity }}</p>
+                  </div>
+                  <p class="flex-none text-base font-medium">
+                    {{ item.product.price * item.quantity | currency }}
+                  </p>
+                </li>
                 }
-              </div>
-              <div class="form-group">
-                <label for="zipCode">Zip Code</label>
-                <input id="zipCode" type="text" formControlName="zipCode" />
-                @if (checkoutForm.get('zipCode')?.touched && checkoutForm.get('zipCode')?.invalid) {
-                <span class="error">Zip Code is required</span>
-                }
-              </div>
-            </div>
-          </div>
+              </ul>
 
-          <div class="form-section">
-            <h3>Payment Details (Fake)</h3>
-            <div class="form-group">
-              <label for="cardNumber">Card Number</label>
-              <input
-                id="cardNumber"
-                type="text"
-                formControlName="cardNumber"
-                placeholder="0000 0000 0000 0000"
-              />
-              @if (checkoutForm.get('cardNumber')?.touched &&
-              checkoutForm.get('cardNumber')?.invalid) {
-              <span class="error">Valid card number is required</span>
-              }
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label for="expiry">Expiry</label>
-                <input id="expiry" type="text" formControlName="expiry" placeholder="MM/YY" />
-                @if (checkoutForm.get('expiry')?.touched && checkoutForm.get('expiry')?.invalid) {
-                <span class="error">Required</span>
-                }
-              </div>
-              <div class="form-group">
-                <label for="cvv">CVV</label>
-                <input id="cvv" type="text" formControlName="cvv" placeholder="123" />
-                @if (checkoutForm.get('cvv')?.touched && checkoutForm.get('cvv')?.invalid) {
-                <span class="error">Required</span>
-                }
-              </div>
-            </div>
-          </div>
+              <dl
+                class="hidden space-y-6 border-t border-gray-200 pt-6 text-sm font-medium text-gray-900 lg:block"
+              >
+                <div class="flex items-center justify-between">
+                  <dt class="text-gray-600">Subtotal</dt>
+                  <dd>{{ cartTotal() | currency }}</dd>
+                </div>
 
-          <button type="submit" [disabled]="checkoutForm.invalid || isProcessing">
-            {{ isProcessing ? 'Processing...' : 'Place Order (' + (cartTotal() | currency) + ')' }}
-          </button>
-        </form>
+                <div class="flex items-center justify-between">
+                  <dt class="text-gray-600">Shipping</dt>
+                  <dd>$5.00</dd>
+                </div>
 
-        <div class="order-summary">
-          <h3>Order Summary</h3>
-          @for (item of cartItems(); track item.product.id) {
-          <div class="summary-item">
-            <span>{{ item.quantity }}x {{ item.product.name }}</span>
-            <span>{{ item.product.price * item.quantity | currency }}</span>
-          </div>
-          }
-          <div class="total-row">
-            <span>Total</span>
-            <span>{{ cartTotal() | currency }}</span>
-          </div>
+                <div class="flex items-center justify-between border-t border-gray-200 pt-6">
+                  <dt class="text-base">Total</dt>
+                  <dd class="text-base">{{ cartTotal() + 5 | currency }}</dd>
+                </div>
+              </dl>
+            </div>
+          </section>
+
+          <!-- Checkout Form (Left Column on Desktop) -->
+          <section
+            aria-labelledby="payment-and-shipping-heading"
+            class="lg:col-start-1 lg:row-start-1"
+          >
+            <div class="mx-auto max-w-lg px-4 lg:max-w-none lg:px-0">
+              <h2 id="payment-and-shipping-heading" class="sr-only">
+                Payment and shipping details
+              </h2>
+
+              <form [formGroup]="checkoutForm" (ngSubmit)="onSubmit()">
+                <div class="mx-auto max-w-2xl px-4 lg:max-w-none lg:px-0">
+                  <div>
+                    <h3 id="contact-info-heading" class="text-lg font-medium text-gray-900">
+                      Contact information
+                    </h3>
+
+                    <div class="mt-6">
+                      <label for="email-address" class="block text-sm font-medium text-gray-700"
+                        >Email address</label
+                      >
+                      <div class="mt-1">
+                        <input
+                          type="email"
+                          id="email-address"
+                          formControlName="email"
+                          class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                          [class.border-red-300]="
+                            checkoutForm.get('email')?.touched && checkoutForm.get('email')?.invalid
+                          "
+                        />
+                        @if (checkoutForm.get('email')?.touched &&
+                        checkoutForm.get('email')?.invalid) {
+                        <p class="mt-2 text-sm text-red-600">Valid email is required</p>
+                        }
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="mt-10">
+                    <h3 id="shipping-heading" class="text-lg font-medium text-gray-900">
+                      Shipping address
+                    </h3>
+
+                    <div class="mt-6 grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-3">
+                      <div class="sm:col-span-3">
+                        <label for="full-name" class="block text-sm font-medium text-gray-700"
+                          >Full name</label
+                        >
+                        <div class="mt-1">
+                          <input
+                            type="text"
+                            id="full-name"
+                            formControlName="fullName"
+                            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                            [class.border-red-300]="
+                              checkoutForm.get('fullName')?.touched &&
+                              checkoutForm.get('fullName')?.invalid
+                            "
+                          />
+                          @if (checkoutForm.get('fullName')?.touched &&
+                          checkoutForm.get('fullName')?.invalid) {
+                          <p class="mt-2 text-sm text-red-600">Name is required</p>
+                          }
+                        </div>
+                      </div>
+
+                      <div class="sm:col-span-3">
+                        <label for="address" class="block text-sm font-medium text-gray-700"
+                          >Address</label
+                        >
+                        <div class="mt-1">
+                          <input
+                            type="text"
+                            id="address"
+                            formControlName="address"
+                            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                            [class.border-red-300]="
+                              checkoutForm.get('address')?.touched &&
+                              checkoutForm.get('address')?.invalid
+                            "
+                          />
+                          @if (checkoutForm.get('address')?.touched &&
+                          checkoutForm.get('address')?.invalid) {
+                          <p class="mt-2 text-sm text-red-600">Address is required</p>
+                          }
+                        </div>
+                      </div>
+
+                      <div class="sm:col-span-1">
+                        <label for="city" class="block text-sm font-medium text-gray-700"
+                          >City</label
+                        >
+                        <div class="mt-1">
+                          <input
+                            type="text"
+                            id="city"
+                            formControlName="city"
+                            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                            [class.border-red-300]="
+                              checkoutForm.get('city')?.touched && checkoutForm.get('city')?.invalid
+                            "
+                          />
+                          @if (checkoutForm.get('city')?.touched &&
+                          checkoutForm.get('city')?.invalid) {
+                          <p class="mt-2 text-sm text-red-600">Required</p>
+                          }
+                        </div>
+                      </div>
+
+                      <div class="sm:col-span-1">
+                        <label for="postal-code" class="block text-sm font-medium text-gray-700"
+                          >Zip Code</label
+                        >
+                        <div class="mt-1">
+                          <input
+                            type="text"
+                            id="postal-code"
+                            formControlName="zipCode"
+                            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                            [class.border-red-300]="
+                              checkoutForm.get('zipCode')?.touched &&
+                              checkoutForm.get('zipCode')?.invalid
+                            "
+                          />
+                          @if (checkoutForm.get('zipCode')?.touched &&
+                          checkoutForm.get('zipCode')?.invalid) {
+                          <p class="mt-2 text-sm text-red-600">Required</p>
+                          }
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="mt-10">
+                    <h3 id="payment-heading" class="text-lg font-medium text-gray-900">
+                      Payment details
+                    </h3>
+
+                    <div class="mt-6 grid grid-cols-3 gap-x-4 gap-y-6 sm:grid-cols-4">
+                      <div class="col-span-3 sm:col-span-4">
+                        <label for="card-number" class="block text-sm font-medium text-gray-700"
+                          >Card number</label
+                        >
+                        <div class="mt-1">
+                          <input
+                            type="text"
+                            id="card-number"
+                            formControlName="cardNumber"
+                            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                            placeholder="0000 0000 0000 0000"
+                            [class.border-red-300]="
+                              checkoutForm.get('cardNumber')?.touched &&
+                              checkoutForm.get('cardNumber')?.invalid
+                            "
+                          />
+                          @if (checkoutForm.get('cardNumber')?.touched &&
+                          checkoutForm.get('cardNumber')?.invalid) {
+                          <p class="mt-2 text-sm text-red-600">Valid card number is required</p>
+                          }
+                        </div>
+                      </div>
+
+                      <div class="col-span-2 sm:col-span-3">
+                        <label for="expiration-date" class="block text-sm font-medium text-gray-700"
+                          >Expiration date (MM/YY)</label
+                        >
+                        <div class="mt-1">
+                          <input
+                            type="text"
+                            id="expiration-date"
+                            formControlName="expiry"
+                            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                            placeholder="MM/YY"
+                            [class.border-red-300]="
+                              checkoutForm.get('expiry')?.touched &&
+                              checkoutForm.get('expiry')?.invalid
+                            "
+                          />
+                          @if (checkoutForm.get('expiry')?.touched &&
+                          checkoutForm.get('expiry')?.invalid) {
+                          <p class="mt-2 text-sm text-red-600">Required</p>
+                          }
+                        </div>
+                      </div>
+
+                      <div>
+                        <label for="cvc" class="block text-sm font-medium text-gray-700">CVC</label>
+                        <div class="mt-1">
+                          <input
+                            type="text"
+                            id="cvc"
+                            formControlName="cvv"
+                            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                            placeholder="123"
+                            [class.border-red-300]="
+                              checkoutForm.get('cvv')?.touched && checkoutForm.get('cvv')?.invalid
+                            "
+                          />
+                          @if (checkoutForm.get('cvv')?.touched && checkoutForm.get('cvv')?.invalid)
+                          {
+                          <p class="mt-2 text-sm text-red-600">Required</p>
+                          }
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div
+                    class="mt-10 border-t border-gray-200 pt-6 sm:flex sm:items-center sm:justify-between"
+                  >
+                    <button
+                      type="submit"
+                      [disabled]="checkoutForm.invalid || isProcessing"
+                      class="w-full rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed sm:order-last sm:w-auto"
+                    >
+                      {{ isProcessing ? 'Processing...' : 'Place Order' }}
+                    </button>
+                    <p class="mt-4 text-center text-sm text-gray-500 sm:mt-0 sm:text-left">
+                      You won't be charged until the next step.
+                    </p>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </section>
         </div>
       </div>
     </div>
   `,
-  styles: [
-    `
-      .checkout-container {
-        padding: 20px;
-        max-width: 1000px;
-        margin: 0 auto;
-      }
-      .checkout-content {
-        display: grid;
-        grid-template-columns: 1fr 350px;
-        gap: 40px;
-      }
-      @media (max-width: 768px) {
-        .checkout-content {
-          grid-template-columns: 1fr;
-        }
-      }
-      .form-section {
-        margin-bottom: 32px;
-      }
-      h3 {
-        margin-bottom: 16px;
-        border-bottom: 1px solid #eee;
-        padding-bottom: 8px;
-      }
-      .form-group {
-        margin-bottom: 16px;
-      }
-      .form-row {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 16px;
-      }
-      label {
-        display: block;
-        margin-bottom: 6px;
-        font-weight: 500;
-      }
-      input {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        font-size: 1rem;
-      }
-      input.ng-invalid.ng-touched {
-        border-color: #dc3545;
-      }
-      .error {
-        color: #dc3545;
-        font-size: 0.85rem;
-        margin-top: 4px;
-        display: block;
-      }
-      button[type='submit'] {
-        width: 100%;
-        padding: 14px;
-        background-color: #28a745;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        font-size: 1.1rem;
-        cursor: pointer;
-        font-weight: bold;
-      }
-      button:disabled {
-        background-color: #94d3a2;
-        cursor: not-allowed;
-      }
-      .order-summary {
-        background: #f8f9fa;
-        padding: 24px;
-        border-radius: 8px;
-        height: fit-content;
-      }
-      .summary-item {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 12px;
-        font-size: 0.95rem;
-      }
-      .total-row {
-        display: flex;
-        justify-content: space-between;
-        font-weight: bold;
-        font-size: 1.2rem;
-        margin-top: 16px;
-        padding-top: 16px;
-        border-top: 1px solid #ddd;
-      }
-    `,
-  ],
+  styles: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CheckoutComponent {
