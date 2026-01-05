@@ -11,13 +11,22 @@ import { Product } from '../../core/models/product.model';
       class="group relative flex flex-col h-full overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
     >
       <div class="relative aspect-square overflow-hidden bg-gray-100">
+        @if (priority()) {
         <img
           [ngSrc]="product().imageUrl"
           [alt]="product().name"
           fill
-          [priority]="priority()"
+          priority
           class="h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-110"
         />
+        } @else {
+        <img
+          [ngSrc]="product().imageUrl"
+          [alt]="product().name"
+          fill
+          class="h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-110"
+        />
+        }
       </div>
       <div class="flex flex-1 flex-col p-5">
         <div class="flex justify-between items-start mb-2">
