@@ -7,84 +7,50 @@ import { Product } from '../../core/models/product.model';
   standalone: true,
   imports: [CommonModule, NgOptimizedImage],
   template: `
-    <div class="product-card">
-      <div class="image-container">
-        <img [ngSrc]="product().imageUrl" [alt]="product().name" fill priority />
+    <div
+      class="group relative flex flex-col h-full overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
+    >
+      <div class="relative aspect-square overflow-hidden bg-gray-100">
+        <img
+          [ngSrc]="product().imageUrl"
+          [alt]="product().name"
+          fill
+          [priority]="priority()"
+          class="h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-110"
+        />
       </div>
-      <div class="details">
-        <h3>{{ product().name }}</h3>
-        <p class="category">{{ product().category }}</p>
-        <p class="price">{{ product().price | currency }}</p>
-        <button (click)="onAddToCart()">Add to Cart</button>
+      <div class="flex flex-1 flex-col p-5">
+        <div class="flex justify-between items-start mb-2">
+          <div>
+            <p class="text-xs font-medium text-indigo-600 mb-1 uppercase tracking-wide">
+              {{ product().category }}
+            </p>
+            <h3 class="text-lg font-semibold text-gray-900 line-clamp-1" [title]="product().name">
+              {{ product().name }}
+            </h3>
+          </div>
+          <p class="text-lg font-bold text-gray-900 ml-2">{{ product().price | currency }}</p>
+        </div>
+
+        <p class="text-sm text-gray-500 line-clamp-2 flex-1 mb-4">
+          {{ product().description }}
+        </p>
+
+        <button
+          (click)="onAddToCart()"
+          class="mt-auto flex w-full items-center justify-center rounded-lg bg-gray-900 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2 active:scale-95 cursor-pointer"
+        >
+          Add to Cart
+        </button>
       </div>
     </div>
   `,
-  styles: [
-    `
-      .product-card {
-        border: 1px solid #e0e0e0;
-        border-radius: 8px;
-        padding: 16px;
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-        transition: box-shadow 0.2s;
-        background: white;
-      }
-      .product-card:hover {
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      }
-      .image-container {
-        position: relative;
-        width: 100%;
-        height: 200px; /* Fixed height for consistency */
-        overflow: hidden;
-        border-radius: 4px;
-      }
-      img {
-        object-fit: cover;
-        width: 100%;
-        height: 100%;
-      }
-      .details {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-      }
-      h3 {
-        margin: 0;
-        font-size: 1.1rem;
-      }
-      .category {
-        color: #666;
-        font-size: 0.9rem;
-        margin: 0;
-      }
-      .price {
-        font-weight: bold;
-        font-size: 1.2rem;
-        color: #2c3e50;
-        margin: 0;
-      }
-      button {
-        background-color: #007bff;
-        color: white;
-        border: none;
-        padding: 8px 16px;
-        border-radius: 4px;
-        cursor: pointer;
-        font-weight: 500;
-        transition: background-color 0.2s;
-      }
-      button:hover {
-        background-color: #0056b3;
-      }
-    `,
-  ],
+  styles: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductCardComponent {
   product = input.required<Product>();
+  priority = input(false);
   addToCart = output<Product>();
 
   onAddToCart() {
