@@ -1,10 +1,20 @@
 import { TestBed } from '@angular/core/testing';
 import { App } from './app';
+import { provideRouter } from '@angular/router';
+import { CartService } from './core/services/cart.service';
+import { computed } from '@angular/core';
 
 describe('App', () => {
+  let cartServiceSpy: any;
+
   beforeEach(async () => {
+    cartServiceSpy = {
+      cartCount: computed(() => 0),
+    };
+
     await TestBed.configureTestingModule({
       imports: [App],
+      providers: [provideRouter([]), { provide: CartService, useValue: cartServiceSpy }],
     }).compileComponents();
   });
 
@@ -14,10 +24,10 @@ describe('App', () => {
     expect(app).toBeTruthy();
   });
 
-  it('should render title', async () => {
+  it('should render title', () => {
     const fixture = TestBed.createComponent(App);
-    await fixture.whenStable();
+    fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, quick-cart');
+    expect(compiled.querySelector('.logo')?.textContent).toContain('QuickCart');
   });
 });
