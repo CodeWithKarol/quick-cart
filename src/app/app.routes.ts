@@ -8,6 +8,14 @@ export const routes: Routes = [
     title: 'QuickCart - Home',
   },
   {
+    path: 'product/:id',
+    loadComponent: () =>
+      import('./features/products/product-overview.component').then(
+        (m) => m.ProductOverviewComponent
+      ),
+    title: 'QuickCart - Product Details',
+  },
+  {
     path: 'cart',
     loadComponent: () => import('./features/cart/cart.component').then((m) => m.CartComponent),
     title: 'QuickCart - Cart',

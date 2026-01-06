@@ -13,7 +13,7 @@ import { CartService } from '../../core/services/cart.service';
       <div class="mx-auto max-w-2xl px-4 pt-16 pb-24 sm:px-6 lg:max-w-7xl lg:px-8">
         <h2 class="sr-only">Checkout</h2>
 
-        <div class="lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16">
+        <div class="grid grid-cols-1 gap-y-12 lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16">
           <!-- Order Summary (Right Column on Desktop, Top on Mobile) -->
           <section aria-labelledby="summary-heading" class="lg:col-start-2">
             <div class="mx-auto max-w-lg px-4 lg:max-w-none lg:px-0">
@@ -21,7 +21,7 @@ import { CartService } from '../../core/services/cart.service';
 
               <ul role="list" class="divide-y divide-gray-200 text-sm font-medium text-gray-900">
                 @for (item of cartItems(); track item.product.id) {
-                <li class="flex items-start space-x-4 py-6">
+                <li class="flex items-center space-x-4 py-6">
                   <img
                     [src]="item.product.imageUrl"
                     [alt]="item.product.name"
@@ -39,9 +39,7 @@ import { CartService } from '../../core/services/cart.service';
                 }
               </ul>
 
-              <dl
-                class="hidden space-y-6 border-t border-gray-200 pt-6 text-sm font-medium text-gray-900 lg:block"
-              >
+              <dl class="space-y-6 border-t border-gray-200 pt-6 text-sm font-medium text-gray-900">
                 <div class="flex items-center justify-between">
                   <dt class="text-gray-600">Subtotal</dt>
                   <dd>{{ cartTotal() | currency }}</dd>
@@ -99,7 +97,7 @@ import { CartService } from '../../core/services/cart.service';
               </h2>
 
               <form [formGroup]="checkoutForm" (ngSubmit)="onSubmit()">
-                <div class="mx-auto max-w-2xl px-4 lg:max-w-none lg:px-0">
+                <div class="mx-auto max-w-2xl lg:max-w-none lg:px-0">
                   <div>
                     <h3 id="contact-info-heading" class="text-lg font-medium text-gray-900">
                       Contact information

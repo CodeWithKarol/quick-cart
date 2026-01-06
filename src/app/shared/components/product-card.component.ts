@@ -1,16 +1,20 @@
 import { Component, input, output, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { Product } from '../../core/models/product.model';
 
 @Component({
   selector: 'app-product-card',
   standalone: true,
-  imports: [CommonModule, NgOptimizedImage],
+  imports: [CommonModule, NgOptimizedImage, RouterLink],
   template: `
     <div
       class="group relative flex flex-col h-full overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
     >
-      <div class="relative aspect-square overflow-hidden bg-gray-100">
+      <div
+        [routerLink]="['/product', product().id]"
+        class="relative aspect-square overflow-hidden bg-gray-100 cursor-pointer"
+      >
         @if (priority()) {
         <img
           [ngSrc]="product().imageUrl"
@@ -34,7 +38,11 @@ import { Product } from '../../core/models/product.model';
             <p class="text-xs font-medium text-indigo-600 mb-1 uppercase tracking-wide">
               {{ product().category }}
             </p>
-            <h3 class="text-lg font-semibold text-gray-900 line-clamp-1" [title]="product().name">
+            <h3
+              [routerLink]="['/product', product().id]"
+              class="text-lg font-semibold text-gray-900 line-clamp-1 cursor-pointer hover:text-indigo-600"
+              [title]="product().name"
+            >
               {{ product().name }}
             </h3>
           </div>
