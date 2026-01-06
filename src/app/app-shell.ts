@@ -165,7 +165,7 @@ import { CommonModule } from '@angular/common';
         }
       </header>
 
-      <main class="flex-grow">
+      <main class="flex-grow flex flex-col">
         <router-outlet></router-outlet>
       </main>
 

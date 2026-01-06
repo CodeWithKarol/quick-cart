@@ -7,13 +7,24 @@ import { CartService } from '../../services/cart-service';
   selector: 'app-cart',
   standalone: true,
   imports: [CommonModule, RouterLink, NgOptimizedImage],
+  styles: [
+    `
+      :host {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+      }
+    `,
+  ],
   template: `
-    <div class="bg-white">
-      <div class="mx-auto max-w-2xl px-4 pt-16 pb-24 sm:px-6 lg:max-w-7xl lg:px-8">
+    <div class="bg-white flex-1 flex flex-col">
+      <div
+        class="mx-auto max-w-2xl px-4 pt-16 pb-24 sm:px-6 lg:max-w-7xl lg:px-8 flex-1 flex flex-col w-full"
+      >
         <h1 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Shopping Cart</h1>
 
         @if (cartItems().length === 0) {
-        <div class="mt-12 text-center">
+        <div class="flex-1 flex flex-col justify-center items-center mt-12 text-center">
           <svg
             class="mx-auto h-12 w-12 text-gray-400"
             fill="none"
@@ -245,7 +256,6 @@ import { CartService } from '../../services/cart-service';
       </div>
     </div>
   `,
-  styles: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CartPage {
