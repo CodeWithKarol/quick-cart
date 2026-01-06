@@ -1,7 +1,7 @@
 import { Component, input, output, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { Product } from '../../core/models/product.model';
+import { Product } from '../../core/models/product';
 
 @Component({
   selector: 'app-product-card',
@@ -65,7 +65,7 @@ import { Product } from '../../core/models/product.model';
   styles: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProductCardComponent {
+export class ProductCard {
   product = input.required<Product>();
   priority = input(false);
   addToCart = output<Product>();

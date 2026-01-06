@@ -1,10 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ProductCardComponent } from './product-card.component';
-import { Product } from '../../core/models/product.model';
+import { ProductCard } from './product-card';
+import { Product } from '../../core/models/product';
 
-describe('ProductCardComponent', () => {
-  let component: ProductCardComponent;
-  let fixture: ComponentFixture<ProductCardComponent>;
+describe('ProductCard', () => {
+  let component: ProductCard;
+  let fixture: ComponentFixture<ProductCard>;
 
   const mockProduct: Product = {
     id: 1,
@@ -17,7 +17,7 @@ describe('ProductCardComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ProductCardComponent],
+      imports: [ProductCard],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ProductCardComponent);

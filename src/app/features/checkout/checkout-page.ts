@@ -2,7 +2,7 @@ import { Component, inject, ChangeDetectionStrategy, signal, computed } from '@a
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { CartService } from '../../core/services/cart.service';
+import { CartService } from '../../core/services/cart-service';
 
 @Component({
   selector: 'app-checkout',
@@ -543,7 +543,7 @@ import { CartService } from '../../core/services/cart.service';
   styles: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CheckoutComponent {
+export class CheckoutPage {
   private fb = inject(FormBuilder);
   private cartService = inject(CartService);
   private router = inject(Router);

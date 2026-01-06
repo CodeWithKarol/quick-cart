@@ -1,6 +1,6 @@
 import { Component, inject, ChangeDetectionStrategy, signal } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
-import { CartService } from './core/services/cart.service';
+import { CartService } from './core/services/cart-service';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -181,7 +181,7 @@ import { CommonModule } from '@angular/common';
   styles: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class App {
+export class AppShell {
   private cartService = inject(CartService);
   cartCount = this.cartService.cartCount;
   isMobileMenuOpen = signal(false);

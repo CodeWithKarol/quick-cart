@@ -1,10 +1,10 @@
 import { TestBed } from '@angular/core/testing';
-import { App } from './app';
+import { AppShell } from './app-shell';
 import { provideRouter } from '@angular/router';
-import { CartService } from './core/services/cart.service';
+import { CartService } from './core/services/cart-service';
 import { computed } from '@angular/core';
 
-describe('App', () => {
+describe('AppShell', () => {
   let cartServiceSpy: any;
 
   beforeEach(async () => {
@@ -13,7 +13,7 @@ describe('App', () => {
     };
 
     await TestBed.configureTestingModule({
-      imports: [App],
+      imports: [AppShell],
       providers: [provideRouter([]), { provide: CartService, useValue: cartServiceSpy }],
     }).compileComponents();
   });

@@ -1,7 +1,7 @@
 import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { CartService } from '../../core/services/cart.service';
+import { CartService } from '../../core/services/cart-service';
 
 @Component({
   selector: 'app-cart',
@@ -248,7 +248,7 @@ import { CartService } from '../../core/services/cart.service';
   styles: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CartComponent {
+export class CartPage {
   private cartService = inject(CartService);
 
   cartItems = this.cartService.cartItems;

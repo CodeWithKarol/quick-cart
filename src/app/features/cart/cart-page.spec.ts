@@ -1,14 +1,14 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { CartComponent } from './cart.component';
-import { CartService } from '../../core/services/cart.service';
+import { CartPage } from './cart-page';
+import { CartService } from '../../core/services/cart-service';
 import { provideRouter } from '@angular/router';
 import { signal, computed } from '@angular/core';
-import { CartItem } from '../../core/models/cart-item.model';
+import { CartItem } from '../../core/models/cart-item';
 import { vi } from 'vitest';
 
-describe('CartComponent', () => {
-  let component: CartComponent;
-  let fixture: ComponentFixture<CartComponent>;
+describe('CartPage', () => {
+  let component: CartPage;
+  let fixture: ComponentFixture<CartPage>;
   let cartServiceSpy: any;
 
   const mockCartItems: CartItem[] = [
@@ -35,11 +35,11 @@ describe('CartComponent', () => {
     };
 
     await TestBed.configureTestingModule({
-      imports: [CartComponent],
+      imports: [CartPage],
       providers: [provideRouter([]), { provide: CartService, useValue: cartServiceSpy }],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(CartComponent);
+    fixture = TestBed.createComponent(CartPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

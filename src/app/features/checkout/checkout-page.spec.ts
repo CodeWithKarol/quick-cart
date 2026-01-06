@@ -1,13 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { CheckoutComponent } from './checkout.component';
-import { CartService } from '../../core/services/cart.service';
+import { CheckoutPage } from './checkout-page';
+import { CartService } from '../../core/services/cart-service';
 import { provideRouter } from '@angular/router';
 import { signal, computed } from '@angular/core';
 import { vi } from 'vitest';
 
-describe('CheckoutComponent', () => {
-  let component: CheckoutComponent;
-  let fixture: ComponentFixture<CheckoutComponent>;
+describe('CheckoutPage', () => {
+  let component: CheckoutPage;
+  let fixture: ComponentFixture<CheckoutPage>;
   let cartServiceSpy: any;
 
   beforeEach(async () => {
@@ -18,11 +18,11 @@ describe('CheckoutComponent', () => {
     };
 
     await TestBed.configureTestingModule({
-      imports: [CheckoutComponent],
+      imports: [CheckoutPage],
       providers: [provideRouter([]), { provide: CartService, useValue: cartServiceSpy }],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(CheckoutComponent);
+    fixture = TestBed.createComponent(CheckoutPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

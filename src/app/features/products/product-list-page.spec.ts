@@ -1,14 +1,14 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ProductListComponent } from './product-list.component';
-import { ProductService } from '../../core/services/product.service';
-import { CartService } from '../../core/services/cart.service';
+import { ProductListPage } from './product-list-page';
+import { ProductService } from '../../core/services/product-service';
+import { CartService } from '../../core/services/cart-service';
 import { of } from 'rxjs';
-import { Product } from '../../core/models/product.model';
+import { Product } from '../../core/models/product';
 import { vi } from 'vitest';
 
-describe('ProductListComponent', () => {
-  let component: ProductListComponent;
-  let fixture: ComponentFixture<ProductListComponent>;
+describe('ProductListPage', () => {
+  let component: ProductListPage;
+  let fixture: ComponentFixture<ProductListPage>;
   let cartServiceSpy: any;
   let productServiceSpy: any;
 
@@ -22,14 +22,14 @@ describe('ProductListComponent', () => {
     productServiceSpy = { getProducts: vi.fn().mockReturnValue(of(mockProducts)) };
 
     await TestBed.configureTestingModule({
-      imports: [ProductListComponent],
+      imports: [ProductListPage],
       providers: [
         { provide: CartService, useValue: cartServiceSpy },
         { provide: ProductService, useValue: productServiceSpy },
       ],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ProductListComponent);
+    fixture = TestBed.createComponent(ProductListPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,15 +1,15 @@
 import { Component, inject, signal, computed, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ProductService } from '../../core/services/product.service';
-import { CartService } from '../../core/services/cart.service';
-import { ProductCardComponent } from '../../shared/components/product-card.component';
+import { ProductService } from '../../core/services/product-service';
+import { CartService } from '../../core/services/cart-service';
+import { ProductCard } from '../../shared/components/product-card';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { Product } from '../../core/models/product.model';
+import { Product } from '../../core/models/product';
 
 @Component({
   selector: 'app-product-list',
   standalone: true,
-  imports: [CommonModule, ProductCardComponent],
+  imports: [CommonModule, ProductCard],
   template: `
     <div class="bg-white min-h-screen">
       <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
@@ -126,7 +126,7 @@ import { Product } from '../../core/models/product.model';
   styles: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProductListComponent {
+export class ProductListPage {
   private productService = inject(ProductService);
   private cartService = inject(CartService);
 
