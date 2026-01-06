@@ -9,8 +9,17 @@ import { Product } from '../../models/product';
   selector: 'app-product-overview',
   standalone: true,
   imports: [CommonModule, NgOptimizedImage, RouterLink],
+  styles: [
+    `
+      :host {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+      }
+    `,
+  ],
   template: `
-    <div class="bg-white">
+    <div class="bg-white flex-1 flex flex-col">
       <nav aria-label="Breadcrumb" class="pt-4 sm:pt-8">
         <ol
           role="list"

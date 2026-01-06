@@ -74,7 +74,7 @@ import { Product } from '../../models/product';
         <div class="flex justify-center items-center h-64">
           <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
         </div>
-        } @else {
+        } @else { @if (filteredProducts().length > 0) {
         <div
           class="grid grid-cols-1 border-t border-l border-gray-200 sm:grid-cols-2 lg:grid-cols-4"
         >
@@ -86,9 +86,12 @@ import { Product } from '../../models/product';
             class="border-r border-b border-gray-200 bg-white"
           >
           </app-product-card>
-          } @empty {
+          }
+        </div>
+        } @else {
+        <div class="flex flex-col items-center justify-center py-12">
           <div
-            class="col-span-full text-center py-12 bg-gray-50 rounded-lg border border-dashed border-gray-300"
+            class="w-full text-center py-24 bg-gray-50 rounded-lg border border-dashed border-gray-300"
           >
             <svg
               class="mx-auto h-12 w-12 text-gray-400"
@@ -118,9 +121,8 @@ import { Product } from '../../models/product';
               </button>
             </div>
           </div>
-          }
         </div>
-        }
+        } }
       </div>
     </div>
   `,
