@@ -1,7 +1,7 @@
 import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { CartService } from '../../core/services/cart-service';
+import { CartService } from '../../services/cart-service';
 
 @Component({
   selector: 'app-cart',
@@ -46,7 +46,7 @@ import { CartService } from '../../core/services/cart-service';
 
             <ul role="list" class="divide-y divide-gray-200 border-t border-b border-gray-200">
               @for (item of cartItems(); track item.product.id) {
-              <li class="flex py-6 sm:py-10">
+              <li class="cart-item flex py-6 sm:py-10">
                 <div class="flex-shrink-0">
                   <div
                     class="relative h-24 w-24 rounded-md border border-gray-200 overflow-hidden sm:h-48 sm:w-48"
@@ -60,7 +60,7 @@ import { CartService } from '../../core/services/cart-service';
                   </div>
                 </div>
 
-                <div class="ml-4 flex flex-1 flex-col justify-between sm:ml-6">
+                <div class="item-details ml-4 flex flex-1 flex-col justify-between sm:ml-6">
                   <div class="relative pr-9 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:pr-0">
                     <div>
                       <div class="flex justify-between">

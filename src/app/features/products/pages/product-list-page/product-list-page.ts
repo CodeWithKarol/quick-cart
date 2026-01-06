@@ -1,10 +1,10 @@
 import { Component, inject, signal, computed, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ProductService } from '../../core/services/product-service';
-import { CartService } from '../../core/services/cart-service';
-import { ProductCard } from '../../shared/components/product-card';
+import { ProductService } from '../../services/product-service';
+import { CartService } from '../../../cart/services/cart-service';
+import { ProductCard } from '../../components/product-card/product-card';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { Product } from '../../core/models/product';
+import { Product } from '../../models/product';
 
 @Component({
   selector: 'app-product-list',

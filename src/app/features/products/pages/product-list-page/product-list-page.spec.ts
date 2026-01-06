@@ -1,9 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { ProductListPage } from './product-list-page';
-import { ProductService } from '../../core/services/product-service';
-import { CartService } from '../../core/services/cart-service';
+import { ProductService } from '../../services/product-service';
+import { CartService } from '../../../cart/services/cart-service';
 import { of } from 'rxjs';
-import { Product } from '../../core/models/product';
+import { Product } from '../../models/product';
 import { vi } from 'vitest';
 
 describe('ProductListPage', () => {
@@ -24,6 +25,7 @@ describe('ProductListPage', () => {
     await TestBed.configureTestingModule({
       imports: [ProductListPage],
       providers: [
+        provideRouter([]),
         { provide: CartService, useValue: cartServiceSpy },
         { provide: ProductService, useValue: productServiceSpy },
       ],

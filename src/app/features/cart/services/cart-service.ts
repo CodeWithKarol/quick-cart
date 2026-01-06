@@ -1,6 +1,6 @@
 import { Injectable, signal, computed } from '@angular/core';
 import { CartItem } from '../models/cart-item';
-import { Product } from '../models/product';
+import { Product } from '../../products/models/product';
 
 @Injectable({
   providedIn: 'root',
@@ -19,10 +19,10 @@ export class CartService {
     this.cartItemsSignal().reduce((acc, item) => acc + item.product.price * item.quantity, 0)
   );
 
-  // Expose the cart items as a readonly signal
+  // Expose the cartItems signal as readonly
   readonly cartItems = this.cartItemsSignal.asReadonly();
 
-  addToCart(product: Product): void {
+  addToCart(product: Product) {
     this.cartItemsSignal.update((items) => {
       const existingItem = items.find((item) => item.product.id === product.id);
       if (existingItem) {
@@ -34,11 +34,11 @@ export class CartService {
     });
   }
 
-  removeFromCart(productId: number): void {
+  removeFromCart(productId: number) {
     this.cartItemsSignal.update((items) => items.filter((item) => item.product.id !== productId));
   }
 
-  updateQuantity(productId: number, quantity: number): void {
+  updateQuantity(productId: number, quantity: number) {
     if (quantity <= 0) {
       this.removeFromCart(productId);
       return;
@@ -49,7 +49,7 @@ export class CartService {
     );
   }
 
-  clearCart(): void {
+  clearCart() {
     this.cartItemsSignal.set([]);
   }
 }

@@ -1,7 +1,7 @@
 import { Component, input, output, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { Product } from '../../core/models/product';
+import { Product } from '../../models/product';
 
 @Component({
   selector: 'app-product-card',
@@ -46,7 +46,7 @@ import { Product } from '../../core/models/product';
               {{ product().name }}
             </h3>
           </div>
-          <p class="text-lg font-bold text-gray-900 ml-2">{{ product().price | currency }}</p>
+          <p class="price text-lg font-bold text-gray-900 ml-2">{{ product().price | currency }}</p>
         </div>
 
         <p class="text-sm text-gray-500 line-clamp-2 flex-1 mb-4">

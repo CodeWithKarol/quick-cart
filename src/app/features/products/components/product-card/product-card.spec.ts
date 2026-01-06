@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { ProductCard } from './product-card';
-import { Product } from '../../core/models/product';
+import { Product } from '../../models/product';
 
 describe('ProductCard', () => {
   let component: ProductCard;
@@ -18,9 +19,10 @@ describe('ProductCard', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ProductCard],
+      providers: [provideRouter([])],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ProductCardComponent);
+    fixture = TestBed.createComponent(ProductCard);
     component = fixture.componentInstance;
     fixture.componentRef.setInput('product', mockProduct);
     fixture.detectChanges();

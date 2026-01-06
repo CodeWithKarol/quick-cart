@@ -1,9 +1,9 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { ProductService } from '../../core/services/product-service';
-import { CartService } from '../../core/services/cart-service';
-import { Product } from '../../core/models/product';
+import { ProductService } from '../../services/product-service';
+import { CartService } from '../../../cart/services/cart-service';
+import { Product } from '../../models/product';
 
 @Component({
   selector: 'app-product-overview',

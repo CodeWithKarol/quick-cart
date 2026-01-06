@@ -1,6 +1,6 @@
 import { Component, inject, ChangeDetectionStrategy, signal } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
-import { CartService } from './core/services/cart-service';
+import { CartService } from './features/cart/services/cart-service';
 import { CommonModule } from '@angular/common';
 
 @Component({

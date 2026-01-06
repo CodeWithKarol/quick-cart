@@ -1,9 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CartPage } from './cart-page';
-import { CartService } from '../../core/services/cart-service';
+import { CartService } from '../../services/cart-service';
 import { provideRouter } from '@angular/router';
 import { signal, computed } from '@angular/core';
-import { CartItem } from '../../core/models/cart-item';
+import { CartItem } from '../../models/cart-item';
 import { vi } from 'vitest';
 
 describe('CartPage', () => {
