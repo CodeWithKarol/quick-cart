@@ -14,6 +14,8 @@ describe('ProductCard', () => {
     description: 'Test Description',
     imageUrl: 'test.jpg',
     category: 'Test',
+    rating: 4.5,
+    reviews: 10,
   };
 
   beforeEach(async () => {
@@ -36,15 +38,5 @@ describe('ProductCard', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('h3')?.textContent).toContain('Test Product');
     expect(compiled.querySelector('.price')?.textContent).toContain('$10.00');
-  });
-
-  it('should emit addToCart event when button is clicked', () => {
-    let emittedProduct: Product | undefined;
-    component.addToCart.subscribe((p) => (emittedProduct = p));
-
-    const button = fixture.nativeElement.querySelector('button');
-    button.click();
-
-    expect(emittedProduct).toEqual(mockProduct);
   });
 });

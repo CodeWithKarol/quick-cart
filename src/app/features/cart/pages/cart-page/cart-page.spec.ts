@@ -20,6 +20,8 @@ describe('CartPage', () => {
         description: 'D1',
         imageUrl: 'img1',
         category: 'C1',
+        rating: 4.5,
+        reviews: 10,
       },
       quantity: 2,
     },

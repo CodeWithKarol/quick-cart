@@ -14,8 +14,26 @@ describe('ProductListPage', () => {
   let productServiceSpy: any;
 
   const mockProducts: Product[] = [
-    { id: 1, name: 'P1', price: 10, description: 'D1', imageUrl: 'img1', category: 'C1' },
-    { id: 2, name: 'P2', price: 20, description: 'D2', imageUrl: 'img2', category: 'C2' },
+    {
+      id: 1,
+      name: 'P1',
+      price: 10,
+      description: 'D1',
+      imageUrl: 'img1',
+      category: 'C1',
+      rating: 4,
+      reviews: 5,
+    },
+    {
+      id: 2,
+      name: 'P2',
+      price: 20,
+      description: 'D2',
+      imageUrl: 'img2',
+      category: 'C2',
+      rating: 3,
+      reviews: 8,
+    },
   ];
 
   beforeEach(async () => {

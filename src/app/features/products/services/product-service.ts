@@ -14,6 +14,8 @@ export class ProductService {
       description: 'High-quality wireless headphones with noise cancellation.',
       imageUrl: 'https://placehold.co/300x300/png?text=Headphones',
       category: 'Electronics',
+      rating: 4.5,
+      reviews: 128,
     },
     {
       id: 2,
@@ -22,6 +24,8 @@ export class ProductService {
       description: 'Track your fitness and notifications on the go.',
       imageUrl: 'https://placehold.co/300x300/png?text=Watch',
       category: 'Electronics',
+      rating: 4.2,
+      reviews: 85,
     },
     {
       id: 3,
@@ -30,6 +34,8 @@ export class ProductService {
       description: 'Comfortable running shoes for all terrains.',
       imageUrl: 'https://placehold.co/300x300/png?text=Shoes',
       category: 'Sports',
+      rating: 4.8,
+      reviews: 210,
     },
     {
       id: 4,
@@ -38,6 +44,8 @@ export class ProductService {
       description: 'Durable backpack for travel and school.',
       imageUrl: 'https://placehold.co/300x300/png?text=Backpack',
       category: 'Accessories',
+      rating: 4.6,
+      reviews: 45,
     },
     {
       id: 5,
@@ -46,6 +54,8 @@ export class ProductService {
       description: 'Brew the perfect cup of coffee every morning.',
       imageUrl: 'https://placehold.co/300x300/png?text=Coffee',
       category: 'Home',
+      rating: 4.7,
+      reviews: 320,
     },
   ];
 

@@ -13,11 +13,11 @@ import { Product } from '../../models/product';
   template: `
     <div class="bg-white min-h-screen">
       <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
-        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-10">
+        <div class="flex justify-between items-center mb-8">
           <h2 class="text-2xl font-bold tracking-tight text-gray-900">Our Products</h2>
 
-          <div class="flex flex-col sm:flex-row gap-4">
-            <div class="relative">
+          <div class="flex items-center gap-4">
+            <div class="relative w-64">
               <input
                 type="text"
                 [value]="searchQuery()"
@@ -76,13 +76,14 @@ import { Product } from '../../models/product';
         </div>
         } @else {
         <div
-          class="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8"
+          class="grid grid-cols-1 border-t border-l border-gray-200 sm:grid-cols-2 lg:grid-cols-4"
         >
           @for (product of filteredProducts(); track product.id; let i = $index) {
           <app-product-card
             [product]="product"
             [priority]="i < 4"
             (addToCart)="onAddToCart($event)"
+            class="border-r border-b border-gray-200 bg-white"
           >
           </app-product-card>
           } @empty {
