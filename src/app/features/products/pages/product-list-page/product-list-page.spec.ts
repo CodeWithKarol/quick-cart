@@ -6,6 +6,7 @@ import { CartService } from '../../../cart/services/cart-service';
 import { of } from 'rxjs';
 import { Product } from '../../models/product';
 import { vi } from 'vitest';
+import { By } from '@angular/platform-browser';
 
 describe('ProductListPage', () => {
   let component: ProductListPage;
@@ -16,23 +17,33 @@ describe('ProductListPage', () => {
   const mockProducts: Product[] = [
     {
       id: 1,
-      name: 'P1',
+      name: 'Alpha Product',
       price: 10,
-      description: 'D1',
+      description: 'First excellent item',
       imageUrl: 'img1',
-      category: 'C1',
+      category: 'Electronics',
       rating: 4,
       reviews: 5,
     },
     {
       id: 2,
-      name: 'P2',
+      name: 'Beta Product',
       price: 20,
-      description: 'D2',
+      description: 'Second amazing item',
       imageUrl: 'img2',
-      category: 'C2',
+      category: 'Clothing',
       rating: 3,
       reviews: 8,
+    },
+    {
+      id: 3,
+      name: 'Gamma Gadget',
+      price: 30,
+      description: 'Third cool electronics',
+      imageUrl: 'img3',
+      category: 'Electronics',
+      rating: 5,
+      reviews: 10,
     },
   ];
 
@@ -59,21 +70,85 @@ describe('ProductListPage', () => {
   });
 
   it('should load products', () => {
-    expect(component.products().length).toBe(2);
+    expect(component.products().length).toBe(3);
+    // Initial categories check
+    expect(component.categories()).toEqual(['Electronics', 'Clothing']);
   });
 
-  it('should filter products by search query', () => {
-    component.searchQuery.set('P1');
+  it('should filter products by search query (name case insensitive)', () => {
+    component.searchQuery.set('alpha');
     fixture.detectChanges();
     expect(component.filteredProducts().length).toBe(1);
-    expect(component.filteredProducts()[0].name).toBe('P1');
+    expect(component.filteredProducts()[0].name).toBe('Alpha Product');
+  });
+
+  it('should filter products by search query (description)', () => {
+    component.searchQuery.set('amazing');
+    fixture.detectChanges();
+    expect(component.filteredProducts().length).toBe(1);
+    expect(component.filteredProducts()[0].name).toBe('Beta Product');
   });
 
   it('should filter products by category', () => {
-    component.selectedCategory.set('C2');
+    component.selectedCategory.set('Electronics');
+    fixture.detectChanges();
+    expect(component.filteredProducts().length).toBe(2);
+    const names = component.filteredProducts().map((p) => p.name);
+    expect(names).toContain('Alpha Product');
+    expect(names).toContain('Gamma Gadget');
+  });
+
+  it('should filter by both search and category', () => {
+    component.selectedCategory.set('Electronics');
+    component.searchQuery.set('Gamma');
+    fixture.detectChanges();
+
+    expect(component.filteredProducts().length).toBe(1);
+    expect(component.filteredProducts()[0].name).toBe('Gamma Gadget');
+  });
+
+  it('should show empty state when no matches found', () => {
+    component.searchQuery.set('Nonexistent');
+    fixture.detectChanges();
+    expect(component.filteredProducts().length).toBe(0);
+
+    // Check if "No products found" message is displayed
+    const debugElement = fixture.debugElement.query(By.css('h3'));
+    expect(debugElement.nativeElement.textContent).toContain('No products found');
+  });
+
+  it('should reset filters', () => {
+    component.searchQuery.set('Alpha');
+    component.selectedCategory.set('Electronics');
     fixture.detectChanges();
     expect(component.filteredProducts().length).toBe(1);
-    expect(component.filteredProducts()[0].name).toBe('P2');
+
+    component.resetFilters();
+    fixture.detectChanges();
+
+    expect(component.searchQuery()).toBe('');
+    expect(component.selectedCategory()).toBe('');
+    expect(component.filteredProducts().length).toBe(3);
+  });
+
+  it('should update search via input event', () => {
+    const inputEvent = { target: { value: 'Beta' } } as unknown as Event;
+    component.updateSearch(inputEvent);
+    fixture.detectChanges();
+
+    expect(component.searchQuery()).toBe('Beta');
+    expect(component.filteredProducts().length).toBe(1);
+    expect(component.filteredProducts()[0].name).toBe('Beta Product');
+  });
+
+  it('should update category via change event', () => {
+    const changeEvent = { target: { value: 'Clothing' } } as unknown as Event;
+    component.updateCategory(changeEvent);
+    fixture.detectChanges();
+
+    expect(component.selectedCategory()).toBe('Clothing');
+    expect(component.filteredProducts().length).toBe(1);
+    expect(component.filteredProducts()[0].name).toBe('Beta Product');
   });
 
   it('should add to cart', () => {

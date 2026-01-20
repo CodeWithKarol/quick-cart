@@ -30,4 +30,20 @@ describe('AppShell', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('.logo')?.textContent).toContain('QuickCart');
   });
+
+  it('should toggle mobile menu', () => {
+    const fixture = TestBed.createComponent(AppShell);
+    const app = fixture.componentInstance;
+
+    // Initial state
+    expect(app.isMobileMenuOpen()).toBe(false);
+
+    // Toggle on
+    app.toggleMobileMenu();
+    expect(app.isMobileMenuOpen()).toBe(true);
+
+    // Toggle off
+    app.toggleMobileMenu();
+    expect(app.isMobileMenuOpen()).toBe(false);
+  });
 });

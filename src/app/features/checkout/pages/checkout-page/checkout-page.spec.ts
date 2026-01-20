@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CheckoutPage } from './checkout-page';
 import { CartService } from '../../../cart/services/cart-service';
 import { provideRouter } from '@angular/router';
+import { Router } from '@angular/router';
 import { signal, computed } from '@angular/core';
 import { vi } from 'vitest';
 
@@ -9,12 +10,13 @@ describe('CheckoutPage', () => {
   let component: CheckoutPage;
   let fixture: ComponentFixture<CheckoutPage>;
   let cartServiceSpy: any;
+  let router: Router;
 
   beforeEach(async () => {
     cartServiceSpy = {
       clearCart: vi.fn(),
       cartItems: signal([]),
-      cartTotal: computed(() => 0),
+      cartTotal: computed(() => 100), // Fixed amount for easier calc
     };
 
     await TestBed.configureTestingModule({
@@ -24,7 +26,11 @@ describe('CheckoutPage', () => {
 
     fixture = TestBed.createComponent(CheckoutPage);
     component = fixture.componentInstance;
+    router = TestBed.inject(Router);
     fixture.detectChanges();
+
+    // Mock alert
+    vi.spyOn(window, 'alert').mockImplementation(() => {});
   });
 
   it('should create', () => {
@@ -67,5 +73,60 @@ describe('CheckoutPage', () => {
 
     cvvControl?.setValue('123');
     expect(cvvControl?.valid).toBe(true);
+  });
+
+  it('should calculate shipping and total correctly', () => {
+    // Initial state (standard shipping)
+    expect(component.deliveryMethod()).toBe('standard');
+    expect(component.shippingCost()).toBe(5.0);
+    expect(component.total()).toBe(105.0); // 100 + 5
+
+    // Change to express
+    component.setDeliveryMethod('express');
+    expect(component.deliveryMethod()).toBe('express');
+    expect(component.shippingCost()).toBe(15.0);
+    expect(component.total()).toBe(115.0); // 100 + 15
+  });
+
+  it('should not submit if form is invalid', () => {
+    const markAllAsTouchedSpy = vi.spyOn(component.checkoutForm, 'markAllAsTouched');
+    component.onSubmit();
+
+    expect(component.checkoutForm.valid).toBe(false);
+    expect(markAllAsTouchedSpy).toHaveBeenCalled();
+    expect(cartServiceSpy.clearCart).not.toHaveBeenCalled();
+  });
+
+  it('should process order if form is valid', () => {
+    vi.useFakeTimers();
+    const navigateSpy = vi.spyOn(router, 'navigate');
+
+    // Fill form with valid data
+    component.checkoutForm.patchValue({
+      fullName: 'John Doe',
+      email: 'john@example.com',
+      address: '123 Main St',
+      city: 'New York',
+      zipCode: '10001',
+      cardNumber: '1234567812345678',
+      expiry: '12/25',
+      cvv: '123',
+    });
+
+    expect(component.checkoutForm.valid).toBe(true);
+
+    component.onSubmit();
+
+    expect(component.isProcessing).toBe(true);
+
+    // Fast-forward 2000ms
+    vi.advanceTimersByTime(2000);
+
+    expect(component.isProcessing).toBe(false);
+    expect(cartServiceSpy.clearCart).toHaveBeenCalled();
+    expect(window.alert).toHaveBeenCalledWith('Order placed successfully!');
+    expect(navigateSpy).toHaveBeenCalledWith(['/']);
+
+    vi.useRealTimers();
   });
 });
