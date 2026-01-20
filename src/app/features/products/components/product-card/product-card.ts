@@ -81,6 +81,20 @@ import { WishlistService } from '../../../../features/wishlist/services/wishlist
 
       <p class="price mt-4 text-sm font-medium text-gray-900">{{ product().price | currency }}</p>
 
+      <!-- Colors -->
+      @if (product().colors && product().colors!.length > 0) {
+        <div class="mt-4 flex items-center justify-center space-x-3">
+          @for (color of product().colors; track color.name) {
+            <span
+              class="h-4 w-4 rounded-full border border-black border-opacity-10"
+              [class]="color.class"
+              [attr.aria-label]="color.name"
+              [title]="color.name"
+            ></span>
+          }
+        </div>
+      }
+
       <button
         type="button"
         (click)="onAddToCart($event)"

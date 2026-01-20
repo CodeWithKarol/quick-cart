@@ -4,6 +4,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ProductService } from '../../services/product-service';
 import { CartService } from '../../../cart/services/cart-service';
 import { WishlistService } from '../../../../features/wishlist/services/wishlist.service';
+import { RecentlyViewedService } from '../../services/recently-viewed.service';
 import { Product } from '../../models/product';
 import { ProductCard } from '../../components/product-card/product-card';
 
@@ -135,6 +136,29 @@ import { ProductCard } from '../../components/product-card/product-card';
                   </div>
                 </div>
 
+                <!-- Colors -->
+                @if (product.colors && product.colors.length > 0) {
+                  <div class="mt-6">
+                    <h3 class="text-sm font-medium text-gray-900">Available Colors</h3>
+                    <div class="mt-4 flex items-center space-x-3">
+                      @for (color of product.colors; track color.name) {
+                        <div
+                          class="relative -m-0.5 flex items-center justify-center rounded-full p-0.5 ring-2 ring-offset-1"
+                          [class]="color.selectedClass"
+                          [title]="color.name"
+                        >
+                          <span class="sr-only">{{ color.name }}</span>
+                          <span
+                            aria-hidden="true"
+                            class="h-8 w-8 rounded-full border border-black border-opacity-10"
+                            [class]="color.class"
+                          ></span>
+                        </div>
+                      }
+                    </div>
+                  </div>
+                }
+
                 <div class="mt-6">
                   <h3 class="sr-only">Description</h3>
                   <div class="space-y-6 text-base text-gray-700">
@@ -222,6 +246,22 @@ import { ProductCard } from '../../components/product-card/product-card';
                 </div>
               </div>
             }
+
+            @if (recentlyViewedProducts().length > 0) {
+              <div class="mt-16 border-t border-gray-200 pt-16">
+                <h2 class="text-2xl font-bold tracking-tight text-gray-900">Recently Viewed</h2>
+                <div
+                  class="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8"
+                >
+                  @for (recent of recentlyViewedProducts(); track recent.id) {
+                    <app-product-card
+                      [product]="recent"
+                      (addToCart)="addToCart($event)"
+                    ></app-product-card>
+                  }
+                </div>
+              </div>
+            }
           </div>
         } @else {
           <div class="flex justify-center items-center h-96">
@@ -229,6 +269,27 @@ import { ProductCard } from '../../components/product-card/product-card';
           </div>
         }
       </div>
+
+      <!-- Sticky Mobile CTA -->
+      @if (product(); as product) {
+        <div
+          class="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 p-4 sm:hidden shadow-lg"
+        >
+          <div class="flex items-center justify-between gap-4">
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-medium text-gray-900 truncate">{{ product.name }}</p>
+              <p class="text-sm text-gray-500">{{ product.price | currency }}</p>
+            </div>
+            <button
+              type="button"
+              (click)="addToCart(product)"
+              class="flex-shrink-0 bg-indigo-600 border border-transparent rounded-md py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
+              Add to Cart
+            </button>
+          </div>
+        </div>
+      }
     </div>
   `,
 })
@@ -237,9 +298,11 @@ export class ProductOverviewPage implements OnInit {
   private productService = inject(ProductService);
   private cartService = inject(CartService);
   private wishlistService = inject(WishlistService);
+  private recentlyViewedService = inject(RecentlyViewedService);
 
   product = signal<Product | undefined>(undefined);
   relatedProducts = signal<Product[]>([]);
+  recentlyViewedProducts = signal<Product[]>([]);
   selectedImage = signal<string>('');
 
   isWishlisted = computed(() => {
@@ -255,12 +318,25 @@ export class ProductOverviewPage implements OnInit {
           this.product.set(product);
           if (product) {
             this.selectedImage.set(product.imageUrl);
+            this.recentlyViewedService.addProduct(product.id);
             this.productService.getRelatedProducts(product.id).subscribe((related) => {
               this.relatedProducts.set(related);
             });
+            this.loadRecentlyViewed();
           }
         });
       }
+    });
+  }
+
+  loadRecentlyViewed() {
+    this.productService.getProducts().subscribe((products) => {
+      const ids = this.recentlyViewedService.recentlyViewedIds();
+      const currentId = this.product()?.id;
+      const viewed = products
+        .filter((p) => ids.includes(p.id) && p.id !== currentId) // Exclude current
+        .sort((a, b) => ids.indexOf(a.id) - ids.indexOf(b.id));
+      this.recentlyViewedProducts.set(viewed);
     });
   }
 

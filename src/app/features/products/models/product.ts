@@ -8,4 +8,5 @@ export interface Product {
   rating: number;
   reviews: number;
   images?: string[];
+  colors?: { name: string; class: string; selectedClass: string }[];
 }

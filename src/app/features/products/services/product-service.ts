@@ -22,6 +22,11 @@ export class ProductService {
         'https://placehold.co/300x300/png?text=Headphones+3',
         'https://placehold.co/300x300/png?text=Headphones+4',
       ],
+      colors: [
+        { name: 'Black', class: 'bg-gray-900', selectedClass: 'ring-gray-900' },
+        { name: 'White', class: 'bg-white', selectedClass: 'ring-gray-400' },
+        { name: 'Blue', class: 'bg-blue-600', selectedClass: 'ring-blue-600' },
+      ],
     },
     {
       id: 2,
@@ -35,6 +40,11 @@ export class ProductService {
       images: [
         'https://placehold.co/300x300/png?text=Watch+1',
         'https://placehold.co/300x300/png?text=Watch+2',
+      ],
+      colors: [
+        { name: 'Space Gray', class: 'bg-gray-700', selectedClass: 'ring-gray-700' },
+        { name: 'Silver', class: 'bg-gray-200', selectedClass: 'ring-gray-400' },
+        { name: 'Rose Gold', class: 'bg-pink-200', selectedClass: 'ring-pink-200' },
       ],
     },
     {
