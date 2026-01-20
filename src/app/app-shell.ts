@@ -1,15 +1,24 @@
 import { Component, inject, ChangeDetectionStrategy, signal } from '@angular/core';
-import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
+import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { CartService } from './features/cart/services/cart-service';
 import { CommonModule } from '@angular/common';
 import { ToastContainerComponent } from './shared/components/toast/toast.component';
+import { CartDrawerComponent } from './shared/components/cart-drawer/cart-drawer.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, CommonModule, ToastContainerComponent],
+  imports: [
+    RouterOutlet,
+    RouterLink,
+    RouterLinkActive,
+    CommonModule,
+    ToastContainerComponent,
+    CartDrawerComponent,
+  ],
   template: `
     <app-toast-container></app-toast-container>
+    <app-cart-drawer></app-cart-drawer>
     <div class="min-h-screen flex flex-col bg-gray-50 font-sans text-gray-900">
       <!-- Promo Bar -->
       <div class="bg-indigo-600 px-4 py-3 text-white">
@@ -53,11 +62,38 @@ import { ToastContainerComponent } from './shared/components/toast/toast.compone
                 >
               </div>
             </div>
+
+            <!-- Global Search -->
+            <div class="flex flex-1 items-center justify-center px-6 lg:ml-6 lg:justify-end">
+              <div class="w-full max-w-lg lg:max-w-xs">
+                <label for="search" class="sr-only">Search</label>
+                <div class="relative text-gray-400 focus-within:text-gray-600">
+                  <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                    <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                      <path
+                        fill-rule="evenodd"
+                        d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                  </div>
+                  <input
+                    id="search"
+                    class="block w-full rounded-md border border-gray-300 bg-white py-1.5 pl-10 pr-3 text-gray-900 placeholder-gray-500 focus:border-indigo-500 focus:placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
+                    placeholder="Search products..."
+                    type="search"
+                    (input)="onSearch($event)"
+                  />
+                </div>
+              </div>
+            </div>
+
             <div class="flex items-center gap-4">
-              <a
-                routerLink="/cart"
-                routerLinkActive="text-indigo-600"
+              <button
+                type="button"
+                (click)="openCart()"
                 class="group -m-2 flex items-center p-2 text-gray-700 hover:text-indigo-600 transition-colors"
+                style="background: none; border: none; cursor: pointer;"
               >
                 <span class="sr-only">items in cart, view bag</span>
                 <div class="relative">
@@ -87,7 +123,7 @@ import { ToastContainerComponent } from './shared/components/toast/toast.compone
                   class="ml-2 text-sm font-medium text-gray-700 group-hover:text-indigo-600 hidden sm:block"
                   >Cart</span
                 >
-              </a>
+              </button>
               <div class="flex md:hidden">
                 <button
                   type="button"
@@ -277,10 +313,20 @@ import { ToastContainerComponent } from './shared/components/toast/toast.compone
 })
 export class AppShell {
   private cartService = inject(CartService);
+  private router = inject(Router);
   cartCount = this.cartService.cartCount;
   isMobileMenuOpen = signal(false);
 
   toggleMobileMenu() {
     this.isMobileMenuOpen.update((v) => !v);
+  }
+
+  onSearch(event: Event) {
+    const input = event.target as HTMLInputElement;
+    this.router.navigate(['/'], { queryParams: { q: input.value } });
+  }
+
+  openCart() {
+    this.cartService.openDrawer();
   }
 }

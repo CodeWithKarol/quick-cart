@@ -48,6 +48,13 @@ import { WishlistService } from '../../../../features/wishlist/services/wishlist
             class="h-full w-full object-cover object-center group-hover:opacity-75"
           />
         }
+        <button
+          type="button"
+          (click)="onQuickView($event)"
+          class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm text-gray-900 px-4 py-2 rounded-full shadow-sm text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white z-20 transform hover:scale-105"
+        >
+          Quick View
+        </button>
       </div>
 
       <h3 class="text-sm font-medium text-gray-900">
@@ -113,18 +120,25 @@ export class ProductCard {
   product = input.required<Product>();
   priority = input(false);
   addToCart = output<Product>();
+  quickView = output<Product>();
 
   isWishlisted = computed(() => this.wishlistService.isInWishlist(this.product().id));
 
-  toggleWishlist(event: MouseEvent) {
+  toggleWishlist(event: Event) {
     event.stopPropagation();
     event.preventDefault();
     this.wishlistService.toggle(this.product().id);
   }
 
-  onAddToCart(event: MouseEvent) {
+  onAddToCart(event: Event) {
     event.stopPropagation();
     event.preventDefault();
     this.addToCart.emit(this.product());
+  }
+
+  onQuickView(event: Event) {
+    event.stopPropagation();
+    event.preventDefault();
+    this.quickView.emit(this.product());
   }
 }

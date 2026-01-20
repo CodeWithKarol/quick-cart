@@ -5,7 +5,7 @@ export const routes: Routes = [
     path: '',
     loadComponent: () =>
       import('./features/products/pages/product-list-page/product-list-page').then(
-        (m) => m.ProductListPage
+        (m) => m.ProductListPage,
       ),
     title: 'QuickCart - Home',
   },
@@ -13,7 +13,7 @@ export const routes: Routes = [
     path: 'product/:id',
     loadComponent: () =>
       import('./features/products/pages/product-overview-page/product-overview-page').then(
-        (m) => m.ProductOverviewPage
+        (m) => m.ProductOverviewPage,
       ),
     title: 'QuickCart - Product Details',
   },
@@ -28,6 +28,14 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/checkout/pages/checkout-page/checkout-page').then((m) => m.CheckoutPage),
     title: 'QuickCart - Checkout',
+  },
+  {
+    path: 'order-success',
+    loadComponent: () =>
+      import('./features/checkout/pages/order-success-page/order-success-page').then(
+        (m) => m.OrderSuccessPage,
+      ),
+    title: 'QuickCart - Order Confirmed',
   },
   {
     path: '**',

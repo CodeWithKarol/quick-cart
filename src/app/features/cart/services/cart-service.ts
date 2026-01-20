@@ -25,16 +25,38 @@ export class CartService {
   // Expose the cartItems signal as readonly
   readonly cartItems = this.cartItemsSignal.asReadonly();
 
+  // Drawer state
+  readonly isDrawerOpen = signal(false);
+
+  toggleDrawer() {
+    this.isDrawerOpen.update((v) => !v);
+  }
+
+  openDrawer() {
+    this.isDrawerOpen.set(true);
+  }
+
+  closeDrawer() {
+    this.isDrawerOpen.set(false);
+  }
+
+  clearCart() {
+    this.cartItemsSignal.set([]);
+  }
+
   addToCart(product: Product) {
     this.cartItemsSignal.update((items) => {
+      // ... logic
       const existingItem = items.find((item) => item.product.id === product.id);
       if (existingItem) {
         this.toastService.show(`Updated quantity for ${product.name}`);
+        this.openDrawer(); // Auto open drawer on add
         return items.map((item) =>
           item.product.id === product.id ? { ...item, quantity: item.quantity + 1 } : item,
         );
       }
       this.toastService.show(`${product.name} added to cart`);
+      this.openDrawer(); // Auto open drawer on add
       return [...items, { product, quantity: 1 }];
     });
   }
@@ -52,9 +74,5 @@ export class CartService {
     this.cartItemsSignal.update((items) =>
       items.map((item) => (item.product.id === productId ? { ...item, quantity } : item)),
     );
-  }
-
-  clearCart() {
-    this.cartItemsSignal.set([]);
   }
 }

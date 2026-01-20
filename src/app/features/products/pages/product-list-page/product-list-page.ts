@@ -1,15 +1,24 @@
-import { Component, inject, signal, computed, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  inject,
+  signal,
+  computed,
+  ChangeDetectionStrategy,
+  OnInit,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 import { ProductService } from '../../services/product-service';
 import { CartService } from '../../../cart/services/cart-service';
 import { ProductCard } from '../../components/product-card/product-card';
+import { QuickViewComponent } from '../../components/quick-view/quick-view.component';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Product } from '../../models/product';
 
 @Component({
   selector: 'app-product-list',
   standalone: true,
-  imports: [CommonModule, ProductCard],
+  imports: [CommonModule, ProductCard, QuickViewComponent],
   template: `
     <div class="bg-white min-h-screen">
       <!-- Hero Section -->
@@ -42,28 +51,16 @@ import { Product } from '../../models/product';
           <h2 class="text-2xl font-bold tracking-tight text-gray-900">All Products</h2>
 
           <div class="flex items-center">
-            <div class="relative rounded-md shadow-sm max-w-xs">
-              <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                <svg
-                  class="h-5 w-5 text-gray-400"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z"
-                    clip-rule="evenodd"
-                  />
-                </svg>
-              </div>
-              <input
-                type="text"
-                [value]="searchQuery()"
-                (input)="updateSearch($event)"
-                class="block w-full rounded-md border-0 py-1.5 pl-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                placeholder="Search"
-              />
+            <div class="relative inline-block text-left">
+              <select
+                class="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900 border-none bg-transparent focus:ring-0"
+                (change)="updateSort($event)"
+              >
+                <option value="newest">Newest</option>
+                <option value="price-asc">Price: Low to High</option>
+                <option value="price-desc">Price: High to Low</option>
+                <option value="rating">Best Rating</option>
+              </select>
             </div>
           </div>
         </div>
@@ -239,6 +236,7 @@ import { Product } from '../../models/product';
                         [product]="product"
                         [priority]="i < 4"
                         (addToCart)="onAddToCart($event)"
+                        (quickView)="onQuickView($event)"
                         class="bg-white rounded-lg"
                       >
                       </app-product-card>
@@ -284,14 +282,21 @@ import { Product } from '../../models/product';
           </div>
         </section>
       </main>
+
+      <app-quick-view
+        [product]="selectedQuickViewProduct()"
+        [isOpen]="!!selectedQuickViewProduct()"
+        (close)="closeQuickView()"
+      ></app-quick-view>
     </div>
   `,
   styles: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProductListPage {
+export class ProductListPage implements OnInit {
   private productService = inject(ProductService);
   private cartService = inject(CartService);
+  private route = inject(ActivatedRoute);
 
   // Signals for state
   searchQuery = signal('');
@@ -299,6 +304,7 @@ export class ProductListPage {
   minPrice = signal<number | null>(null);
   maxPrice = signal<number | null>(null);
   minRating = signal<number>(0);
+  sortOption = signal('newest');
 
   // Load products using toSignal
   products = toSignal(this.productService.getProducts(), { initialValue: [] });
@@ -315,6 +321,7 @@ export class ProductListPage {
     const minP = this.minPrice();
     const maxP = this.maxPrice();
     const rating = this.minRating();
+    const sort = this.sortOption();
 
     result = result.filter((p) => {
       // Text Search
@@ -335,10 +342,38 @@ export class ProductListPage {
       return true;
     });
 
+    // Sort
+    switch (sort) {
+      case 'price-asc':
+        result = result.sort((a, b) => a.price - b.price);
+        break;
+      case 'price-desc':
+        result = result.sort((a, b) => b.price - a.price);
+        break;
+      case 'rating':
+        result = result.sort((a, b) => b.rating - a.rating);
+        break;
+      default: // newest
+        result = result.sort((a, b) => b.id - a.id);
+    }
+
     return result;
   });
 
   isLoading = computed(() => this.products().length === 0);
+
+  ngOnInit() {
+    this.route.queryParams.subscribe((params) => {
+      if (params['q']) {
+        this.searchQuery.set(params['q']);
+      }
+    });
+  }
+
+  updateSort(event: Event) {
+    const input = event.target as HTMLSelectElement;
+    this.sortOption.set(input.value);
+  }
 
   updateSearch(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -365,5 +400,15 @@ export class ProductListPage {
 
   onAddToCart(product: Product) {
     this.cartService.addToCart(product);
+  }
+
+  selectedQuickViewProduct = signal<Product | undefined>(undefined);
+
+  onQuickView(product: Product) {
+    this.selectedQuickViewProduct.set(product);
+  }
+
+  closeQuickView() {
+    this.selectedQuickViewProduct.set(undefined);
   }
 }

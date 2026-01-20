@@ -627,9 +627,8 @@ export class CheckoutPage {
       setTimeout(() => {
         this.isProcessing = false;
         this.cartService.clearCart();
-        alert('Order placed successfully!');
-        this.router.navigate(['/']);
-      }, 2000);
+        this.router.navigate(['/order-success']);
+      }, 1500);
     } else {
       this.checkoutForm.markAllAsTouched();
     }
