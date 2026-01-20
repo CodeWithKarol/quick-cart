@@ -12,9 +12,34 @@ import { Product } from '../../models/product';
   imports: [CommonModule, ProductCard],
   template: `
     <div class="bg-white min-h-screen">
+      <!-- Hero Section -->
+      <div class="relative bg-gray-900 border-b-4 border-indigo-600">
+        <div aria-hidden="true" class="absolute inset-0 overflow-hidden">
+          <img
+            src="https://placehold.co/1920x600/111827/4F46E5?text=Summer+Collection+2026"
+            alt=""
+            class="h-full w-full object-cover object-center opacity-40 mix-blend-multiply"
+          />
+        </div>
+        <div
+          class="relative mx-auto max-w-3xl flex flex-col items-center px-6 py-32 text-center sm:py-48 lg:px-0"
+        >
+          <h1 class="text-4xl font-bold tracking-tight text-white sm:text-6xl">New Arrivals</h1>
+          <p class="mt-4 text-xl text-gray-300">
+            Check out our latest collection of premium products. Designed for style, engineered for
+            performance.
+          </p>
+          <a
+            href="#products-heading"
+            class="mt-8 inline-block rounded-md border border-transparent bg-white px-8 py-3 text-base font-medium text-gray-900 hover:bg-gray-100"
+            >Shop Now</a
+          >
+        </div>
+      </div>
+
       <main class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div class="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-16">
-          <h1 class="text-4xl font-bold tracking-tight text-gray-900">New Arrivals</h1>
+          <h2 class="text-2xl font-bold tracking-tight text-gray-900">All Products</h2>
 
           <div class="flex items-center">
             <div class="relative rounded-md shadow-sm max-w-xs">

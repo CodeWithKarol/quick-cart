@@ -1,10 +1,13 @@
-import { Injectable, signal, effect } from '@angular/core';
+import { Injectable, signal, effect, inject } from '@angular/core';
 import { Product } from '../../products/models/product';
+import { ToastService } from '../../../shared/services/toast.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class WishlistService {
+  private toastService = inject(ToastService);
+
   readonly wishlist = signal<number[]>([]);
 
   constructor() {
@@ -30,8 +33,10 @@ export class WishlistService {
   toggle(productId: number) {
     this.wishlist.update((current) => {
       if (current.includes(productId)) {
+        this.toastService.show('Removed from wishlist', 'info');
         return current.filter((id) => id !== productId);
       } else {
+        this.toastService.show('Added to wishlist', 'success');
         return [...current, productId];
       }
     });
