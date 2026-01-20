@@ -9,6 +9,7 @@ import { vi } from 'vitest';
 describe('CheckoutPage', () => {
   let component: CheckoutPage;
   let fixture: ComponentFixture<CheckoutPage>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let cartServiceSpy: any;
   let router: Router;
 
@@ -30,6 +31,7 @@ describe('CheckoutPage', () => {
     fixture.detectChanges();
 
     // Mock alert
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     vi.spyOn(window, 'alert').mockImplementation(() => {});
   });
 

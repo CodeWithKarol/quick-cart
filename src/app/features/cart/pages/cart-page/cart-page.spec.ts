@@ -9,6 +9,7 @@ import { vi } from 'vitest';
 describe('CartPage', () => {
   let component: CartPage;
   let fixture: ComponentFixture<CartPage>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let cartServiceSpy: any;
 
   const mockCartItems: CartItem[] = [

@@ -1,5 +1,4 @@
 import { Injectable, signal, effect, inject } from '@angular/core';
-import { Product } from '../../products/models/product';
 import { ToastService } from '../../../shared/services/toast.service';
 
 @Injectable({

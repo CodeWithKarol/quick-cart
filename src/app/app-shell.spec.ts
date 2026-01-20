@@ -5,6 +5,7 @@ import { CartService } from './features/cart/services/cart-service';
 import { computed } from '@angular/core';
 
 describe('AppShell', () => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let cartServiceSpy: any;
 
   beforeEach(async () => {

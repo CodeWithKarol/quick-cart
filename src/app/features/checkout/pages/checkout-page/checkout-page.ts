@@ -1,7 +1,7 @@
 import { Component, inject, ChangeDetectionStrategy, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { CartService } from '../../../cart/services/cart-service';
 
 @Component({
@@ -355,13 +355,16 @@ import { CartService } from '../../../cart/services/cart-service';
                     <h3 class="text-lg font-medium text-gray-900">Delivery method</h3>
                     <div class="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
                       <!-- Standard -->
-                      <label
+                      <div
                         class="relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none"
+                        role="button"
+                        tabindex="0"
                         [class.border-indigo-500]="deliveryMethod() === 'standard'"
                         [class.ring-2]="deliveryMethod() === 'standard'"
                         [class.ring-indigo-500]="deliveryMethod() === 'standard'"
                         [class.border-gray-300]="deliveryMethod() !== 'standard'"
                         (click)="setDeliveryMethod('standard')"
+                        (keyup.enter)="setDeliveryMethod('standard')"
                       >
                         <span class="flex flex-1">
                           <span class="flex flex-col">
@@ -395,16 +398,19 @@ import { CartService } from '../../../cart/services/cart-service';
                           [class.border-indigo-500]="deliveryMethod() === 'standard'"
                           [class.border-transparent]="deliveryMethod() !== 'standard'"
                         ></span>
-                      </label>
+                      </div>
 
                       <!-- Express -->
-                      <label
+                      <div
                         class="relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none"
+                        role="button"
+                        tabindex="0"
                         [class.border-indigo-500]="deliveryMethod() === 'express'"
                         [class.ring-2]="deliveryMethod() === 'express'"
                         [class.ring-indigo-500]="deliveryMethod() === 'express'"
                         [class.border-gray-300]="deliveryMethod() !== 'express'"
                         (click)="setDeliveryMethod('express')"
+                        (keyup.enter)="setDeliveryMethod('express')"
                       >
                         <span class="flex flex-1">
                           <span class="flex flex-col">
@@ -438,7 +444,7 @@ import { CartService } from '../../../cart/services/cart-service';
                           [class.border-indigo-500]="deliveryMethod() === 'express'"
                           [class.border-transparent]="deliveryMethod() !== 'express'"
                         ></span>
-                      </label>
+                      </div>
                     </div>
                   </div>
 

@@ -89,7 +89,7 @@ export class ProductService {
     return of(product).pipe(delay(300));
   }
 
-  getRelatedProducts(currentProductId: number, limit: number = 4): Observable<Product[]> {
+  getRelatedProducts(currentProductId: number, limit = 4): Observable<Product[]> {
     const currentProduct = this.products.find((p) => p.id === currentProductId);
     if (!currentProduct) return of([]);
 

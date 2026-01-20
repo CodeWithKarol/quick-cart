@@ -13,7 +13,9 @@ import { RouterLink } from '@angular/router';
       <div class="relative z-50" role="dialog" aria-modal="true">
         <div
           class="fixed inset-0 hidden bg-gray-500/75 transition-opacity md:block"
-          (click)="close.emit()"
+          (click)="closeModal.emit()"
+          (keyup.enter)="closeModal.emit()"
+          tabindex="0"
         ></div>
 
         <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
@@ -29,7 +31,7 @@ import { RouterLink } from '@angular/router';
                 <button
                   type="button"
                   class="absolute right-4 top-4 text-gray-400 hover:text-gray-500 sm:right-6 sm:top-8 md:right-6 md:top-6 lg:right-8 lg:top-8"
-                  (click)="close.emit()"
+                  (click)="closeModal.emit()"
                 >
                   <span class="sr-only">Close</span>
                   <svg
@@ -110,12 +112,12 @@ import { RouterLink } from '@angular/router';
 export class QuickViewComponent {
   product = input<Product>();
   isOpen = input(false);
-  close = output();
+  closeModal = output();
 
   cartService = inject(CartService);
 
   addToCart(p: Product) {
     this.cartService.addToCart(p);
-    this.close.emit();
+    this.closeModal.emit();
   }
 }

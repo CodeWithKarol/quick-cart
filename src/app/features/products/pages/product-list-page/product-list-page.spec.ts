@@ -11,7 +11,9 @@ import { By } from '@angular/platform-browser';
 describe('ProductListPage', () => {
   let component: ProductListPage;
   let fixture: ComponentFixture<ProductListPage>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let cartServiceSpy: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let productServiceSpy: any;
 
   const mockProducts: Product[] = [

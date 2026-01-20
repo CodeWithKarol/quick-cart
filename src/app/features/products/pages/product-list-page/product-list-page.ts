@@ -78,14 +78,18 @@ import { Product } from '../../models/product';
               >
                 <li
                   class="flex items-center justify-between cursor-pointer group"
+                  tabindex="0"
                   (click)="selectedCategory.set('')"
+                  (keyup.enter)="selectedCategory.set('')"
                 >
                   <span [class.text-indigo-600]="selectedCategory() === ''">All Categories</span>
                 </li>
                 @for (cat of categories(); track cat) {
                   <li
                     class="flex items-center justify-between cursor-pointer group"
+                    tabindex="0"
                     (click)="selectedCategory.set(cat)"
+                    (keyup.enter)="selectedCategory.set(cat)"
                   >
                     <span [class.text-indigo-600]="selectedCategory() === cat">{{ cat }}</span>
                     @if (selectedCategory() === cat) {
@@ -153,11 +157,12 @@ import { Product } from '../../models/product';
                   <span class="font-medium text-gray-900">Rating</span>
                 </h3>
                 <div class="pt-6 space-y-2">
-                  <div class="flex items-center gap-2 cursor-pointer" (click)="minRating.set(4)">
+                  <label class="flex items-center gap-2 cursor-pointer">
                     <input
                       type="radio"
                       name="rating"
                       [checked]="minRating() === 4"
+                      (change)="minRating.set(4)"
                       class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
                     />
                     <span class="text-sm text-gray-600 flex items-center">
@@ -174,12 +179,13 @@ import { Product } from '../../models/product';
                         />
                       </svg>
                     </span>
-                  </div>
-                  <div class="flex items-center gap-2 cursor-pointer" (click)="minRating.set(3)">
+                  </label>
+                  <label class="flex items-center gap-2 cursor-pointer">
                     <input
                       type="radio"
                       name="rating"
                       [checked]="minRating() === 3"
+                      (change)="minRating.set(3)"
                       class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
                     />
                     <span class="text-sm text-gray-600 flex items-center">
@@ -196,16 +202,17 @@ import { Product } from '../../models/product';
                         />
                       </svg>
                     </span>
-                  </div>
-                  <div class="flex items-center gap-2 cursor-pointer" (click)="minRating.set(0)">
+                  </label>
+                  <label class="flex items-center gap-2 cursor-pointer">
                     <input
                       type="radio"
                       name="rating"
                       [checked]="minRating() === 0"
+                      (change)="minRating.set(0)"
                       class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
                     />
                     <span class="text-sm text-gray-600">All Ratings</span>
-                  </div>
+                  </label>
                 </div>
               </div>
 
@@ -286,7 +293,7 @@ import { Product } from '../../models/product';
       <app-quick-view
         [product]="selectedQuickViewProduct()"
         [isOpen]="!!selectedQuickViewProduct()"
-        (close)="closeQuickView()"
+        (closeModal)="closeQuickView()"
       ></app-quick-view>
     </div>
   `,

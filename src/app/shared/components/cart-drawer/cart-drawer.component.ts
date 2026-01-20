@@ -1,4 +1,4 @@
-import { Component, inject, computed } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { CartService } from '../../../features/cart/services/cart-service';
@@ -11,7 +11,12 @@ import { CartService } from '../../../features/cart/services/cart-service';
     @if (isOpen()) {
       <div class="relative z-50" aria-labelledby="slide-over-title" role="dialog" aria-modal="true">
         <!-- Background backdrop -->
-        <div class="fixed inset-0 bg-gray-500/75 transition-opacity" (click)="close()"></div>
+        <div
+          class="fixed inset-0 bg-gray-500/75 transition-opacity"
+          (click)="close()"
+          (keyup.enter)="close()"
+          tabindex="0"
+        ></div>
 
         <div class="fixed inset-0 overflow-hidden">
           <div class="absolute inset-0 overflow-hidden">

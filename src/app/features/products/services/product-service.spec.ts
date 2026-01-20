@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { ProductService } from './product-service';
+import { Product } from '../models/product';
 import { vi } from 'vitest';
 
 describe('ProductService', () => {
@@ -20,7 +21,7 @@ describe('ProductService', () => {
   });
 
   it('should return products', () => {
-    let products: any[] = [];
+    let products: Product[] = [];
     service.getProducts().subscribe((data) => {
       products = data;
     });
@@ -32,7 +33,7 @@ describe('ProductService', () => {
   });
 
   it('should return product by id', () => {
-    let product: any;
+    let product: Product | undefined;
     service.getProductById(1).subscribe((data) => {
       product = data;
     });
@@ -44,7 +45,7 @@ describe('ProductService', () => {
   });
 
   it('should return undefined for non-existent product id', () => {
-    let product: any;
+    let product: Product | undefined;
     service.getProductById(999).subscribe((data) => {
       product = data;
     });
