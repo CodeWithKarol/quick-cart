@@ -16,6 +16,12 @@ export class ProductService {
       category: 'Electronics',
       rating: 4.5,
       reviews: 128,
+      images: [
+        'https://placehold.co/300x300/png?text=Headphones+1',
+        'https://placehold.co/300x300/png?text=Headphones+2',
+        'https://placehold.co/300x300/png?text=Headphones+3',
+        'https://placehold.co/300x300/png?text=Headphones+4',
+      ],
     },
     {
       id: 2,
@@ -26,6 +32,10 @@ export class ProductService {
       category: 'Electronics',
       rating: 4.2,
       reviews: 85,
+      images: [
+        'https://placehold.co/300x300/png?text=Watch+1',
+        'https://placehold.co/300x300/png?text=Watch+2',
+      ],
     },
     {
       id: 3,
@@ -67,5 +77,25 @@ export class ProductService {
   getProductById(id: number): Observable<Product | undefined> {
     const product = this.products.find((p) => p.id === id);
     return of(product).pipe(delay(300));
+  }
+
+  getRelatedProducts(currentProductId: number, limit: number = 4): Observable<Product[]> {
+    const currentProduct = this.products.find((p) => p.id === currentProductId);
+    if (!currentProduct) return of([]);
+
+    const related = this.products
+      .filter((p) => p.category === currentProduct.category && p.id !== currentProductId)
+      .slice(0, limit);
+
+    // If not enough related products in category, fill with others
+    if (related.length < limit) {
+      const remaining = limit - related.length;
+      const others = this.products
+        .filter((p) => p.category !== currentProduct.category && p.id !== currentProductId)
+        .slice(0, remaining);
+      return of([...related, ...others]).pipe(delay(300));
+    }
+
+    return of(related).pipe(delay(300));
   }
 }

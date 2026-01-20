@@ -21,21 +21,21 @@ import { CartService } from '../../../cart/services/cart-service';
 
               <ul role="list" class="divide-y divide-gray-200 text-sm font-medium text-gray-900">
                 @for (item of cartItems(); track item.product.id) {
-                <li class="flex items-center space-x-4 py-6">
-                  <img
-                    [src]="item.product.imageUrl"
-                    [alt]="item.product.name"
-                    class="h-20 w-20 flex-none rounded-md object-cover object-center"
-                  />
-                  <div class="flex-auto space-y-1">
-                    <h3>{{ item.product.name }}</h3>
-                    <p class="text-gray-500">{{ item.product.category }}</p>
-                    <p class="text-gray-500">Qty {{ item.quantity }}</p>
-                  </div>
-                  <p class="flex-none text-base font-medium">
-                    {{ item.product.price * item.quantity | currency }}
-                  </p>
-                </li>
+                  <li class="flex items-center space-x-4 py-6">
+                    <img
+                      [src]="item.product.imageUrl"
+                      [alt]="item.product.name"
+                      class="h-20 w-20 flex-none rounded-md object-cover object-center"
+                    />
+                    <div class="flex-auto space-y-1">
+                      <h3>{{ item.product.name }}</h3>
+                      <p class="text-gray-500">{{ item.product.category }}</p>
+                      <p class="text-gray-500">Qty {{ item.quantity }}</p>
+                    </div>
+                    <p class="flex-none text-base font-medium">
+                      {{ item.product.price * item.quantity | currency }}
+                    </p>
+                  </li>
                 }
               </ul>
 
@@ -97,6 +97,43 @@ import { CartService } from '../../../cart/services/cart-service';
               </h2>
 
               <form [formGroup]="checkoutForm" (ngSubmit)="onSubmit()">
+                <!-- Express Checkout -->
+                <div class="mt-4 mb-4">
+                  <h3 class="sr-only">Express Checkout</h3>
+                  <div class="grid grid-cols-2 gap-4">
+                    <button
+                      type="button"
+                      class="flex w-full items-center justify-center rounded-md border border-transparent bg-black py-2 text-white hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+                    >
+                      <span class="sr-only">Pay with Apple Pay</span>
+                      <svg class="h-5 w-auto" fill="currentColor" viewBox="0 0 50 20">
+                        <path
+                          d="M22.06 17.07c-3.15 0-5.32-2.18-5.32-5.34 0-3.32 2.37-5.59 5.67-5.59 1.49 0 2.62.42 3.32.96l-.8 1.4c-.6-.44-1.46-.78-2.52-.78-2.02 0-3.41 1.42-3.41 3.99 0 2.38 1.46 3.73 3.65 3.73 1.1 0 1.94-.36 2.58-.87l.76 1.44c-.81.7-1.92 1.06-3.93 1.06zm8.81-.13l-3.32-10.45h2.18l1.37 5.09c.29 1.1.58 2.27.58 2.27s.26-1.12.55-2.26l1.45-5.1h2.13l-3.45 10.45h-1.49zm9.05-4.49c0-1.21.36-4.57 3.55-4.57 1.25 0 2.15.28 2.92.68l-.66 1.46c-.63-.34-1.3-.57-2.22-.57-1.11 0-1.8.44-1.8 1.16 0 .61.46.99 1.34 1.3 1.99.71 2.87 1.51 2.87 3.1 0 1.95-1.74 3.03-3.8 3.03-1.49 0-2.67-.34-3.53-.82l.68-1.54c.75.46 1.77.77 2.85.77 1.38 0 1.91-.56 1.91-1.33 0-.76-.51-1.15-1.49-1.49-1.39-.47-2.62-1.07-2.62-2.98zm-29.4-.04c.14-2.88 2.52-4.14 2.65-4.2-.02-.02-1.47-1.87-3.77-1.93-1.61-.06-3.23.95-3.85.95-.61 0-2-1.06-3.44-1.03-1.76.03-3.07 1.04-3.9 2.5-1.65 2.88-.42 7.15 1.2 9.48.79 1.15 1.72 2.41 2.94 2.37 1.19-.04 1.63-.76 3.06-.76 1.42 0 1.83.76 3.07.74 1.26-.03 2.06-1.14 2.83-2.27.9-1.28 1.26-2.54 1.28-2.6-.03-.02-2.48-.95-2.07-3.45zM11.97 3.6c.71-.85 1.19-2.04 1.06-3.22-.98.05-2.24.69-2.94 1.51-.62.72-1.17 1.88-1.01 3.03 1.1.08 2.21-.49 2.89-1.32z"
+                        />
+                      </svg>
+                    </button>
+                    <button
+                      type="button"
+                      class="flex w-full items-center justify-center rounded-md border border-gray-300 bg-white py-2 text-gray-900 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+                    >
+                      <span class="sr-only">Pay with Google Pay</span>
+                      <svg class="h-5 w-auto" viewBox="0 0 40 20" fill="currentColor">
+                        <path
+                          d="M6.3 8.7h4.1V17H8.4v-6.3H6.3V8.7zm2.1-3.6c.8 0 1.5.7 1.5 1.5S9.2 8.1 8.4 8.1s-1.5-.7-1.5-1.5.7-1.5 1.5-1.5zm6.8 3.5h1.9v8.3h-1.9V8.6zm-4.7 0H13c1.7 0 2.8 1.2 2.8 2.9v5.4h-1.9v-5.2c0-1-.5-1.4-1.3-1.4-.7 0-1.2.5-1.5 1.1v5.5h-1.9V8.6h1.3zm12.3 0H25v8.3h-1.9v-1h-.1c-.4.7-1.3 1.2-2.2 1.2-1.9 0-3.3-1.6-3.3-4.2 0-2.6 1.3-4.3 3.3-4.3 1 0 1.8.5 2.1 1.1h.1V8.6zm-1.8 6.9c.9 0 1.7-.8 1.7-2.6s-.7-2.6-1.7-2.6c-.8 0-1.7.8-1.7 2.6s.8 2.6 1.7 2.6zm6.3-5.2h1.9v5.3c0 2.2-1.3 3.6-3.5 3.6-1.8 0-2.9-1-3.2-1.5l1.5-.9c.2.4.8.8 1.8.8 1.1 0 1.5-.6 1.5-1.5v-.3h-.1c-.4.6-1.2 1-2.1 1-2 0-3.5-1.7-3.5-4.2s1.5-4.2 3.5-4.2c.9 0 1.7.4 2.1 1h.1v-.8zm-1.8 5.2c.9 0 1.6-.8 1.6-2.6s-.6-2.6-1.6-2.6c-.9 0-1.7.8-1.7 2.6s.8 2.6 1.7 2.6zm6.8-5.3h1.3l-3.3 8.2h-1.9l1.2-2.7-2.3-5.5h2l1.2 3.4h.1l1.6-3.4z"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                  <div class="relative mt-8 mb-8">
+                    <div class="absolute inset-0 flex items-center" aria-hidden="true">
+                      <div class="w-full border-t border-gray-200"></div>
+                    </div>
+                    <div class="relative flex justify-center">
+                      <span class="bg-gray-50 px-2 text-sm text-gray-500">Or continue with</span>
+                    </div>
+                  </div>
+                </div>
+
                 <div class="mx-auto max-w-2xl lg:max-w-none lg:px-0">
                   <div>
                     <h3 id="contact-info-heading" class="text-lg font-medium text-gray-900">
@@ -141,9 +178,10 @@ import { CartService } from '../../../cart/services/cart-service';
                           "
                         />
                       </div>
-                      @if (checkoutForm.get('email')?.touched && checkoutForm.get('email')?.invalid)
-                      {
-                      <p class="mt-2 text-sm text-red-600">Valid email is required</p>
+                      @if (
+                        checkoutForm.get('email')?.touched && checkoutForm.get('email')?.invalid
+                      ) {
+                        <p class="mt-2 text-sm text-red-600">Valid email is required</p>
                       }
                     </div>
                   </div>
@@ -184,9 +222,11 @@ import { CartService } from '../../../cart/services/cart-service';
                             "
                           />
                         </div>
-                        @if (checkoutForm.get('fullName')?.touched &&
-                        checkoutForm.get('fullName')?.invalid) {
-                        <p class="mt-2 text-sm text-red-600">Name is required</p>
+                        @if (
+                          checkoutForm.get('fullName')?.touched &&
+                          checkoutForm.get('fullName')?.invalid
+                        ) {
+                          <p class="mt-2 text-sm text-red-600">Name is required</p>
                         }
                       </div>
 
@@ -222,9 +262,11 @@ import { CartService } from '../../../cart/services/cart-service';
                             "
                           />
                         </div>
-                        @if (checkoutForm.get('address')?.touched &&
-                        checkoutForm.get('address')?.invalid) {
-                        <p class="mt-2 text-sm text-red-600">Address is required</p>
+                        @if (
+                          checkoutForm.get('address')?.touched &&
+                          checkoutForm.get('address')?.invalid
+                        ) {
+                          <p class="mt-2 text-sm text-red-600">Address is required</p>
                         }
                       </div>
 
@@ -259,9 +301,10 @@ import { CartService } from '../../../cart/services/cart-service';
                             "
                           />
                         </div>
-                        @if (checkoutForm.get('city')?.touched && checkoutForm.get('city')?.invalid)
-                        {
-                        <p class="mt-2 text-sm text-red-600">Required</p>
+                        @if (
+                          checkoutForm.get('city')?.touched && checkoutForm.get('city')?.invalid
+                        ) {
+                          <p class="mt-2 text-sm text-red-600">Required</p>
                         }
                       </div>
 
@@ -297,9 +340,11 @@ import { CartService } from '../../../cart/services/cart-service';
                             "
                           />
                         </div>
-                        @if (checkoutForm.get('zipCode')?.touched &&
-                        checkoutForm.get('zipCode')?.invalid) {
-                        <p class="mt-2 text-sm text-red-600">Required</p>
+                        @if (
+                          checkoutForm.get('zipCode')?.touched &&
+                          checkoutForm.get('zipCode')?.invalid
+                        ) {
+                          <p class="mt-2 text-sm text-red-600">Required</p>
                         }
                       </div>
                     </div>
@@ -436,9 +481,11 @@ import { CartService } from '../../../cart/services/cart-service';
                             "
                           />
                         </div>
-                        @if (checkoutForm.get('cardNumber')?.touched &&
-                        checkoutForm.get('cardNumber')?.invalid) {
-                        <p class="mt-2 text-sm text-red-600">Valid card number is required</p>
+                        @if (
+                          checkoutForm.get('cardNumber')?.touched &&
+                          checkoutForm.get('cardNumber')?.invalid
+                        ) {
+                          <p class="mt-2 text-sm text-red-600">Valid card number is required</p>
                         }
                       </div>
 
@@ -475,9 +522,10 @@ import { CartService } from '../../../cart/services/cart-service';
                             "
                           />
                         </div>
-                        @if (checkoutForm.get('expiry')?.touched &&
-                        checkoutForm.get('expiry')?.invalid) {
-                        <p class="mt-2 text-sm text-red-600">Required</p>
+                        @if (
+                          checkoutForm.get('expiry')?.touched && checkoutForm.get('expiry')?.invalid
+                        ) {
+                          <p class="mt-2 text-sm text-red-600">Required</p>
                         }
                       </div>
 
@@ -512,7 +560,7 @@ import { CartService } from '../../../cart/services/cart-service';
                           />
                         </div>
                         @if (checkoutForm.get('cvv')?.touched && checkoutForm.get('cvv')?.invalid) {
-                        <p class="mt-2 text-sm text-red-600">Required</p>
+                          <p class="mt-2 text-sm text-red-600">Required</p>
                         }
                       </div>
                     </div>
