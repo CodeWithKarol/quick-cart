@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, effect } from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { CartService } from '../../../features/cart/services/cart-service';
@@ -22,7 +22,7 @@ import { CartService } from '../../../features/cart/services/cart-service';
           <div class="absolute inset-0 overflow-hidden">
             <div class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
               <div class="pointer-events-auto w-screen max-w-md">
-                <div class="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
+                <div class="flex h-full flex-col bg-white shadow-xl">
                   <div class="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
                     <div class="flex items-start justify-between">
                       <h2 class="text-lg font-medium text-gray-900" id="slide-over-title">
@@ -219,6 +219,16 @@ export class CartDrawerComponent {
   isOpen = this.cartService.isDrawerOpen;
   cartItems = this.cartService.cartItems;
   cartTotal = this.cartService.cartTotal;
+
+  constructor() {
+    effect(() => {
+      if (this.isOpen()) {
+        document.body.style.overflow = 'hidden';
+      } else {
+        document.body.style.overflow = '';
+      }
+    });
+  }
 
   close() {
     this.cartService.closeDrawer();

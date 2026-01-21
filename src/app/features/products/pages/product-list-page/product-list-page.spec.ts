@@ -143,9 +143,8 @@ describe('ProductListPage', () => {
     expect(component.filteredProducts()[0].name).toBe('Beta Product');
   });
 
-  it('should update category via change event', () => {
-    const changeEvent = { target: { value: 'Clothing' } } as unknown as Event;
-    component.updateCategory(changeEvent);
+  it('should update category', () => {
+    component.selectedCategory.set('Clothing');
     fixture.detectChanges();
 
     expect(component.selectedCategory()).toBe('Clothing');

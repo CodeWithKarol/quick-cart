@@ -171,17 +171,23 @@ import { ImageZoomDirective } from '../../../../shared/directives/image-zoom.dir
 
                 <!-- Colors -->
                 @if (product.colors && product.colors.length > 0) {
-                  <div class="mt-6">
-                    <h3 class="text-sm font-medium text-gray-900">Available Colors</h3>
+                  <!-- Changed mt-6 to mt-10 for better separation -->
+                  <div class="mt-10">
+                    <h3 class="text-sm font-medium text-gray-900">Color</h3>
                     <div class="mt-4 flex items-center space-x-3">
                       @for (color of product.colors; track color.name) {
                         <button
                           type="button"
-                          class="relative -m-0.5 flex items-center justify-center rounded-full p-0.5 ring-2 ring-offset-1 focus:outline-none"
-                          [class.ring-indigo-500]="selectedColor() === color.name"
-                          [class.ring-transparent]="selectedColor() !== color.name"
+                          class="relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 focus:outline-none ring-2 focus:ring focus:ring-offset-1"
+                          [class.ring-offset-1]="selectedColor() === color.name"
+                          [class]="
+                            selectedColor() === color.name
+                              ? color.selectedClass
+                              : 'ring-transparent'
+                          "
                           (click)="selectedColor.set(color.name)"
                           [title]="color.name"
+                          [attr.aria-label]="color.name"
                         >
                           <span class="sr-only">{{ color.name }}</span>
                           <span
@@ -195,7 +201,7 @@ import { ImageZoomDirective } from '../../../../shared/directives/image-zoom.dir
                   </div>
                 }
 
-                <div class="mt-6">
+                <div class="mt-10">
                   <h3 class="sr-only">Description</h3>
                   <div class="space-y-6 text-base text-gray-700">
                     <p>{{ product.description }}</p>

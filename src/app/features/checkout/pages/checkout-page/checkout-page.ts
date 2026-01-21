@@ -9,849 +9,534 @@ import { CartService } from '../../../cart/services/cart-service';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   template: `
-    <div class="bg-gray-50 min-h-screen pb-24 pt-16">
-      <div class="mx-auto max-w-2xl px-4 pt-16 pb-24 sm:px-6 lg:max-w-7xl lg:px-8">
-        <h2 class="sr-only">Checkout</h2>
+    <div class="bg-gray-50 min-h-screen pt-16 pb-12 sm:px-6 lg:px-8">
+      <div class="mx-auto max-w-7xl lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16">
+        <!-- Order Summary (Right Column on Desktop) -->
+        <div class="mt-10 lg:mt-0 lg:col-start-2">
+          <div class="lg:sticky lg:top-20">
+            <h2 class="text-lg font-medium text-gray-900">Order summary</h2>
 
-        <div class="grid grid-cols-1 gap-y-12 lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16">
-          <!-- Order Summary (Right Column on Desktop, Top on Mobile) -->
-          <section aria-labelledby="summary-heading" class="lg:col-start-2">
-            <div class="mx-auto max-w-lg px-4 lg:max-w-none lg:px-0">
-              <h2 id="summary-heading" class="text-lg font-medium text-gray-900">Order summary</h2>
-
-              <ul role="list" class="divide-y divide-gray-200 text-sm font-medium text-gray-900">
+            <div class="mt-4 rounded-lg border border-gray-200 bg-white shadow-sm">
+              <h3 class="sr-only">Items in your cart</h3>
+              <ul role="list" class="divide-y divide-gray-200">
                 @for (item of cartItems(); track item.product.id) {
-                  <li class="flex items-center space-x-4 py-6">
-                    <img
-                      [src]="item.product.imageUrl"
-                      [alt]="item.product.name"
-                      class="h-20 w-20 flex-none rounded-md object-cover object-center"
-                    />
-                    <div class="flex-auto space-y-1">
-                      <h3>{{ item.product.name }}</h3>
-                      <p class="text-gray-500">{{ item.product.category }}</p>
-                      <p class="text-gray-500">Qty {{ item.quantity }}</p>
+                  <li class="flex py-6 px-4 sm:px-6">
+                    <div class="flex-shrink-0">
+                      <img
+                        [src]="item.product.imageUrl"
+                        [alt]="item.product.name"
+                        class="w-20 rounded-md"
+                      />
                     </div>
-                    <p class="flex-none text-base font-medium">
-                      {{ item.product.price * item.quantity | currency }}
-                    </p>
+
+                    <div class="ml-6 flex flex-1 flex-col">
+                      <div class="flex">
+                        <div class="min-w-0 flex-1">
+                          <h4 class="text-sm">
+                            <a
+                              [href]="'/products/' + item.product.id"
+                              class="font-medium text-gray-700 hover:text-gray-800"
+                              >{{ item.product.name }}</a
+                            >
+                          </h4>
+                          <p class="mt-1 text-sm text-gray-500">{{ item.product.category }}</p>
+                        </div>
+
+                        <div class="ml-4 flow-root flex-shrink-0">
+                          <button
+                            type="button"
+                            class="-m-2.5 flex items-center justify-center bg-white p-2.5 text-gray-400 hover:text-gray-500"
+                          >
+                            <span class="sr-only">Remove</span>
+                            <!-- Trash Icon could go here, but maybe just display quantity -->
+                            <span class="text-sm font-medium text-gray-900"
+                              >x{{ item.quantity }}</span
+                            >
+                          </button>
+                        </div>
+                      </div>
+
+                      <div class="flex flex-1 items-end justify-between pt-2">
+                        <p class="mt-1 text-sm font-medium text-gray-900">
+                          {{ item.product.price | currency }}
+                        </p>
+                      </div>
+                    </div>
                   </li>
                 }
               </ul>
-
-              <dl class="space-y-6 border-t border-gray-200 pt-6 text-sm font-medium text-gray-900">
+              <dl class="border-t border-gray-200 py-6 px-4 space-y-6 sm:px-6">
                 <div class="flex items-center justify-between">
-                  <dt class="text-gray-600">Subtotal</dt>
-                  <dd>{{ cartTotal() | currency }}</dd>
+                  <dt class="text-sm">Subtotal</dt>
+                  <dd class="text-sm font-medium text-gray-900">{{ cartTotal() | currency }}</dd>
                 </div>
-
                 <div class="flex items-center justify-between">
-                  <dt class="flex items-center text-gray-600">
-                    <span>Shipping estimate</span>
-                    <div class="relative ml-2 group">
-                      <div class="flex-shrink-0 text-gray-400 hover:text-gray-500 cursor-help">
-                        <span class="sr-only">Learn more about how shipping is calculated</span>
-                        <svg
-                          class="h-5 w-5"
-                          viewBox="0 0 20 20"
-                          fill="currentColor"
-                          aria-hidden="true"
-                        >
-                          <path
-                            fill-rule="evenodd"
-                            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM8.94 6.94a.75.75 0 11-1.061-1.061 3 3 0 112.871 5.026v.345a.75.75 0 01-1.5 0v-.5c0-.72.57-1.172 1.081-1.287A1.5 1.5 0 108.94 6.94zM10 15a1 1 0 100-2 1 1 0 000 2z"
-                            clip-rule="evenodd"
-                          />
-                        </svg>
-                      </div>
-                      <div
-                        class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block w-48 p-2 bg-gray-900 text-white text-xs rounded shadow-lg z-50 text-center"
-                      >
-                        Shipping costs are calculated based on your location and selected delivery
-                        method.
-                        <div
-                          class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-gray-900"
-                        ></div>
-                      </div>
-                    </div>
-                  </dt>
-                  <dd>{{ shippingCost() | currency }}</dd>
+                  <dt class="text-sm">Shipping</dt>
+                  <dd class="text-sm font-medium text-gray-900">{{ shippingCost() | currency }}</dd>
                 </div>
-
                 <div class="flex items-center justify-between border-t border-gray-200 pt-6">
-                  <dt class="text-base">Total</dt>
-                  <dd class="text-base">{{ total() | currency }}</dd>
+                  <dt class="text-base font-medium">Total</dt>
+                  <dd class="text-base font-medium text-gray-900">{{ total() | currency }}</dd>
                 </div>
               </dl>
             </div>
-          </section>
+          </div>
+        </div>
 
-          <!-- Checkout Form (Left Column on Desktop) -->
-          <section
-            aria-labelledby="payment-and-shipping-heading"
-            class="lg:col-start-1 lg:row-start-1"
-          >
-            <div class="mx-auto max-w-lg px-4 lg:max-w-none lg:px-0">
-              <h2 id="payment-and-shipping-heading" class="sr-only">
-                Payment and shipping details
-              </h2>
-
-              <!-- Progress Bar -->
-              <nav aria-label="Progress" class="mb-12">
-                <ol role="list" class="flex items-center space-x-2 sm:space-x-8">
-                  @for (step of steps; track step; let i = $index) {
-                    <li class="flex items-center">
-                      @if (
-                        steps.indexOf(currentStep()) > i ||
-                        (steps.indexOf(currentStep()) === i && step === 'payment' && false)
-                      ) {
-                        <!-- Completed -->
-                        <button
-                          type="button"
-                          (click)="goToStep(step)"
-                          class="flex items-center text-indigo-600"
-                        >
-                          <span
-                            class="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-600 hover:bg-indigo-900 transition-colors"
-                          >
-                            <svg
-                              class="h-5 w-5 text-white"
-                              viewBox="0 0 20 20"
-                              fill="currentColor"
-                              aria-hidden="true"
-                            >
-                              <path
-                                fill-rule="evenodd"
-                                d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
-                                clip-rule="evenodd"
-                              />
-                            </svg>
-                          </span>
-                          <span class="ml-2 text-sm font-medium hidden sm:block capitalize">{{
-                            step
-                          }}</span>
-                        </button>
-                      } @else if (steps.indexOf(currentStep()) === i) {
-                        <!-- Current -->
-                        <div class="flex items-center text-indigo-600" aria-current="step">
-                          <span
-                            class="flex h-8 w-8 items-center justify-center rounded-full border-2 border-indigo-600 bg-white"
-                          >
-                            <span
-                              class="h-2.5 w-2.5 rounded-full bg-indigo-600"
-                              aria-hidden="true"
-                            ></span>
-                          </span>
-                          <span class="ml-2 text-sm font-medium capitalize">{{ step }}</span>
-                        </div>
-                      } @else {
-                        <!-- Upcoming -->
-                        <div class="flex items-center text-gray-400">
-                          <span
-                            class="flex h-8 w-8 items-center justify-center rounded-full border-2 border-gray-300 bg-white"
-                          >
-                            <span
-                              class="h-2.5 w-2.5 rounded-full bg-transparent"
-                              aria-hidden="true"
-                            ></span>
-                          </span>
-                          <span class="ml-2 text-sm font-medium hidden sm:block capitalize">{{
-                            step
-                          }}</span>
-                        </div>
-                      }
-
-                      @if (i !== steps.length - 1) {
-                        <!-- Separator -->
-                        <div
-                          class="h-0.5 w-8 sm:w-16 bg-gray-200 ml-2 sm:ml-8"
-                          aria-hidden="true"
-                        ></div>
-                      }
-                    </li>
-                  }
-                </ol>
-              </nav>
-
-              <form [formGroup]="checkoutForm" (ngSubmit)="onSubmit()">
-                @if (currentStep() === 'information') {
-                  <!-- Express Checkout -->
-                  <div class="mt-4 mb-4">
-                    <h3 class="sr-only">Express Checkout</h3>
-                    <div class="grid grid-cols-2 gap-4">
-                      <button
-                        type="button"
-                        class="flex w-full items-center justify-center rounded-md border border-transparent bg-black py-2 text-white hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+        <!-- Checkout Form (Left Column) -->
+        <div class="mt-10 lg:mt-0 lg:col-start-1">
+          <!-- Steps -->
+          <nav aria-label="Progress" class="mb-8">
+            <ol role="list" class="space-y-4 md:flex md:space-y-0 md:space-x-8">
+              @for (step of steps; track step; let i = $index) {
+                <li class="md:flex-1">
+                  @if (currentStep() === step) {
+                    <a
+                      class="group flex flex-col border-l-4 border-indigo-600 py-2 pl-4 md:border-l-0 md:border-t-4 md:pl-0 md:pt-4"
+                      aria-current="step"
+                    >
+                      <span class="text-sm font-medium text-indigo-600">Step {{ i + 1 }}</span>
+                      <span class="text-sm font-medium text-gray-900 capitalize">{{ step }}</span>
+                    </a>
+                  } @else if (steps.indexOf(currentStep()) > i) {
+                    <a
+                      (click)="goToStep(step)"
+                      class="group flex flex-col border-l-4 border-indigo-600 py-2 pl-4 hover:border-indigo-800 md:border-l-0 md:border-t-4 md:pl-0 md:pt-4 cursor-pointer"
+                    >
+                      <span class="text-sm font-medium text-indigo-600 group-hover:text-indigo-800"
+                        >Step {{ i + 1 }}</span
                       >
-                        <span class="sr-only">Pay with Apple Pay</span>
-                        <svg class="h-5 w-auto" fill="currentColor" viewBox="0 0 50 20">
-                          <path
-                            d="M22.06 17.07c-3.15 0-5.32-2.18-5.32-5.34 0-3.32 2.37-5.59 5.67-5.59 1.49 0 2.62.42 3.32.96l-.8 1.4c-.6-.44-1.46-.78-2.52-.78-2.02 0-3.41 1.42-3.41 3.99 0 2.38 1.46 3.73 3.65 3.73 1.1 0 1.94-.36 2.58-.87l.76 1.44c-.81.7-1.92 1.06-3.93 1.06zm8.81-.13l-3.32-10.45h2.18l1.37 5.09c.29 1.1.58 2.27.58 2.27s.26-1.12.55-2.26l1.45-5.1h2.13l-3.45 10.45h-1.49zm9.05-4.49c0-1.21.36-4.57 3.55-4.57 1.25 0 2.15.28 2.92.68l-.66 1.46c-.63-.34-1.3-.57-2.22-.57-1.11 0-1.8.44-1.8 1.16 0 .61.46.99 1.34 1.3 1.99.71 2.87 1.51 2.87 3.1 0 1.95-1.74 3.03-3.8 3.03-1.49 0-2.67-.34-3.53-.82l.68-1.54c.75.46 1.77.77 2.85.77 1.38 0 1.91-.56 1.91-1.33 0-.76-.51-1.15-1.49-1.49-1.39-.47-2.62-1.07-2.62-2.98zm-29.4-.04c.14-2.88 2.52-4.14 2.65-4.2-.02-.02-1.47-1.87-3.77-1.93-1.61-.06-3.23.95-3.85.95-.61 0-2-1.06-3.44-1.03-1.76.03-3.07 1.04-3.9 2.5-1.65 2.88-.42 7.15 1.2 9.48.79 1.15 1.72 2.41 2.94 2.37 1.19-.04 1.63-.76 3.06-.76 1.42 0 1.83.76 3.07.74 1.26-.03 2.06-1.14 2.83-2.27.9-1.28 1.26-2.54 1.28-2.6-.03-.02-2.48-.95-2.07-3.45zM11.97 3.6c.71-.85 1.19-2.04 1.06-3.22-.98.05-2.24.69-2.94 1.51-.62.72-1.17 1.88-1.01 3.03 1.1.08 2.21-.49 2.89-1.32z"
-                          />
-                        </svg>
-                      </button>
-                      <button
-                        type="button"
-                        class="flex w-full items-center justify-center rounded-md border border-gray-300 bg-white py-2 text-gray-900 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+                      <span
+                        class="text-sm font-medium text-gray-900 group-hover:text-gray-900 capitalize"
+                        >{{ step }}</span
                       >
-                        <span class="sr-only">Pay with Google Pay</span>
-                        <svg class="h-5 w-auto" viewBox="0 0 40 20" fill="currentColor">
-                          <path
-                            d="M6.3 8.7h4.1V17H8.4v-6.3H6.3V8.7zm2.1-3.6c.8 0 1.5.7 1.5 1.5S9.2 8.1 8.4 8.1s-1.5-.7-1.5-1.5.7-1.5 1.5-1.5zm6.8 3.5h1.9v8.3h-1.9V8.6zm-4.7 0H13c1.7 0 2.8 1.2 2.8 2.9v5.4h-1.9v-5.2c0-1-.5-1.4-1.3-1.4-.7 0-1.2.5-1.5 1.1v5.5h-1.9V8.6h1.3zm12.3 0H25v8.3h-1.9v-1h-.1c-.4.7-1.3 1.2-2.2 1.2-1.9 0-3.3-1.6-3.3-4.2 0-2.6 1.3-4.3 3.3-4.3 1 0 1.8.5 2.1 1.1h.1V8.6zm-1.8 6.9c.9 0 1.7-.8 1.7-2.6s-.7-2.6-1.7-2.6c-.8 0-1.7.8-1.7 2.6s.8 2.6 1.7 2.6zm6.3-5.2h1.9v5.3c0 2.2-1.3 3.6-3.5 3.6-1.8 0-2.9-1-3.2-1.5l1.5-.9c.2.4.8.8 1.8.8 1.1 0 1.5-.6 1.5-1.5v-.3h-.1c-.4.6-1.2 1-2.1 1-2 0-3.5-1.7-3.5-4.2s1.5-4.2 3.5-4.2c.9 0 1.7.4 2.1 1h.1v-.8zm-1.8 5.2c.9 0 1.6-.8 1.6-2.6s-.6-2.6-1.6-2.6c-.9 0-1.7.8-1.7 2.6s.8 2.6 1.7 2.6zm6.8-5.3h1.3l-3.3 8.2h-1.9l1.2-2.7-2.3-5.5h2l1.2 3.4h.1l1.6-3.4z"
-                          />
-                        </svg>
-                      </button>
+                    </a>
+                  } @else {
+                    <div
+                      class="group flex flex-col border-l-4 border-gray-200 py-2 pl-4 md:border-l-0 md:border-t-4 md:pl-0 md:pt-4"
+                    >
+                      <span class="text-sm font-medium text-gray-500">Step {{ i + 1 }}</span>
+                      <span class="text-sm font-medium text-gray-500 capitalize">{{ step }}</span>
                     </div>
-                    <div class="relative mt-8 mb-8">
-                      <div class="absolute inset-0 flex items-center" aria-hidden="true">
-                        <div class="w-full border-t border-gray-200"></div>
+                  }
+                </li>
+              }
+            </ol>
+          </nav>
+
+          <form [formGroup]="checkoutForm" (ngSubmit)="onSubmit()">
+            @if (currentStep() === 'information') {
+              <div class="space-y-6">
+                <!-- Express Checkout (Better Buttons) -->
+                <div>
+                  <div class="mt-6 grid grid-cols-2 gap-4">
+                    <button
+                      type="button"
+                      class="flex w-full items-center justify-center rounded-md border border-transparent bg-black py-2.5 text-white hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+                    >
+                      <span class="sr-only">Sign in with Apple</span>
+                      <svg class="h-5 w-auto" fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                          d="M12.22 3.4c.5-1.22 1.6-1.9 2.5-1.9.9 0 2 .7 2.5 1.9.5 1.2-.2 2.7-.9 3.5-.7.8-1.8 1.1-2.7 1-.9-.1-1.8-.7-2.3-1.6-.5-1 .1-2.2.9-2.9zm5.3 4.2c-1.3-.8-2.5-.2-3.1.2-.6.4-1.2 1.1-1.2 2.3 0 1.9 1.5 3.5 3.5 3.5 1 0 1.9-.5 2.5-1.1.2-.2.5-.3.8-.3 1 0 2.2 1.1 2.2 1.1s-.4 1.1-.9 2c-.6 1.1-1.4 2.3-2.6 2.3-.6 0-1.1-.2-1.6-.5-.9-.5-2.2-.5-3.1 0-.5.3-1 .5-1.6.5-1.2 0-2.3-1.5-3.2-3.3-1.6-3.2-.3-6.8 2.6-7 1-.1 1.9.6 2.5.6.5 0 1.3-.7 2.3-.7 1 0 1.6.4 1.9.7-1.2.7-2.1 2.2-2.1 3.7 0 1.2.7 2.3 1.7 2.9l.4.1z"
+                        ></path>
+                      </svg>
+                      <span class="ml-2 font-medium">Apple Pay</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      class="flex w-full items-center justify-center rounded-md border border-gray-300 bg-white py-2.5 text-black hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+                    >
+                      <span class="sr-only">Sign in with Google</span>
+                      <svg class="h-5 w-auto" fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                          d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .533 5.333.533 12S5.867 24 12.48 24c3.44 0 6.333-1.147 8.52-3.173 2.227-2.227 2.907-5.507 2.907-8.16 0-.667-.067-1.293-.187-1.747h-11.24z"
+                        ></path>
+                      </svg>
+                      <span class="ml-2 font-medium">Google Pay</span>
+                    </button>
+                  </div>
+                  <div class="relative mt-6">
+                    <div class="absolute inset-0 flex items-center" aria-hidden="true">
+                      <div class="w-full border-t border-gray-300"></div>
+                    </div>
+                    <div class="relative flex justify-center">
+                      <span class="bg-gray-50 px-2 text-sm text-gray-500"
+                        >Or continue with email</span
+                      >
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Contact Info -->
+                <div>
+                  <h3 class="text-lg font-medium text-gray-900">Contact information</h3>
+                  <div class="mt-4">
+                    <label
+                      for="email-address"
+                      class="block text-sm font-medium leading-6 text-gray-900"
+                      >Email address</label
+                    >
+                    <div class="mt-2">
+                      <input
+                        type="email"
+                        id="email-address"
+                        formControlName="email"
+                        autocomplete="email"
+                        class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                      />
+                    </div>
+                    @if (checkoutForm.get('email')?.touched && checkoutForm.get('email')?.invalid) {
+                      <p class="mt-2 text-sm text-red-600">Valid email is required</p>
+                    }
+                  </div>
+                </div>
+
+                <!-- Shipping Address -->
+                <div class="pt-6">
+                  <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-medium text-gray-900">Shipping address</h3>
+                    <button
+                      type="button"
+                      class="text-sm font-medium text-indigo-600 hover:text-indigo-500"
+                      (click)="fillMockData()"
+                    >
+                      Use mock data
+                    </button>
+                  </div>
+
+                  <div class="mt-4 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6 pl-1">
+                    <div class="sm:col-span-6">
+                      <label
+                        for="full-name"
+                        class="block text-sm font-medium leading-6 text-gray-900"
+                        >Full name</label
+                      >
+                      <div class="mt-2">
+                        <input
+                          type="text"
+                          id="full-name"
+                          formControlName="fullName"
+                          autocomplete="name"
+                          class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        />
                       </div>
-                      <div class="relative flex justify-center">
-                        <span class="bg-gray-50 px-2 text-sm text-gray-500">Or continue with</span>
+                    </div>
+
+                    <div class="sm:col-span-6">
+                      <label for="address" class="block text-sm font-medium leading-6 text-gray-900"
+                        >Address</label
+                      >
+                      <div class="mt-2">
+                        <input
+                          type="text"
+                          id="address"
+                          formControlName="address"
+                          autocomplete="street-address"
+                          class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        />
+                      </div>
+                    </div>
+
+                    <div class="sm:col-span-2">
+                      <label for="city" class="block text-sm font-medium leading-6 text-gray-900"
+                        >City</label
+                      >
+                      <div class="mt-2">
+                        <input
+                          type="text"
+                          id="city"
+                          formControlName="city"
+                          autocomplete="address-level2"
+                          class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        />
+                      </div>
+                    </div>
+
+                    <div class="sm:col-span-2">
+                      <label
+                        for="postal-code"
+                        class="block text-sm font-medium leading-6 text-gray-900"
+                        >ZIP / Postal code</label
+                      >
+                      <div class="mt-2">
+                        <input
+                          type="text"
+                          id="postal-code"
+                          formControlName="zipCode"
+                          autocomplete="postal-code"
+                          class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        />
+                      </div>
+                    </div>
+                    <!-- No State field in original mock, but normally needed. Leaving out for now or adding mock state? Original didn't have it. -->
+                  </div>
+                </div>
+
+                <div class="pt-6 flex justify-end">
+                  <button
+                    type="button"
+                    (click)="nextStep()"
+                    class="rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                  >
+                    Continue to Shipping
+                  </button>
+                </div>
+              </div>
+            }
+
+            @if (currentStep() === 'shipping') {
+              <div class="space-y-6">
+                <div>
+                  <h3 class="text-lg font-medium text-gray-900">Delivery method</h3>
+                  <div class="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
+                    <!-- Standard -->
+                    <div
+                      class="relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none"
+                      [class.border-indigo-500]="deliveryMethod() === 'standard'"
+                      [class.ring-2]="deliveryMethod() === 'standard'"
+                      [class.ring-indigo-500]="deliveryMethod() === 'standard'"
+                      [class.border-gray-300]="deliveryMethod() !== 'standard'"
+                      (click)="setDeliveryMethod('standard')"
+                    >
+                      <span class="flex flex-1">
+                        <span class="flex flex-col">
+                          <span class="block text-sm font-medium text-gray-900">Standard</span>
+                          <span class="mt-1 flex items-center text-sm text-gray-500"
+                            >4–10 business days</span
+                          >
+                          <span class="mt-6 text-sm font-medium text-gray-900">$5.00</span>
+                        </span>
+                      </span>
+                      <svg
+                        class="h-5 w-5 text-indigo-600"
+                        [class.invisible]="deliveryMethod() !== 'standard'"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                        aria-hidden="true"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                          clip-rule="evenodd"
+                        />
+                      </svg>
+                      <span
+                        class="pointer-events-none absolute -inset-px rounded-lg border-2"
+                        aria-hidden="true"
+                        [class.border-indigo-500]="deliveryMethod() === 'standard'"
+                        [class.border-transparent]="deliveryMethod() !== 'standard'"
+                      ></span>
+                    </div>
+
+                    <!-- Express -->
+                    <div
+                      class="relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none"
+                      [class.border-indigo-500]="deliveryMethod() === 'express'"
+                      [class.ring-2]="deliveryMethod() === 'express'"
+                      [class.ring-indigo-500]="deliveryMethod() === 'express'"
+                      [class.border-gray-300]="deliveryMethod() !== 'express'"
+                      (click)="setDeliveryMethod('express')"
+                    >
+                      <span class="flex flex-1">
+                        <span class="flex flex-col">
+                          <span class="block text-sm font-medium text-gray-900">Express</span>
+                          <span class="mt-1 flex items-center text-sm text-gray-500"
+                            >2–5 business days</span
+                          >
+                          <span class="mt-6 text-sm font-medium text-gray-900">$15.00</span>
+                        </span>
+                      </span>
+                      <svg
+                        class="h-5 w-5 text-indigo-600"
+                        [class.invisible]="deliveryMethod() !== 'express'"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                        aria-hidden="true"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                          clip-rule="evenodd"
+                        />
+                      </svg>
+                      <span
+                        class="pointer-events-none absolute -inset-px rounded-lg border-2"
+                        aria-hidden="true"
+                        [class.border-indigo-500]="deliveryMethod() === 'express'"
+                        [class.border-transparent]="deliveryMethod() !== 'express'"
+                      ></span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="flex items-center justify-between pt-6 border-t border-gray-200">
+                  <button
+                    type="button"
+                    (click)="prevStep()"
+                    class="text-sm font-medium text-indigo-600 hover:text-indigo-500"
+                  >
+                    <span aria-hidden="true"> &larr;</span> Back to Information
+                  </button>
+                  <button
+                    type="button"
+                    (click)="nextStep()"
+                    class="rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                  >
+                    Continue to Payment
+                  </button>
+                </div>
+              </div>
+            }
+
+            @if (currentStep() === 'payment') {
+              <div class="space-y-6">
+                <div>
+                  <h3 class="text-lg font-medium text-gray-900">Payment details</h3>
+
+                  <div class="mt-6 grid grid-cols-4 gap-y-6 gap-x-4">
+                    <div class="col-span-4">
+                      <label
+                        for="card-number"
+                        class="block text-sm font-medium leading-6 text-gray-900"
+                        >Card number</label
+                      >
+                      <div class="mt-2">
+                        <input
+                          type="text"
+                          id="card-number"
+                          formControlName="cardNumber"
+                          autocomplete="cc-number"
+                          class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        />
+                      </div>
+                    </div>
+
+                    <div class="col-span-2 sm:col-span-3">
+                      <label
+                        for="expiration-date"
+                        class="block text-sm font-medium leading-6 text-gray-900"
+                        >Expiration date (MM/YY)</label
+                      >
+                      <div class="mt-2">
+                        <input
+                          type="text"
+                          id="expiration-date"
+                          formControlName="expiry"
+                          autocomplete="cc-exp"
+                          class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        />
+                      </div>
+                    </div>
+
+                    <div class="col-span-2 sm:col-span-1">
+                      <label for="cvc" class="block text-sm font-medium leading-6 text-gray-900"
+                        >CVC</label
+                      >
+                      <div class="mt-2">
+                        <input
+                          type="text"
+                          id="cvc"
+                          formControlName="cvv"
+                          autocomplete="cc-csc"
+                          class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        />
                       </div>
                     </div>
                   </div>
-                }
 
-                <div class="mx-auto max-w-2xl lg:max-w-none lg:px-0">
-                  @if (currentStep() === 'information') {
-                    <div>
-                      <h3 id="contact-info-heading" class="text-lg font-medium text-gray-900">
-                        Contact information
-                      </h3>
-
-                      <div class="mt-6">
-                        <div class="flex justify-between items-center mb-1">
-                          <label for="email-address" class="block text-sm font-medium text-gray-700"
-                            >Email address</label
-                          >
-                          <span class="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full"
-                            >No account required</span
-                          >
-                        </div>
-                        <div class="relative mt-1 rounded-md shadow-sm">
-                          <div
-                            class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
-                          >
-                            <svg
-                              class="h-5 w-5 text-gray-400"
-                              viewBox="0 0 20 20"
-                              fill="currentColor"
-                              aria-hidden="true"
-                            >
-                              <path
-                                d="M3 4a2 2 0 00-2 2v1.161l8.441 4.221a1.25 1.25 0 001.118 0L19 7.162V6a2 2 0 00-2-2H3z"
-                              />
-                              <path
-                                d="M19 8.839l-7.77 3.885a2.75 2.75 0 01-2.46 0L1 8.839V14a2 2 0 002 2h14a2 2 0 002-2V8.839z"
-                              />
-                            </svg>
-                          </div>
-                          <input
-                            type="email"
-                            id="email-address"
-                            formControlName="email"
-                            class="block w-full rounded-md border-0 py-1.5 pl-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                            [class.ring-red-300]="
-                              checkoutForm.get('email')?.touched &&
-                              checkoutForm.get('email')?.invalid
-                            "
-                            [class.text-red-900]="
-                              checkoutForm.get('email')?.touched &&
-                              checkoutForm.get('email')?.invalid
-                            "
-                            [class.placeholder-red-300]="
-                              checkoutForm.get('email')?.touched &&
-                              checkoutForm.get('email')?.invalid
-                            "
-                          />
-                        </div>
-                        @if (
-                          checkoutForm.get('email')?.touched && checkoutForm.get('email')?.invalid
-                        ) {
-                          <p class="mt-2 text-sm text-red-600">Valid email is required</p>
-                        }
-                      </div>
+                  <!-- Billing Address Toggle -->
+                  <div class="mt-6 border-t border-gray-200 pt-6">
+                    <div class="flex items-center">
+                      <input
+                        id="billing-same"
+                        type="checkbox"
+                        [checked]="billingSameAsShipping()"
+                        (change)="billingSameAsShipping.set(!billingSameAsShipping())"
+                        class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                      />
+                      <label
+                        for="billing-same"
+                        class="ml-2 block text-sm font-medium text-gray-900"
+                      >
+                        Billing address same as shipping
+                      </label>
                     </div>
 
-                    <div class="mt-10">
-                      <h3 id="shipping-heading" class="text-lg font-medium text-gray-900">
-                        Shipping address
-                      </h3>
-
+                    @if (!billingSameAsShipping()) {
                       <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
-                        <div class="sm:col-span-3">
-                          <div class="flex justify-between items-center">
-                            <label for="full-name" class="block text-sm font-medium text-gray-700"
-                              >Full name</label
-                            >
-                            <button
-                              type="button"
-                              class="text-xs text-indigo-600 hover:text-indigo-500 flex items-center gap-1"
-                              (click)="fillMockData()"
-                            >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 20 20"
-                                fill="currentColor"
-                                class="w-3 h-3"
-                              >
-                                <path
-                                  fill-rule="evenodd"
-                                  d="M9.69 18.933l.003.001C9.89 19.02 10 19 10 19s.11.02.308-.066l.002-.001.006-.003.018-.008a5.741 5.741 0 00.281-.14c.186-.096.446-.24.757-.433.62-.384 1.445-.966 2.274-1.765C15.302 14.988 17 12.493 17 9A7 7 0 103 9c0 3.492 1.698 5.988 3.355 7.584a13.731 13.731 0 002.273 1.765 11.842 11.842 0 00.976.544l.062.029.018.008.006.003zM10 11.25a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5z"
-                                  clip-rule="evenodd"
-                                />
-                              </svg>
-                              Use my location
-                            </button>
-                          </div>
-                          <div class="relative mt-1 rounded-md shadow-sm">
-                            <div
-                              class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
-                            >
-                              <svg
-                                class="h-5 w-5 text-gray-400"
-                                viewBox="0 0 20 20"
-                                fill="currentColor"
-                                aria-hidden="true"
-                              >
-                                <path
-                                  d="M10 8a3 3 0 100-6 3 3 0 000 6zM3.465 14.493a1.23 1.23 0 00.41 1.412A9.957 9.957 0 0010 18c2.31 0 4.438-.784 6.131-2.1.43-.333.604-.903.408-1.41a7.002 7.002 0 00-13.074.003z"
-                                />
-                              </svg>
-                            </div>
-                            <input
-                              type="text"
-                              id="full-name"
-                              formControlName="fullName"
-                              class="block w-full rounded-md border-0 py-1.5 pl-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                              [class.ring-red-300]="
-                                checkoutForm.get('fullName')?.touched &&
-                                checkoutForm.get('fullName')?.invalid
-                              "
-                            />
-                          </div>
-                          @if (
-                            checkoutForm.get('fullName')?.touched &&
-                            checkoutForm.get('fullName')?.invalid
-                          ) {
-                            <p class="mt-2 text-sm text-red-600">Name is required</p>
-                          }
-                        </div>
-
-                        <div class="sm:col-span-3">
-                          <label for="address" class="block text-sm font-medium text-gray-700"
-                            >Address</label
+                        <div class="sm:col-span-6">
+                          <label class="block text-sm font-medium leading-6 text-gray-900"
+                            >Billing Full Name</label
                           >
-                          <div class="relative mt-1 rounded-md shadow-sm">
-                            <div
-                              class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
-                            >
-                              <svg
-                                class="h-5 w-5 text-gray-400"
-                                viewBox="0 0 20 20"
-                                fill="currentColor"
-                                aria-hidden="true"
-                              >
-                                <path
-                                  fill-rule="evenodd"
-                                  d="M9.293 2.293a1 1 0 011.414 0l7 7A1 1 0 0117 11h-1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-3a1 1 0 00-1-1H9a1 1 0 00-1 1v3a1 1 0 01-1 1H5a1 1 0 01-1-1v-6H3a1 1 0 01-.707-1.707l7-7z"
-                                  clip-rule="evenodd"
-                                />
-                              </svg>
-                            </div>
+                          <div class="mt-2">
                             <input
                               type="text"
-                              id="address"
-                              formControlName="address"
-                              class="block w-full rounded-md border-0 py-1.5 pl-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                              [class.ring-red-300]="
-                                checkoutForm.get('address')?.touched &&
-                                checkoutForm.get('address')?.invalid
-                              "
+                              formControlName="billingFullName"
+                              class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             />
                           </div>
-                          @if (
-                            checkoutForm.get('address')?.touched &&
-                            checkoutForm.get('address')?.invalid
-                          ) {
-                            <p class="mt-2 text-sm text-red-600">Address is required</p>
-                          }
                         </div>
-
-                        <div class="sm:col-span-1">
-                          <label for="city" class="block text-sm font-medium text-gray-700"
+                        <div class="sm:col-span-6">
+                          <label class="block text-sm font-medium leading-6 text-gray-900"
+                            >Billing Address</label
+                          >
+                          <div class="mt-2">
+                            <input
+                              type="text"
+                              formControlName="billingAddress"
+                              class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                            />
+                          </div>
+                        </div>
+                        <div class="sm:col-span-2">
+                          <label class="block text-sm font-medium leading-6 text-gray-900"
                             >City</label
                           >
-                          <div class="relative mt-1 rounded-md shadow-sm">
-                            <div
-                              class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
-                            >
-                              <svg
-                                class="h-5 w-5 text-gray-400"
-                                viewBox="0 0 20 20"
-                                fill="currentColor"
-                                aria-hidden="true"
-                              >
-                                <path
-                                  fill-rule="evenodd"
-                                  d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4zm3 1h6v4H7V5zm0 6h6v4H7v-4z"
-                                  clip-rule="evenodd"
-                                />
-                              </svg>
-                            </div>
+                          <div class="mt-2">
                             <input
                               type="text"
-                              id="city"
-                              formControlName="city"
-                              class="block w-full rounded-md border-0 py-1.5 pl-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                              [class.ring-red-300]="
-                                checkoutForm.get('city')?.touched &&
-                                checkoutForm.get('city')?.invalid
-                              "
+                              formControlName="billingCity"
+                              class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             />
                           </div>
-                          @if (
-                            checkoutForm.get('city')?.touched && checkoutForm.get('city')?.invalid
-                          ) {
-                            <p class="mt-2 text-sm text-red-600">Required</p>
-                          }
                         </div>
-
-                        <div class="sm:col-span-1">
-                          <label for="postal-code" class="block text-sm font-medium text-gray-700"
+                        <div class="sm:col-span-2">
+                          <label class="block text-sm font-medium leading-6 text-gray-900"
                             >Zip Code</label
                           >
-                          <div class="relative mt-1 rounded-md shadow-sm">
-                            <div
-                              class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
-                            >
-                              <svg
-                                class="h-5 w-5 text-gray-400"
-                                viewBox="0 0 20 20"
-                                fill="currentColor"
-                                aria-hidden="true"
-                              >
-                                <path
-                                  fill-rule="evenodd"
-                                  d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
-                                  clip-rule="evenodd"
-                                />
-                              </svg>
-                            </div>
+                          <div class="mt-2">
                             <input
                               type="text"
-                              id="postal-code"
-                              formControlName="zipCode"
-                              class="block w-full rounded-md border-0 py-1.5 pl-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                              [class.ring-red-300]="
-                                checkoutForm.get('zipCode')?.touched &&
-                                checkoutForm.get('zipCode')?.invalid
-                              "
+                              formControlName="billingZipCode"
+                              class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             />
-                          </div>
-                          @if (
-                            checkoutForm.get('zipCode')?.touched &&
-                            checkoutForm.get('zipCode')?.invalid
-                          ) {
-                            <p class="mt-2 text-sm text-red-600">Required</p>
-                          }
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="mt-10 flex justify-end">
-                      <button
-                        type="button"
-                        (click)="nextStep()"
-                        class="rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
-                      >
-                        Continue to Shipping
-                      </button>
-                    </div>
-                  } @else if (currentStep() === 'shipping') {
-                    <!-- Delivery Method -->
-                    <div class="mt-0">
-                      <h3 class="text-lg font-medium text-gray-900">Delivery method</h3>
-                      <div class="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
-                        <!-- Standard -->
-                        <div
-                          class="relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none"
-                          role="button"
-                          tabindex="0"
-                          [class.border-indigo-500]="deliveryMethod() === 'standard'"
-                          [class.ring-2]="deliveryMethod() === 'standard'"
-                          [class.ring-indigo-500]="deliveryMethod() === 'standard'"
-                          [class.border-gray-300]="deliveryMethod() !== 'standard'"
-                          (click)="setDeliveryMethod('standard')"
-                          (keyup.enter)="setDeliveryMethod('standard')"
-                        >
-                          <span class="flex flex-1">
-                            <span class="flex flex-col">
-                              <span class="block text-sm font-medium text-gray-900">Standard</span>
-                              <span class="mt-1 flex items-center text-sm text-gray-500"
-                                >4–10 business days</span
-                              >
-                              <span class="mt-6 text-sm font-medium text-gray-900">$5.00</span>
-                            </span>
-                          </span>
-                          <span
-                            class="h-5 w-5 text-indigo-600"
-                            [class.invisible]="deliveryMethod() !== 'standard'"
-                          >
-                            <svg
-                              class="h-5 w-5"
-                              viewBox="0 0 20 20"
-                              fill="currentColor"
-                              aria-hidden="true"
-                            >
-                              <path
-                                fill-rule="evenodd"
-                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
-                                clip-rule="evenodd"
-                              />
-                            </svg>
-                          </span>
-                          <span
-                            class="pointer-events-none absolute -inset-px rounded-lg border-2"
-                            aria-hidden="true"
-                            [class.border-indigo-500]="deliveryMethod() === 'standard'"
-                            [class.border-transparent]="deliveryMethod() !== 'standard'"
-                          ></span>
-                        </div>
-
-                        <!-- Express -->
-                        <div
-                          class="relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none"
-                          role="button"
-                          tabindex="0"
-                          [class.border-indigo-500]="deliveryMethod() === 'express'"
-                          [class.ring-2]="deliveryMethod() === 'express'"
-                          [class.ring-indigo-500]="deliveryMethod() === 'express'"
-                          [class.border-gray-300]="deliveryMethod() !== 'express'"
-                          (click)="setDeliveryMethod('express')"
-                          (keyup.enter)="setDeliveryMethod('express')"
-                        >
-                          <span class="flex flex-1">
-                            <span class="flex flex-col">
-                              <span class="block text-sm font-medium text-gray-900">Express</span>
-                              <span class="mt-1 flex items-center text-sm text-gray-500"
-                                >2–5 business days</span
-                              >
-                              <span class="mt-6 text-sm font-medium text-gray-900">$15.00</span>
-                            </span>
-                          </span>
-                          <span
-                            class="h-5 w-5 text-indigo-600"
-                            [class.invisible]="deliveryMethod() !== 'express'"
-                          >
-                            <svg
-                              class="h-5 w-5"
-                              viewBox="0 0 20 20"
-                              fill="currentColor"
-                              aria-hidden="true"
-                            >
-                              <path
-                                fill-rule="evenodd"
-                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
-                                clip-rule="evenodd"
-                              />
-                            </svg>
-                          </span>
-                          <span
-                            class="pointer-events-none absolute -inset-px rounded-lg border-2"
-                            aria-hidden="true"
-                            [class.border-indigo-500]="deliveryMethod() === 'express'"
-                            [class.border-transparent]="deliveryMethod() !== 'express'"
-                          ></span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="mt-10 flex items-center justify-between">
-                      <button
-                        type="button"
-                        (click)="prevStep()"
-                        class="text-indigo-600 hover:text-indigo-500 font-medium"
-                      >
-                        &larr; Back to Information
-                      </button>
-                      <button
-                        type="button"
-                        (click)="nextStep()"
-                        class="rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
-                      >
-                        Continue to Payment
-                      </button>
-                    </div>
-                  } @else if (currentStep() === 'payment') {
-                    <div class="mt-0">
-                      <div class="flex items-center justify-between mb-6">
-                        <h3 id="payment-heading" class="text-lg font-medium text-gray-900">
-                          Payment details
-                        </h3>
-                        <div class="flex items-center space-x-1 grayscale opacity-75">
-                          <!-- Visa -->
-                          <div
-                            class="h-6 w-9 bg-white border border-gray-200 rounded flex items-center justify-center overflow-hidden"
-                          >
-                            <svg class="h-full w-full" viewBox="0 0 32 20" fill="none">
-                              <rect width="32" height="20" fill="#1A1F71" />
-                              <path d="M11 11.5L12.5 4H15.5L14 11.5H11Z" fill="white" />
-                            </svg>
-                          </div>
-                          <!-- Generic Card -->
-                          <div
-                            class="h-6 w-9 bg-white border border-gray-200 rounded flex items-center justify-center overflow-hidden"
-                          >
-                            <svg
-                              class="h-4 w-4 text-gray-400"
-                              fill="currentColor"
-                              viewBox="0 0 20 20"
-                            >
-                              <path
-                                fill-rule="evenodd"
-                                d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a1 1 0 100-2 1 1 0 000 2z"
-                                clip-rule="evenodd"
-                              />
-                            </svg>
                           </div>
                         </div>
                       </div>
-
-                      <div class="grid grid-cols-3 gap-x-4 gap-y-6 sm:grid-cols-4">
-                        <div class="col-span-3 sm:col-span-4">
-                          <label for="card-number" class="block text-sm font-medium text-gray-700"
-                            >Card number</label
-                          >
-                          <div class="relative mt-1 rounded-md shadow-sm">
-                            <div
-                              class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
-                            >
-                              <svg
-                                class="h-5 w-5 text-gray-400"
-                                viewBox="0 0 20 20"
-                                fill="currentColor"
-                                aria-hidden="true"
-                              >
-                                <path
-                                  fill-rule="evenodd"
-                                  d="M1 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-1 1H2a1 1 0 01-1-1V4zm12 4a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 01-1 1h-2a1 1 0 01-1-1V8zM2 10a1 1 0 011-1h14a1 1 0 011 1v6a1 1 0 01-1 1H3a1 1 0 01-1-1v-6z"
-                                  clip-rule="evenodd"
-                                />
-                              </svg>
-                            </div>
-                            <input
-                              type="text"
-                              id="card-number"
-                              formControlName="cardNumber"
-                              class="block w-full rounded-md border-0 py-1.5 pl-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                              placeholder="0000 0000 0000 0000"
-                              [class.ring-red-300]="
-                                checkoutForm.get('cardNumber')?.touched &&
-                                checkoutForm.get('cardNumber')?.invalid
-                              "
-                            />
-                          </div>
-                          @if (
-                            checkoutForm.get('cardNumber')?.touched &&
-                            checkoutForm.get('cardNumber')?.invalid
-                          ) {
-                            <p class="mt-2 text-sm text-red-600">Valid card number is required</p>
-                          }
-                        </div>
-
-                        <div class="col-span-2 sm:col-span-3">
-                          <label
-                            for="expiration-date"
-                            class="block text-sm font-medium text-gray-700"
-                            >Expiration date (MM/YY)</label
-                          >
-                          <div class="relative mt-1 rounded-md shadow-sm">
-                            <div
-                              class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
-                            >
-                              <svg
-                                class="h-5 w-5 text-gray-400"
-                                viewBox="0 0 20 20"
-                                fill="currentColor"
-                                aria-hidden="true"
-                              >
-                                <path
-                                  fill-rule="evenodd"
-                                  d="M5.75 2a.75.75 0 01.75.75V4h7V2.75a.75.75 0 011.5 0V4h.25A2.75 2.75 0 0118 6.75v8.5A2.75 2.75 0 0115.25 18H4.75A2.75 2.75 0 012 15.25v-8.5A2.75 2.75 0 014.75 4H5V2.75A.75.75 0 015.75 2zm-1 5.5c-.69 0-1.25.56-1.25 1.25v6.5c0 .69.56 1.25 1.25 1.25h10.5c.69 0 1.25-.56 1.25-1.25v-6.5c0-.69-.56-1.25-1.25-1.25H4.75z"
-                                  clip-rule="evenodd"
-                                />
-                              </svg>
-                            </div>
-                            <input
-                              type="text"
-                              id="expiration-date"
-                              formControlName="expiry"
-                              class="block w-full rounded-md border-0 py-1.5 pl-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                              placeholder="MM/YY"
-                              [class.ring-red-300]="
-                                checkoutForm.get('expiry')?.touched &&
-                                checkoutForm.get('expiry')?.invalid
-                              "
-                            />
-                          </div>
-                          @if (
-                            checkoutForm.get('expiry')?.touched &&
-                            checkoutForm.get('expiry')?.invalid
-                          ) {
-                            <p class="mt-2 text-sm text-red-600">Required</p>
-                          }
-                        </div>
-
-                        <div>
-                          <label for="cvc" class="block text-sm font-medium text-gray-700"
-                            >CVC</label
-                          >
-                          <div class="relative mt-1 rounded-md shadow-sm">
-                            <div
-                              class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
-                            >
-                              <svg
-                                class="h-5 w-5 text-gray-400"
-                                viewBox="0 0 20 20"
-                                fill="currentColor"
-                                aria-hidden="true"
-                              >
-                                <path
-                                  fill-rule="evenodd"
-                                  d="M10 1a4.5 4.5 0 00-4.5 4.5V9H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-.5V5.5A4.5 4.5 0 0010 1zm3 8V5.5a3 3 0 10-6 0V9h6z"
-                                  clip-rule="evenodd"
-                                />
-                              </svg>
-                            </div>
-                            <input
-                              type="text"
-                              id="cvc"
-                              formControlName="cvv"
-                              class="block w-full rounded-md border-0 py-1.5 pl-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                              placeholder="123"
-                              [class.ring-red-300]="
-                                checkoutForm.get('cvv')?.touched && checkoutForm.get('cvv')?.invalid
-                              "
-                            />
-                          </div>
-                          @if (
-                            checkoutForm.get('cvv')?.touched && checkoutForm.get('cvv')?.invalid
-                          ) {
-                            <p class="mt-2 text-sm text-red-600">Required</p>
-                          }
-                        </div>
-
-                        <div class="col-span-3 sm:col-span-4 mt-6 border-t pt-4">
-                          <div class="flex items-center">
-                            <input
-                              id="billing-same"
-                              type="checkbox"
-                              [checked]="billingSameAsShipping()"
-                              (change)="billingSameAsShipping.set(!billingSameAsShipping())"
-                              class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                            />
-                            <label for="billing-same" class="ml-2 block text-sm text-gray-900">
-                              Billing address same as shipping
-                            </label>
-                          </div>
-
-                          @if (!billingSameAsShipping()) {
-                            <div class="mt-4 grid grid-cols-1 gap-y-4">
-                              <div>
-                                <label class="block text-sm font-medium text-gray-700"
-                                  >Billing Full Name</label
-                                >
-                                <input
-                                  type="text"
-                                  formControlName="billingFullName"
-                                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border p-2"
-                                />
-                              </div>
-                              <div>
-                                <label class="block text-sm font-medium text-gray-700"
-                                  >Billing Address</label
-                                >
-                                <input
-                                  type="text"
-                                  formControlName="billingAddress"
-                                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border p-2"
-                                />
-                              </div>
-                              <div class="grid grid-cols-2 gap-4">
-                                <div>
-                                  <label class="block text-sm font-medium text-gray-700"
-                                    >Billing City</label
-                                  >
-                                  <input
-                                    type="text"
-                                    formControlName="billingCity"
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border p-2"
-                                  />
-                                </div>
-                                <div>
-                                  <label class="block text-sm font-medium text-gray-700"
-                                    >Billing Zip</label
-                                  >
-                                  <input
-                                    type="text"
-                                    formControlName="billingZipCode"
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border p-2"
-                                  />
-                                </div>
-                              </div>
-                            </div>
-                          }
-                        </div>
-                      </div>
-                    </div>
-
-                    <div
-                      class="mt-10 border-t border-gray-200 pt-6 sm:flex sm:items-center sm:justify-between"
-                    >
-                      <button
-                        type="button"
-                        (click)="prevStep()"
-                        class="mb-4 sm:mb-0 text-indigo-600 hover:text-indigo-500 font-medium sm:order-first"
-                      >
-                        &larr; Back to Shipping
-                      </button>
-                      <button
-                        type="submit"
-                        [disabled]="checkoutForm.invalid || isProcessing"
-                        class="w-full rounded-md border border-transparent bg-indigo-600 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed sm:order-last sm:w-auto sm:px-8"
-                      >
-                        {{ isProcessing ? 'Processing...' : 'Pay ' + (total() | currency) }}
-                      </button>
-
-                      <div class="mt-4 sm:mt-0 text-center sm:text-left">
-                        <div
-                          class="flex items-center justify-center sm:justify-start text-xs font-medium text-green-700 mb-1"
-                        >
-                          <svg
-                            class="h-4 w-4 mr-1.5"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke-width="2"
-                            stroke="currentColor"
-                          >
-                            <path
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z"
-                            />
-                          </svg>
-                          Secure SSL Checkout
-                        </div>
-                        <p class="text-xs text-gray-500">Encrypted payment processing</p>
-                      </div>
-                    </div>
-                  }
+                    }
+                  </div>
                 </div>
-              </form>
-            </div>
-          </section>
+
+                <div class="flex items-center justify-between pt-6 border-t border-gray-200">
+                  <button
+                    type="button"
+                    (click)="prevStep()"
+                    class="text-sm font-medium text-indigo-600 hover:text-indigo-500"
+                  >
+                    <span aria-hidden="true"> &larr;</span> Back to Shipping
+                  </button>
+                  <button
+                    type="submit"
+                    [disabled]="checkoutForm.invalid || isProcessing"
+                    class="rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50"
+                  >
+                    {{ isProcessing ? 'Processing...' : 'Pay ' + (total() | currency) }}
+                  </button>
+                </div>
+              </div>
+            }
+          </form>
         </div>
       </div>
     </div>

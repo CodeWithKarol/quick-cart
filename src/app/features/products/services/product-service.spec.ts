@@ -41,7 +41,7 @@ describe('ProductService', () => {
     vi.advanceTimersByTime(300);
 
     expect(product).toBeDefined();
-    expect(product.id).toBe(1);
+    expect(product?.id).toBe(1);
   });
 
   it('should return undefined for non-existent product id', () => {
