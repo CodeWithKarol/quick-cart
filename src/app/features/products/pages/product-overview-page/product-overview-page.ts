@@ -185,7 +185,7 @@ export class ProductOverviewPage implements OnInit {
   ];
 
   mockCustomerPhotos = [
-    'https://images.unsplash.com/photo-1517705008128-361805f42e82?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80',
+    'https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80',
     'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80',
     'https://images.unsplash.com/photo-1483985988355-763728e1935b?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80',
     'https://images.unsplash.com/photo-1532453288672-3a27e9be9efd?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80',
