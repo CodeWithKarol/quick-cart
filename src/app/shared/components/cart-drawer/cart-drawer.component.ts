@@ -60,7 +60,7 @@ import { CartService } from '../../../features/cart/services/cart-service';
                           @if (cartItems().length === 0) {
                             <li class="py-6 text-center text-gray-500">Your cart is empty</li>
                           }
-                          @for (item of cartItems(); track item.product.id) {
+                          @for (item of cartItems(); track item.product.id; let first = $first) {
                             <li class="flex py-6">
                               <div
                                 class="relative h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200"
@@ -69,6 +69,7 @@ import { CartService } from '../../../features/cart/services/cart-service';
                                   [ngSrc]="item.product.imageUrl"
                                   [alt]="item.product.name"
                                   fill
+                                  [priority]="first"
                                   class="h-full w-full object-cover object-center"
                                 />
                               </div>

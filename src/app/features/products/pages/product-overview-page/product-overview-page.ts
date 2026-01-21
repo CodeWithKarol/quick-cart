@@ -403,9 +403,10 @@ import { ImageZoomDirective } from '../../../../shared/directives/image-zoom.dir
                 <div
                   class="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8"
                 >
-                  @for (related of relatedProducts(); track related.id) {
+                  @for (related of relatedProducts(); track related.id; let i = $index) {
                     <app-product-card
                       [product]="related"
+                      [priority]="i < 2"
                       (addToCart)="addToCart($event)"
                       (quickView)="onQuickView($event)"
                     ></app-product-card>
@@ -420,9 +421,10 @@ import { ImageZoomDirective } from '../../../../shared/directives/image-zoom.dir
                 <div
                   class="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8"
                 >
-                  @for (recent of recentlyViewedProducts(); track recent.id) {
+                  @for (recent of recentlyViewedProducts(); track recent.id; let i = $index) {
                     <app-product-card
                       [product]="recent"
+                      [priority]="i < 2"
                       (addToCart)="addToCart($event)"
                       (quickView)="onQuickView($event)"
                     ></app-product-card>

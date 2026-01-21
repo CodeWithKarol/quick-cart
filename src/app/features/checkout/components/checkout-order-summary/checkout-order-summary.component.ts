@@ -5,72 +5,10 @@ import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-checkout-order-summary',
-  standalone: true,
   imports: [CommonModule, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
-    <div class="mt-4 rounded-lg border border-gray-200 bg-white shadow-sm">
-      <h3 class="sr-only">Items in your cart</h3>
-      <ul role="list" class="divide-y divide-gray-200">
-        @for (item of cartItems(); track item.product.id) {
-          <li class="flex py-6 px-4 sm:px-6">
-            <div class="flex-shrink-0">
-              <img
-                [src]="item.product.imageUrl"
-                [alt]="item.product.name"
-                class="w-20 rounded-md"
-              />
-            </div>
-
-            <div class="ml-6 flex flex-1 flex-col">
-              <div class="flex">
-                <div class="min-w-0 flex-1">
-                  <h4 class="text-sm">
-                    <a
-                      [routerLink]="['/product', item.product.id]"
-                      class="font-medium text-gray-700 hover:text-gray-800"
-                      >{{ item.product.name }}</a
-                    >
-                  </h4>
-                  <p class="mt-1 text-sm text-gray-500">{{ item.product.category }}</p>
-                </div>
-
-                <div class="ml-4 flow-root flex-shrink-0">
-                  <button
-                    type="button"
-                    class="-m-2.5 flex items-center justify-center bg-white p-2.5 text-gray-400 hover:text-gray-500"
-                  >
-                    <span class="sr-only">Remove</span>
-                    <span class="text-sm font-medium text-gray-900">x{{ item.quantity }}</span>
-                  </button>
-                </div>
-              </div>
-
-              <div class="flex flex-1 items-end justify-between pt-2">
-                <p class="mt-1 text-sm font-medium text-gray-900">
-                  {{ item.product.price | currency }}
-                </p>
-              </div>
-            </div>
-          </li>
-        }
-      </ul>
-      <dl class="border-t border-gray-200 py-6 px-4 space-y-6 sm:px-6">
-        <div class="flex items-center justify-between">
-          <dt class="text-sm">Subtotal</dt>
-          <dd class="text-sm font-medium text-gray-900">{{ cartTotal() | currency }}</dd>
-        </div>
-        <div class="flex items-center justify-between">
-          <dt class="text-sm">Shipping</dt>
-          <dd class="text-sm font-medium text-gray-900">{{ shippingCost() | currency }}</dd>
-        </div>
-        <div class="flex items-center justify-between border-t border-gray-200 pt-6">
-          <dt class="text-base font-medium">Total</dt>
-          <dd class="text-base font-medium text-gray-900">{{ total() | currency }}</dd>
-        </div>
-      </dl>
-    </div>
-  `,
+  templateUrl: './checkout-order-summary.component.html',
+  styleUrl: './checkout-order-summary.component.css',
 })
 export class CheckoutOrderSummaryComponent {
   cartItems = input.required<CartItem[]>();

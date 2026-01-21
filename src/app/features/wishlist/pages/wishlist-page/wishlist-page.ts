@@ -51,9 +51,10 @@ import { toSignal } from '@angular/core/rxjs-interop';
           <div
             class="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8"
           >
-            @for (product of wishlistItems(); track product.id) {
+            @for (product of wishlistItems(); track product.id; let i = $index) {
               <app-product-card
                 [product]="product"
+                [priority]="i < 4"
                 (addToCart)="onAddToCart($event)"
                 (quickView)="onQuickView($event)"
               ></app-product-card>

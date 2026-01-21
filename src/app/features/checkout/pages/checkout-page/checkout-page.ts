@@ -11,7 +11,6 @@ import { CheckoutPaymentComponent } from '../../components/checkout-payment/chec
 
 @Component({
   selector: 'app-checkout',
-  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -21,65 +20,8 @@ import { CheckoutPaymentComponent } from '../../components/checkout-payment/chec
     CheckoutDeliveryComponent,
     CheckoutPaymentComponent,
   ],
-  template: `
-    <div class="bg-gray-50 min-h-screen pt-16 pb-12 sm:px-6 lg:px-8">
-      <div class="mx-auto max-w-7xl lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16">
-        <!-- Order Summary (Right Column on Desktop) -->
-        <div class="mt-10 lg:mt-0 lg:col-start-2">
-          <div class="lg:sticky lg:top-20">
-            <h2 class="text-lg font-medium text-gray-900">Order summary</h2>
-            <app-checkout-order-summary
-              [cartItems]="cartItems()"
-              [cartTotal]="cartTotal()"
-              [shippingCost]="shippingCost()"
-              [total]="total()"
-            ></app-checkout-order-summary>
-          </div>
-        </div>
-
-        <!-- Checkout Form (Left Column) -->
-        <div class="mt-10 lg:mt-0 lg:col-start-1">
-          <!-- Steps -->
-          <app-checkout-steps
-            [steps]="steps"
-            [currentStep]="currentStep()"
-            (stepClick)="goToStep($event)"
-          ></app-checkout-steps>
-
-          <form [formGroup]="checkoutForm" (ngSubmit)="onSubmit()">
-            @switch (currentStep()) {
-              @case ('information') {
-                <app-checkout-personal-info
-                  [form]="checkoutForm"
-                  (fillMockData)="fillMockData()"
-                  (continue)="nextStep()"
-                ></app-checkout-personal-info>
-              }
-              @case ('shipping') {
-                <app-checkout-delivery
-                  [deliveryMethod]="deliveryMethod()"
-                  (deliveryMethodChange)="setDeliveryMethod($event)"
-                  (continue)="nextStep()"
-                  (back)="prevStep()"
-                ></app-checkout-delivery>
-              }
-              @case ('payment') {
-                <app-checkout-payment
-                  [form]="checkoutForm"
-                  [billingSameAsShipping]="billingSameAsShipping()"
-                  [total]="total()"
-                  [isProcessing]="isProcessing"
-                  (billingSameAsShippingChange)="billingSameAsShipping.set($event)"
-                  (back)="prevStep()"
-                ></app-checkout-payment>
-              }
-            }
-          </form>
-        </div>
-      </div>
-    </div>
-  `,
-  styles: [],
+  templateUrl: './checkout-page.html',
+  styleUrl: './checkout-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CheckoutPage {
