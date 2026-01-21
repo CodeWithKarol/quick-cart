@@ -120,14 +120,13 @@ import { ImageZoomDirective } from '../../../../shared/directives/image-zoom.dir
                 </div>
 
                 <div
-                  class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-gray-100 sm:aspect-h-3 sm:aspect-w-2"
+                  class="relative aspect-square w-full overflow-hidden rounded-lg bg-gray-100 sm:aspect-[2/3]"
                   [appImageZoom]="2"
                 >
                   <img
                     [ngSrc]="selectedImage() || product.imageUrl"
                     [alt]="product.name"
-                    width="600"
-                    height="600"
+                    fill
                     priority
                     class="h-full w-full object-cover object-center sm:rounded-lg"
                   />

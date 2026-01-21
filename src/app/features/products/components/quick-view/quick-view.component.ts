@@ -51,12 +51,13 @@ import { RouterLink } from '@angular/router';
                     class="grid w-full grid-cols-1 items-start gap-x-6 gap-y-8 sm:grid-cols-12 lg:gap-x-8"
                   >
                     <div
-                      class="aspect-h-3 aspect-w-2 overflow-hidden rounded-lg bg-gray-100 sm:col-span-4 lg:col-span-5 relative h-full min-h-[300px]"
+                      class="aspect-[2/3] overflow-hidden rounded-lg bg-gray-100 sm:col-span-4 lg:col-span-5 relative h-full min-h-[300px]"
                     >
                       <img
                         [ngSrc]="p.imageUrl"
                         [alt]="p.name"
                         fill
+                        priority
                         class="object-cover object-center"
                       />
                     </div>

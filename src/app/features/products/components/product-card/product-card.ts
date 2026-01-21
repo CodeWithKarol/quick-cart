@@ -8,6 +8,14 @@ import { WishlistService } from '../../../../features/wishlist/services/wishlist
   selector: 'app-product-card',
   standalone: true,
   imports: [CommonModule, NgOptimizedImage, RouterLink],
+  styles: [
+    `
+      :host {
+        display: block;
+        height: 100%;
+      }
+    `,
+  ],
   template: `
     <div
       class="group relative p-4 sm:p-6 h-full flex flex-col items-center text-center hover:bg-gray-50 transition-colors"
@@ -30,7 +38,7 @@ import { WishlistService } from '../../../../features/wishlist/services/wishlist
 
       <div
         [routerLink]="['/product', product().id]"
-        class="relative aspect-square w-3/4 overflow-hidden rounded-lg bg-gray-100 cursor-pointer mb-6"
+        class="relative aspect-square w-full overflow-hidden rounded-lg bg-gray-100 cursor-pointer mb-6"
       >
         @if (priority()) {
           <img
@@ -111,7 +119,6 @@ import { WishlistService } from '../../../../features/wishlist/services/wishlist
       </button>
     </div>
   `,
-  styles: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductCard {

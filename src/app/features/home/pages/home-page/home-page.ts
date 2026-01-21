@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import { CommonModule, NgOptimizedImage } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ProductService } from '../../../products/services/product-service';
@@ -12,7 +12,7 @@ import { Product } from '../../../products/models/product';
 @Component({
   selector: 'app-home-page',
   standalone: true,
-  imports: [CommonModule, RouterLink, NgOptimizedImage, ProductCard, QuickViewComponent],
+  imports: [CommonModule, RouterLink, ProductCard, QuickViewComponent],
   template: `
     <!-- Hero Section -->
     <div class="relative bg-white overflow-hidden">
@@ -184,9 +184,10 @@ import { Product } from '../../../products/models/product';
         <div
           class="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8"
         >
-          @for (product of featuredProducts(); track product.id) {
+          @for (product of featuredProducts(); track product.id; let i = $index) {
             <app-product-card
               [product]="product"
+              [priority]="i < 4"
               (addToCart)="onAddToCart($event)"
               (quickView)="onQuickView($event)"
             >

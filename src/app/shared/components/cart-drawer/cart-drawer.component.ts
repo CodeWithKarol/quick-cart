@@ -1,12 +1,12 @@
-import { Component, inject, effect } from '@angular/core';
+import { Component, inject, effect, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { CartService } from '../../../features/cart/services/cart-service';
 
 @Component({
   selector: 'app-cart-drawer',
-  standalone: true,
   imports: [CommonModule, RouterLink, NgOptimizedImage],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     @if (isOpen()) {
       <div class="relative z-50" aria-labelledby="slide-over-title" role="dialog" aria-modal="true">
@@ -63,13 +63,12 @@ import { CartService } from '../../../features/cart/services/cart-service';
                           @for (item of cartItems(); track item.product.id) {
                             <li class="flex py-6">
                               <div
-                                class="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200"
+                                class="relative h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200"
                               >
                                 <img
                                   [ngSrc]="item.product.imageUrl"
                                   [alt]="item.product.name"
-                                  width="96"
-                                  height="96"
+                                  fill
                                   class="h-full w-full object-cover object-center"
                                 />
                               </div>
