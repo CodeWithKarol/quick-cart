@@ -8,8 +8,8 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { ProductService } from '../../services/product-service';
-import { CartService } from '../../../cart/services/cart-service';
+import { ProductService } from '../../services/product.service';
+import { CartService } from '../../../cart/services/cart.service';
 import { WishlistService } from '../../../../features/wishlist/services/wishlist.service';
 import { RecentlyViewedService } from '../../services/recently-viewed.service';
 import { Product } from '../../models/product';

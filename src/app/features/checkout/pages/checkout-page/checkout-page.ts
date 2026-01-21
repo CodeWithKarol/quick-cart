@@ -2,7 +2,7 @@ import { Component, inject, ChangeDetectionStrategy, signal, computed } from '@a
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { CartService } from '../../../cart/services/cart-service';
+import { CartService } from '../../../cart/services/cart.service';
 import { CheckoutOrderSummaryComponent } from '../../components/checkout-order-summary/checkout-order-summary.component';
 import { CheckoutStepsComponent } from '../../components/checkout-steps/checkout-steps.component';
 import { CheckoutPersonalInfoComponent } from '../../components/checkout-personal-info/checkout-personal-info.component';

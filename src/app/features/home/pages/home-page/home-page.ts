@@ -1,8 +1,8 @@
 import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { ProductService } from '../../../products/services/product-service';
-import { CartService } from '../../../cart/services/cart-service';
+import { ProductService } from '../../../products/services/product.service';
+import { CartService } from '../../../cart/services/cart.service';
 import { QuickViewComponent } from '../../../products/components/quick-view/quick-view.component';
 import { map } from 'rxjs/operators';
 import { Product } from '../../../products/models/product';

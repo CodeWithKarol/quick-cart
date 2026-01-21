@@ -1,12 +1,12 @@
 import { Component, inject, ChangeDetectionStrategy, signal, computed } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/router';
-import { CartService } from './features/cart/services/cart-service';
+import { CartService } from './features/cart/services/cart.service';
 import { WishlistService } from './features/wishlist/services/wishlist.service';
-import { ProductService } from './features/products/services/product-service';
+import { ProductService } from './features/products/services/product.service';
 import { Product } from './features/products/models/product';
 import { CommonModule } from '@angular/common';
 import { ToastContainerComponent } from './shared/components/toast/toast.component';
-import { CartDrawerComponent } from './shared/components/cart-drawer/cart-drawer.component';
+import { CartDrawerComponent } from './features/cart/components/cart-drawer/cart-drawer.component';
 
 @Component({
   selector: 'app-root',

@@ -8,8 +8,8 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-import { ProductService } from '../../services/product-service';
-import { CartService } from '../../../cart/services/cart-service';
+import { ProductService } from '../../services/product.service';
+import { CartService } from '../../../cart/services/cart.service';
 import { ProductCard } from '../../components/product-card/product-card';
 import { QuickViewComponent } from '../../components/quick-view/quick-view.component';
 import { toSignal } from '@angular/core/rxjs-interop';
