@@ -4,10 +4,16 @@ export const routes: Routes = [
   {
     path: '',
     loadComponent: () =>
+      import('./features/home/pages/home-page/home-page').then((m) => m.HomePage),
+    title: 'QuickCart - Home',
+  },
+  {
+    path: 'shop',
+    loadComponent: () =>
       import('./features/products/pages/product-list-page/product-list-page').then(
         (m) => m.ProductListPage,
       ),
-    title: 'QuickCart - Home',
+    title: 'QuickCart - Shop',
   },
   {
     path: 'product/:id',

@@ -7,12 +7,20 @@ import { WishlistService } from '../../../../features/wishlist/services/wishlist
 import { RecentlyViewedService } from '../../services/recently-viewed.service';
 import { Product } from '../../models/product';
 import { ProductCard } from '../../components/product-card/product-card';
+import { QuickViewComponent } from '../../components/quick-view/quick-view.component';
 import { ImageZoomDirective } from '../../../../shared/directives/image-zoom.directive';
 
 @Component({
   selector: 'app-product-overview',
   standalone: true,
-  imports: [CommonModule, NgOptimizedImage, RouterLink, ProductCard, ImageZoomDirective],
+  imports: [
+    CommonModule,
+    NgOptimizedImage,
+    RouterLink,
+    ProductCard,
+    ImageZoomDirective,
+    QuickViewComponent,
+  ],
   styles: [
     `
       :host {
@@ -394,6 +402,7 @@ import { ImageZoomDirective } from '../../../../shared/directives/image-zoom.dir
                     <app-product-card
                       [product]="related"
                       (addToCart)="addToCart($event)"
+                      (quickView)="onQuickView($event)"
                     ></app-product-card>
                   }
                 </div>
@@ -410,6 +419,7 @@ import { ImageZoomDirective } from '../../../../shared/directives/image-zoom.dir
                     <app-product-card
                       [product]="recent"
                       (addToCart)="addToCart($event)"
+                      (quickView)="onQuickView($event)"
                     ></app-product-card>
                   }
                 </div>
@@ -443,6 +453,12 @@ import { ImageZoomDirective } from '../../../../shared/directives/image-zoom.dir
           </div>
         </div>
       }
+
+      <app-quick-view
+        [product]="selectedQuickViewProduct()"
+        [isOpen]="!!selectedQuickViewProduct()"
+        (closeModal)="closeQuickView()"
+      ></app-quick-view>
     </div>
   `,
 })
@@ -458,6 +474,7 @@ export class ProductOverviewPage implements OnInit {
   recentlyViewedProducts = signal<Product[]>([]);
   selectedImage = signal<string>('');
   selectedColor = signal<string | null>(null);
+  selectedQuickViewProduct = signal<Product | undefined>(undefined);
 
   // Mock Review Data
   reviewBreakdown = [
@@ -468,10 +485,10 @@ export class ProductOverviewPage implements OnInit {
   ];
 
   mockCustomerPhotos = [
-    'https://placehold.co/300x300/png?text=Photo+1',
-    'https://placehold.co/300x300/png?text=Photo+2',
-    'https://placehold.co/300x300/png?text=Photo+3',
-    'https://placehold.co/300x300/png?text=Photo+4',
+    'https://images.unsplash.com/photo-1517705008128-361805f42e82?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80',
+    'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80',
+    'https://images.unsplash.com/photo-1483985988355-763728e1935b?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80',
+    'https://images.unsplash.com/photo-1532453288672-3a27e9be9efd?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80',
   ];
 
   mockReviews = [
@@ -479,7 +496,8 @@ export class ProductOverviewPage implements OnInit {
       id: 1,
       author: 'Sarah M.',
       rating: 5,
-      avatar: 'https://placehold.co/100x100/png?text=SM',
+      avatar:
+        'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
       content:
         'Absolutely love this product! The quality exceeded my expectations and it arrived much faster than anticipated. Highly recommend to anyone looking for premium quality.',
     },
@@ -487,7 +505,8 @@ export class ProductOverviewPage implements OnInit {
       id: 2,
       author: 'James D.',
       rating: 4,
-      avatar: 'https://placehold.co/100x100/png?text=JD',
+      avatar:
+        'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
       content:
         'Great value for the price. The fit is almost perfect, just a bit tight around the edges but otherwise very comfortable.',
     },
@@ -495,7 +514,8 @@ export class ProductOverviewPage implements OnInit {
       id: 3,
       author: 'Emily R.',
       rating: 5,
-      avatar: 'https://placehold.co/100x100/png?text=ER',
+      avatar:
+        'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
       content:
         'Purchased this as a gift and they loved it. The colors are vibrant and exactly as shown in the pictures. Will be buying another one for myself!',
     },
@@ -549,5 +569,13 @@ export class ProductOverviewPage implements OnInit {
 
   toggleWishlist(product: Product) {
     this.wishlistService.toggle(product.id);
+  }
+
+  onQuickView(product: Product) {
+    this.selectedQuickViewProduct.set(product);
+  }
+
+  closeQuickView() {
+    this.selectedQuickViewProduct.set(undefined);
   }
 }

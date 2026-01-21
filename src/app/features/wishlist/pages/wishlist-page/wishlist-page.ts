@@ -1,4 +1,4 @@
-import { Component, inject, computed } from '@angular/core';
+import { Component, inject, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Product } from '../../../products/models/product';
@@ -6,12 +6,13 @@ import { ProductService } from '../../../products/services/product-service';
 import { WishlistService } from '../../services/wishlist.service';
 import { CartService } from '../../../cart/services/cart-service';
 import { ProductCard } from '../../../products/components/product-card/product-card';
+import { QuickViewComponent } from '../../../products/components/quick-view/quick-view.component';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-wishlist-page',
   standalone: true,
-  imports: [CommonModule, RouterLink, ProductCard],
+  imports: [CommonModule, RouterLink, ProductCard, QuickViewComponent],
   template: `
     <div class="bg-white">
       <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
@@ -54,11 +55,18 @@ import { toSignal } from '@angular/core/rxjs-interop';
               <app-product-card
                 [product]="product"
                 (addToCart)="onAddToCart($event)"
+                (quickView)="onQuickView($event)"
               ></app-product-card>
             }
           </div>
         }
       </div>
+
+      <app-quick-view
+        [product]="selectedQuickViewProduct()"
+        [isOpen]="!!selectedQuickViewProduct()"
+        (closeModal)="closeQuickView()"
+      ></app-quick-view>
     </div>
   `,
 })
@@ -74,19 +82,23 @@ export class WishlistPage {
   allProducts = toSignal(this.productService.getProducts(), { initialValue: [] });
 
   // Computed property to filter products that are in the wishlist
-  // This avoids making a new network call for getProductsByIds every time if we can just reuse the cache
-  // detailed in ProductService, but generally getProductsByIds is better for specific fetching.
-  // HOWEVER, since ProductService.getProducts returns ALL products (it's a mock service),
-  // filtering on the client is perfectly fine and maybe even better here to avoid "refetching".
-  // Let's use the local filtering approach since we already have the full list strategy in other pages.
-
   wishlistItems = computed(() => {
     const products = this.allProducts();
     const ids = this.wishlistIds();
     return products.filter((p) => ids.includes(p.id));
   });
 
+  selectedQuickViewProduct = signal<Product | undefined>(undefined);
+
   onAddToCart(product: Product) {
     this.cartService.addToCart(product);
+  }
+
+  onQuickView(product: Product) {
+    this.selectedQuickViewProduct.set(product);
+  }
+
+  closeQuickView() {
+    this.selectedQuickViewProduct.set(undefined);
   }
 }

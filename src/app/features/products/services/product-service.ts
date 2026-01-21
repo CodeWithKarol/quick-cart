@@ -12,15 +12,16 @@ export class ProductService {
       name: 'Wireless Headphones',
       price: 99.99,
       description: 'High-quality wireless headphones with noise cancellation.',
-      imageUrl: 'https://placehold.co/300x300/png?text=Headphones',
+      imageUrl:
+        'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       category: 'Electronics',
       rating: 4.5,
       reviews: 128,
       images: [
-        'https://placehold.co/300x300/png?text=Headphones+1',
-        'https://placehold.co/300x300/png?text=Headphones+2',
-        'https://placehold.co/300x300/png?text=Headphones+3',
-        'https://placehold.co/300x300/png?text=Headphones+4',
+        'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+        'https://images.unsplash.com/photo-1572569028738-301a68743815?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+        'https://images.unsplash.com/photo-1524678606372-987d7e66c62a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+        'https://images.unsplash.com/photo-1613040809024-b4ef7ba99bc3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       ],
       colors: [
         { name: 'Black', class: 'bg-gray-900', selectedClass: 'ring-gray-900' },
@@ -33,13 +34,14 @@ export class ProductService {
       name: 'Smart Watch',
       price: 199.99,
       description: 'Track your fitness and notifications on the go.',
-      imageUrl: 'https://placehold.co/300x300/png?text=Watch',
+      imageUrl:
+        'https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       category: 'Electronics',
       rating: 4.2,
       reviews: 85,
       images: [
-        'https://placehold.co/300x300/png?text=Watch+1',
-        'https://placehold.co/300x300/png?text=Watch+2',
+        'https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+        'https://images.unsplash.com/photo-1579586337278-3befd40fd17a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       ],
       colors: [
         { name: 'Space Gray', class: 'bg-gray-700', selectedClass: 'ring-gray-700' },
@@ -52,7 +54,8 @@ export class ProductService {
       name: 'Running Shoes',
       price: 79.99,
       description: 'Comfortable running shoes for all terrains.',
-      imageUrl: 'https://placehold.co/300x300/png?text=Shoes',
+      imageUrl:
+        'https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       category: 'Sports',
       rating: 4.8,
       reviews: 210,
@@ -62,7 +65,8 @@ export class ProductService {
       name: 'Backpack',
       price: 49.99,
       description: 'Durable backpack for travel and school.',
-      imageUrl: 'https://placehold.co/300x300/png?text=Backpack',
+      imageUrl:
+        'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       category: 'Accessories',
       rating: 4.6,
       reviews: 45,
@@ -72,7 +76,8 @@ export class ProductService {
       name: 'Coffee Maker',
       price: 129.99,
       description: 'Brew the perfect cup of coffee every morning.',
-      imageUrl: 'https://placehold.co/300x300/png?text=Coffee',
+      imageUrl:
+        'https://images.unsplash.com/photo-1517668808822-9ebb02f2a0e6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       category: 'Home',
       rating: 4.7,
       reviews: 320,
@@ -82,13 +87,14 @@ export class ProductService {
       name: 'Mechanical Keyboard',
       price: 149.99,
       description: 'Tactile mechanical switch keyboard for typing enthusiasts.',
-      imageUrl: 'https://placehold.co/300x300/png?text=Keyboard',
+      imageUrl:
+        'https://images.unsplash.com/photo-1595225476474-87563907a212?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       category: 'Electronics',
       rating: 4.9,
       reviews: 412,
       images: [
-        'https://placehold.co/300x300/png?text=Keyboard+1',
-        'https://placehold.co/300x300/png?text=Keyboard+2',
+        'https://images.unsplash.com/photo-1595225476474-87563907a212?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+        'https://images.unsplash.com/photo-1587829741301-3e47774e1d43?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       ],
       colors: [
         { name: 'Black', class: 'bg-gray-900', selectedClass: 'ring-gray-900' },
@@ -100,7 +106,8 @@ export class ProductService {
       name: 'Yoga Mat',
       price: 29.99,
       description: 'Extra thick non-slip yoga mat for home workouts.',
-      imageUrl: 'https://placehold.co/300x300/png?text=Yoga+Mat',
+      imageUrl:
+        'https://images.unsplash.com/photo-1592432617983-c547f16ef06e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       category: 'Sports',
       rating: 4.3,
       reviews: 156,
@@ -114,7 +121,8 @@ export class ProductService {
       name: 'Water Bottle',
       price: 24.99,
       description: 'Insulated stainless steel water bottle keeps drinks cold for 24h.',
-      imageUrl: 'https://placehold.co/300x300/png?text=Bottle',
+      imageUrl:
+        'https://images.unsplash.com/photo-1602143407151-11115cdbf6e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       category: 'Accessories',
       rating: 4.5,
       reviews: 89,
@@ -124,7 +132,8 @@ export class ProductService {
       name: 'Bluetooth Speaker',
       price: 59.99,
       description: 'Portable speaker with powerful bass and long battery life.',
-      imageUrl: 'https://placehold.co/300x300/png?text=Speaker',
+      imageUrl:
+        'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       category: 'Electronics',
       rating: 4.1,
       reviews: 67,
@@ -134,7 +143,8 @@ export class ProductService {
       name: 'Desk Lamp',
       price: 35.99,
       description: 'Adjustable LED desk lamp with multiple color temperatures.',
-      imageUrl: 'https://placehold.co/300x300/png?text=Lamp',
+      imageUrl:
+        'https://images.unsplash.com/photo-1513506003013-1b6a42a04873?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       category: 'Home',
       rating: 4.0,
       reviews: 42,
@@ -144,7 +154,8 @@ export class ProductService {
       name: 'Gaming Mouse',
       price: 69.99,
       description: 'High-precision gaming mouse with programmable buttons.',
-      imageUrl: 'https://placehold.co/300x300/png?text=Mouse',
+      imageUrl:
+        'https://images.unsplash.com/photo-1615663245857-acda847f8b9b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       category: 'Electronics',
       rating: 4.7,
       reviews: 231,
@@ -154,7 +165,8 @@ export class ProductService {
       name: 'Aviator Sunglasses',
       price: 119.99,
       description: 'Classic aviator style sunglasses with polarized lenses.',
-      imageUrl: 'https://placehold.co/300x300/png?text=Sunglasses',
+      imageUrl:
+        'https://images.unsplash.com/photo-1572635196237-14b3f281503f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       category: 'Accessories',
       rating: 3.8,
       reviews: 34,
@@ -168,7 +180,8 @@ export class ProductService {
       name: 'Cotton T-Shirt',
       price: 19.99,
       description: 'Soft organic cotton t-shirt in various colors.',
-      imageUrl: 'https://placehold.co/300x300/png?text=T-Shirt',
+      imageUrl:
+        'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       category: 'Clothing',
       rating: 4.4,
       reviews: 512,
@@ -183,7 +196,8 @@ export class ProductService {
       name: 'Denim Jacket',
       price: 89.99,
       description: 'Vintage wash denim jacket with button closure.',
-      imageUrl: 'https://placehold.co/300x300/png?text=Jacket',
+      imageUrl:
+        'https://images.unsplash.com/photo-1601333762716-189f783109a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       category: 'Clothing',
       rating: 4.8,
       reviews: 98,
@@ -193,7 +207,8 @@ export class ProductService {
       name: 'Leather Wallet',
       price: 45.99,
       description: 'Slim genuine leather wallet with RFID protection.',
-      imageUrl: 'https://placehold.co/300x300/png?text=Wallet',
+      imageUrl:
+        'https://images.unsplash.com/photo-1627123424574-181ce90b94c0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       category: 'Accessories',
       rating: 4.9,
       reviews: 176,

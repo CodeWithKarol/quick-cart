@@ -58,10 +58,16 @@ import { CartDrawerComponent } from './shared/components/cart-drawer/cart-drawer
               <div class="hidden ml-10 space-x-8 md:block">
                 <a
                   routerLink="/"
+                  class="text-sm font-medium text-gray-700 hover:text-indigo-600 transition-colors"
                   routerLinkActive="text-indigo-600"
                   [routerLinkActiveOptions]="{ exact: true }"
+                  >Home</a
+                >
+                <a
+                  routerLink="/shop"
                   class="text-sm font-medium text-gray-700 hover:text-indigo-600 transition-colors"
-                  >Products</a
+                  routerLinkActive="text-indigo-600"
+                  >Shop</a
                 >
               </div>
             </div>
@@ -268,7 +274,16 @@ import { CartDrawerComponent } from './shared/components/cart-drawer/cart-drawer
                       routerLink="/"
                       (click)="toggleMobileMenu()"
                       class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                      >Products</a
+                      routerLinkActive="bg-gray-50 text-indigo-600"
+                      [routerLinkActiveOptions]="{ exact: true }"
+                      >Home</a
+                    >
+                    <a
+                      routerLink="/shop"
+                      (click)="toggleMobileMenu()"
+                      class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                      routerLinkActive="bg-gray-50 text-indigo-600"
+                      >Shop</a
                     >
                   </div>
                 </div>
@@ -367,9 +382,108 @@ import { CartDrawerComponent } from './shared/components/cart-drawer/cart-drawer
           </div>
         </div>
 
-        <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 border-t border-gray-100">
-          <p class="text-center text-sm text-gray-500">
-            &copy; 2026 QuickCart. All rights reserved.
+        <div
+          class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 border-t border-gray-100 bg-gray-50"
+        >
+          <div class="grid grid-cols-2 gap-8 md:grid-cols-4">
+            <div>
+              <h3 class="text-sm font-semibold leading-6 text-gray-900">Shop</h3>
+              <ul role="list" class="mt-6 space-y-4">
+                <li>
+                  <a routerLink="/shop" class="text-sm leading-6 text-gray-600 hover:text-gray-900"
+                    >New Arrivals</a
+                  >
+                </li>
+                <li>
+                  <a href="#" class="text-sm leading-6 text-gray-600 hover:text-gray-900"
+                    >Best Sellers</a
+                  >
+                </li>
+                <li>
+                  <a href="#" class="text-sm leading-6 text-gray-600 hover:text-gray-900"
+                    >Accessories</a
+                  >
+                </li>
+                <li>
+                  <a href="#" class="text-sm leading-6 text-gray-600 hover:text-gray-900">Sale</a>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="text-sm font-semibold leading-6 text-gray-900">Company</h3>
+              <ul role="list" class="mt-6 space-y-4">
+                <li>
+                  <a href="#" class="text-sm leading-6 text-gray-600 hover:text-gray-900"
+                    >About Us</a
+                  >
+                </li>
+                <li>
+                  <a href="#" class="text-sm leading-6 text-gray-600 hover:text-gray-900"
+                    >Sustainability</a
+                  >
+                </li>
+                <li>
+                  <a href="#" class="text-sm leading-6 text-gray-600 hover:text-gray-900"
+                    >Careers</a
+                  >
+                </li>
+                <li>
+                  <a href="#" class="text-sm leading-6 text-gray-600 hover:text-gray-900"
+                    >Terms & Conditions</a
+                  >
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="text-sm font-semibold leading-6 text-gray-900">Account</h3>
+              <ul role="list" class="mt-6 space-y-4">
+                <li>
+                  <a href="#" class="text-sm leading-6 text-gray-600 hover:text-gray-900"
+                    >Manage Account</a
+                  >
+                </li>
+                <li>
+                  <a href="#" class="text-sm leading-6 text-gray-600 hover:text-gray-900"
+                    >Returns & Exchanges</a
+                  >
+                </li>
+                <li>
+                  <a href="#" class="text-sm leading-6 text-gray-600 hover:text-gray-900"
+                    >Redeem a Gift Card</a
+                  >
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="text-sm font-semibold leading-6 text-gray-900">Connect</h3>
+              <ul role="list" class="mt-6 space-y-4">
+                <li>
+                  <a href="#" class="text-sm leading-6 text-gray-600 hover:text-gray-900"
+                    >Contact Us</a
+                  >
+                </li>
+                <li>
+                  <a href="#" class="text-sm leading-6 text-gray-600 hover:text-gray-900"
+                    >Twitter</a
+                  >
+                </li>
+                <li>
+                  <a href="#" class="text-sm leading-6 text-gray-600 hover:text-gray-900"
+                    >Instagram</a
+                  >
+                </li>
+                <li>
+                  <a href="#" class="text-sm leading-6 text-gray-600 hover:text-gray-900"
+                    >Pinterest</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+          <p
+            class="mt-10 border-t border-gray-200 pt-8 text-center text-xs leading-5 text-gray-500"
+          >
+            &copy; 2026 QuickCart, Inc. All rights reserved.
           </p>
         </div>
       </footer>
