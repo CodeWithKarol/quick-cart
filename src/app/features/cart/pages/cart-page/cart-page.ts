@@ -1,8 +1,8 @@
 import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CartService } from '../../services/cart.service';
+import { CartService } from '../../services/cart-store';
 import { EmptyCartComponent } from '../../components/empty-cart/empty-cart.component';
-import { CartItemComponent } from '../../components/cart-item/cart-item.component';
+import { CartItemComponent } from '../../components/cart-item/cart-item-card';
 import { CartOrderSummaryComponent } from '../../components/cart-order-summary/cart-order-summary.component';
 
 @Component({

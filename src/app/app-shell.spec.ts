@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { AppShell } from './app-shell';
 import { provideRouter } from '@angular/router';
-import { CartService } from './features/cart/services/cart.service';
+import { CartService } from './features/cart/services/cart-store';
 import { computed } from '@angular/core';
 
 describe('AppShell', () => {

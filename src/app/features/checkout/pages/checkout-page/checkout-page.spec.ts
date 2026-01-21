@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CheckoutPage } from './checkout-page';
-import { CartService } from '../../../cart/services/cart.service';
+import { CartService } from '../../../cart/services/cart-store';
 import { provideRouter } from '@angular/router';
 import { Router } from '@angular/router';
 import { signal, computed } from '@angular/core';

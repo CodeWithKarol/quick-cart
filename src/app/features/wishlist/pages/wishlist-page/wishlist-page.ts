@@ -1,9 +1,9 @@
 import { Component, inject, computed, signal, ChangeDetectionStrategy } from '@angular/core';
 import { Product } from '../../../products/models/product';
-import { ProductService } from '../../../products/services/product.service';
-import { WishlistService } from '../../services/wishlist.service';
-import { CartService } from '../../../cart/services/cart.service';
-import { QuickViewComponent } from '../../../products/components/quick-view/quick-view.component';
+import { ProductService } from '../../../products/services/product-api';
+import { WishlistService } from '../../services/wishlist-store';
+import { CartService } from '../../../cart/services/cart-store';
+import { QuickViewComponent } from '../../../products/components/quick-view/quick-view-dialog';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { WishlistEmptyState } from '../../components/wishlist-empty-state/wishlist-empty-state.component';
 import { WishlistGrid } from '../../components/wishlist-grid/wishlist-grid.component';

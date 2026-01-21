@@ -8,13 +8,13 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { ProductService } from '../../services/product.service';
-import { CartService } from '../../../cart/services/cart.service';
-import { WishlistService } from '../../../../features/wishlist/services/wishlist.service';
-import { RecentlyViewedService } from '../../services/recently-viewed.service';
+import { ProductService } from '../../services/product-api';
+import { CartService } from '../../../cart/services/cart-store';
+import { WishlistService } from '../../../../features/wishlist/services/wishlist-store';
+import { RecentlyViewedService } from '../../services/recently-viewed-store';
 import { Product } from '../../models/product';
 import { ProductCard } from '../../components/product-card/product-card';
-import { QuickViewComponent } from '../../components/quick-view/quick-view.component';
+import { QuickViewComponent } from '../../components/quick-view/quick-view-dialog';
 import { ProductGallery } from '../../components/product-gallery/product-gallery.component';
 import { ProductDetails } from '../../components/product-details/product-details.component';
 import { ProductReviews } from '../../components/product-reviews/product-reviews.component';

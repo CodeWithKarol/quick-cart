@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, input, output, computed } from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
-import { ImageZoomDirective } from '../../../../shared/directives/image-zoom.directive';
+import { ImageZoomDirective } from '../../../../shared/directives/image-zoom';
 import { Product } from '../../models/product';
 
 @Component({

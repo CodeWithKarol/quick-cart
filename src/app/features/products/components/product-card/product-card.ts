@@ -2,7 +2,7 @@ import { Component, input, output, inject, computed, ChangeDetectionStrategy } f
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Product } from '../../models/product';
-import { WishlistService } from '../../../../features/wishlist/services/wishlist.service';
+import { WishlistService } from '../../../../features/wishlist/services/wishlist-store';
 
 @Component({
   selector: 'app-product-card',

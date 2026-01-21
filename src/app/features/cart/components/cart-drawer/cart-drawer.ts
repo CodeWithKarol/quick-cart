@@ -1,7 +1,7 @@
 import { Component, inject, effect, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { CartService } from '../../services/cart.service';
+import { CartService } from '../../services/cart-store';
 
 @Component({
   selector: 'app-cart-drawer',

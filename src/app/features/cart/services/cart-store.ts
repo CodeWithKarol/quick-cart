@@ -1,7 +1,7 @@
 import { Injectable, signal, computed, inject } from '@angular/core';
 import { CartItem } from '../models/cart-item';
 import { Product } from '../../products/models/product';
-import { ToastService } from '../../../shared/services/toast.service';
+import { ToastService } from '../../../shared/services/toast-service';
 
 @Injectable({
   providedIn: 'root',

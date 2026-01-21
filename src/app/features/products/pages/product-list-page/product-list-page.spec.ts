@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { ProductListPage } from './product-list-page';
-import { ProductService } from '../../services/product.service';
-import { CartService } from '../../../cart/services/cart.service';
+import { ProductService } from '../../services/product-api';
+import { CartService } from '../../../cart/services/cart-store';
 import { of } from 'rxjs';
 import { Product } from '../../models/product';
 import { vi } from 'vitest';
