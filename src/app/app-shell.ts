@@ -1,6 +1,7 @@
-import { Component, inject, ChangeDetectionStrategy, signal } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy, signal, computed } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { CartService } from './features/cart/services/cart-service';
+import { WishlistService } from './features/wishlist/services/wishlist.service';
 import { CommonModule } from '@angular/common';
 import { ToastContainerComponent } from './shared/components/toast/toast.component';
 import { CartDrawerComponent } from './shared/components/cart-drawer/cart-drawer.component';
@@ -89,6 +90,35 @@ import { CartDrawerComponent } from './shared/components/cart-drawer/cart-drawer
             </div>
 
             <div class="flex items-center gap-4">
+              <a
+                routerLink="/wishlist"
+                class="group -m-2 flex items-center p-2 text-gray-700 hover:text-indigo-600 transition-colors"
+              >
+                <div class="relative">
+                  <svg
+                    class="h-6 w-6 flex-shrink-0 group-hover:text-indigo-600 transition-colors"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"
+                    />
+                  </svg>
+                  @if (wishlistCount() > 0) {
+                    <span
+                      class="absolute -top-2 -right-2 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/4 -translate-y-1/4 bg-red-500 rounded-full min-w-[1.25rem] h-5 ring-2 ring-white"
+                    >
+                      {{ wishlistCount() }}
+                    </span>
+                  }
+                </div>
+                <span class="sr-only">Wishlist</span>
+              </a>
+
               <button
                 type="button"
                 (click)="openCart()"
@@ -313,8 +343,10 @@ import { CartDrawerComponent } from './shared/components/cart-drawer/cart-drawer
 })
 export class AppShell {
   private cartService = inject(CartService);
+  private wishlistService = inject(WishlistService);
   private router = inject(Router);
   cartCount = this.cartService.cartCount;
+  wishlistCount = computed(() => this.wishlistService.wishlist().length);
   isMobileMenuOpen = signal(false);
 
   toggleMobileMenu() {

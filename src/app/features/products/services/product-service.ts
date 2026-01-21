@@ -215,6 +215,11 @@ export class ProductService {
     return of(product).pipe(delay(300));
   }
 
+  getProductsByIds(ids: number[]): Observable<Product[]> {
+    const products = this.products.filter((p) => ids.includes(p.id));
+    return of(products).pipe(delay(300));
+  }
+
   getRelatedProducts(currentProductId: number, limit = 4): Observable<Product[]> {
     const currentProduct = this.products.find((p) => p.id === currentProductId);
     if (!currentProduct) return of([]);

@@ -24,6 +24,12 @@ export const routes: Routes = [
     title: 'QuickCart - Cart',
   },
   {
+    path: 'wishlist',
+    loadComponent: () =>
+      import('./features/wishlist/pages/wishlist-page/wishlist-page').then((m) => m.WishlistPage),
+    title: 'QuickCart - Wishlist',
+  },
+  {
     path: 'checkout',
     loadComponent: () =>
       import('./features/checkout/pages/checkout-page/checkout-page').then((m) => m.CheckoutPage),
