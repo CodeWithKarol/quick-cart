@@ -281,6 +281,38 @@ import { Product } from '../../models/product';
                           Clear filters
                         </button>
                       </div>
+
+                      @if (trendingProducts().length > 0) {
+                        <div
+                          class="mt-10 border-t border-gray-200 pt-10 text-left w-full max-w-2xl mx-auto"
+                        >
+                          <h4 class="text-sm font-medium text-gray-900 mb-4">Trending Now</h4>
+                          <div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
+                            @for (item of trendingProducts(); track item.id) {
+                              <div class="group relative flex flex-col items-center">
+                                <div
+                                  class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 group-hover:opacity-75"
+                                >
+                                  <img
+                                    [src]="item.imageUrl"
+                                    [alt]="item.name"
+                                    class="h-full w-full object-cover object-center"
+                                  />
+                                </div>
+                                <p class="mt-2 text-xs text-gray-900 truncate w-full text-center">
+                                  {{ item.name }}
+                                </p>
+                                <button
+                                  (click)="onAddToCart(item); $event.stopPropagation()"
+                                  class="mt-1 text-xs font-semibold text-indigo-600 hover:text-indigo-500 cursor-pointer"
+                                >
+                                  Add to Cart
+                                </button>
+                              </div>
+                            }
+                          </div>
+                        </div>
+                      }
                     </div>
                   </div>
                 }
@@ -366,6 +398,8 @@ export class ProductListPage implements OnInit {
 
     return result;
   });
+
+  trendingProducts = computed(() => this.products().slice(0, 4));
 
   isLoading = computed(() => this.products().length === 0);
 

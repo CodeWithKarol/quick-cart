@@ -165,9 +165,12 @@ import { ProductCard } from '../../components/product-card/product-card';
                     <h3 class="text-sm font-medium text-gray-900">Available Colors</h3>
                     <div class="mt-4 flex items-center space-x-3">
                       @for (color of product.colors; track color.name) {
-                        <div
-                          class="relative -m-0.5 flex items-center justify-center rounded-full p-0.5 ring-2 ring-offset-1"
-                          [class]="color.selectedClass"
+                        <button
+                          type="button"
+                          class="relative -m-0.5 flex items-center justify-center rounded-full p-0.5 ring-2 ring-offset-1 focus:outline-none"
+                          [class.ring-indigo-500]="selectedColor() === color.name"
+                          [class.ring-transparent]="selectedColor() !== color.name"
+                          (click)="selectedColor.set(color.name)"
                           [title]="color.name"
                         >
                           <span class="sr-only">{{ color.name }}</span>
@@ -176,7 +179,7 @@ import { ProductCard } from '../../components/product-card/product-card';
                             class="h-8 w-8 rounded-full border border-black border-opacity-10"
                             [class]="color.class"
                           ></span>
-                        </div>
+                        </button>
                       }
                     </div>
                   </div>
@@ -452,6 +455,7 @@ export class ProductOverviewPage implements OnInit {
   relatedProducts = signal<Product[]>([]);
   recentlyViewedProducts = signal<Product[]>([]);
   selectedImage = signal<string>('');
+  selectedColor = signal<string | null>(null);
 
   // Mock Review Data
   reviewBreakdown = [
@@ -531,7 +535,14 @@ export class ProductOverviewPage implements OnInit {
   }
 
   addToCart(product: Product) {
-    this.cartService.addToCart(product);
+    if (product.colors && product.colors.length > 0 && !this.selectedColor()) {
+      // If product has colors but none selected, select the first one by default or alert?
+      // For better UX, let's select first one if not selected, or just pass undefined if logic allows
+      // But requirement says "respect Color". So we should force selection or default.
+      // Let's default to first color if none selected
+      this.selectedColor.set(product.colors[0].name);
+    }
+    this.cartService.addToCart(product, this.selectedColor() || undefined);
   }
 
   toggleWishlist(product: Product) {

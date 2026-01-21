@@ -44,35 +44,44 @@ export class CartService {
     this.cartItemsSignal.set([]);
   }
 
-  addToCart(product: Product) {
+  addToCart(product: Product, variant?: string) {
     this.cartItemsSignal.update((items) => {
-      // ... logic
-      const existingItem = items.find((item) => item.product.id === product.id);
+      const existingItem = items.find(
+        (item) => item.product.id === product.id && item.variant === variant,
+      );
       if (existingItem) {
-        this.toastService.show(`Updated quantity for ${product.name}`);
+        this.toastService.show(
+          `Updated quantity for ${product.name} ${variant ? '(' + variant + ')' : ''}`,
+        );
         this.openDrawer(); // Auto open drawer on add
         return items.map((item) =>
-          item.product.id === product.id ? { ...item, quantity: item.quantity + 1 } : item,
+          item.product.id === product.id && item.variant === variant
+            ? { ...item, quantity: item.quantity + 1 }
+            : item,
         );
       }
-      this.toastService.show(`${product.name} added to cart`);
+      this.toastService.show(`${product.name} ${variant ? '(' + variant + ')' : ''} added to cart`);
       this.openDrawer(); // Auto open drawer on add
-      return [...items, { product, quantity: 1 }];
+      return [...items, { product, quantity: 1, variant }];
     });
   }
 
-  removeFromCart(productId: number) {
-    this.cartItemsSignal.update((items) => items.filter((item) => item.product.id !== productId));
+  removeFromCart(productId: number, variant?: string) {
+    this.cartItemsSignal.update((items) =>
+      items.filter((item) => !(item.product.id === productId && item.variant === variant)),
+    );
   }
 
-  updateQuantity(productId: number, quantity: number) {
+  updateQuantity(productId: number, quantity: number, variant?: string) {
     if (quantity <= 0) {
-      this.removeFromCart(productId);
+      this.removeFromCart(productId, variant);
       return;
     }
 
     this.cartItemsSignal.update((items) =>
-      items.map((item) => (item.product.id === productId ? { ...item, quantity } : item)),
+      items.map((item) =>
+        item.product.id === productId && item.variant === variant ? { ...item, quantity } : item,
+      ),
     );
   }
 }

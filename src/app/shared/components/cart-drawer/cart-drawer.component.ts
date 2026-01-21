@@ -91,6 +91,11 @@ import { CartService } from '../../../features/cart/services/cart-service';
                                   </div>
                                   <p class="mt-1 text-sm text-gray-500">
                                     {{ item.product.category }}
+                                    @if (item.variant) {
+                                      <span class="ml-2 text-xs text-gray-500"
+                                        >Variant: {{ item.variant }}</span
+                                      >
+                                    }
                                   </p>
                                 </div>
                                 <div class="flex flex-1 items-end justify-between text-sm">
@@ -99,7 +104,7 @@ import { CartService } from '../../../features/cart/services/cart-service';
                                   <div class="flex">
                                     <button
                                       type="button"
-                                      (click)="removeItem(item.product.id)"
+                                      (click)="removeItem(item.product.id, item.variant)"
                                       class="font-medium text-indigo-600 hover:text-indigo-500"
                                     >
                                       Remove
@@ -219,7 +224,7 @@ export class CartDrawerComponent {
     this.cartService.closeDrawer();
   }
 
-  removeItem(id: number) {
-    this.cartService.removeFromCart(id);
+  removeItem(id: number, variant?: string) {
+    this.cartService.removeFromCart(id, variant);
   }
 }
