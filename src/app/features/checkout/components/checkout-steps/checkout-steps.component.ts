@@ -11,5 +11,5 @@ import { CommonModule } from '@angular/common';
 export class CheckoutStepsComponent {
   steps = input.required<readonly string[]>(); // Or specific type
   currentStep = input.required<string>();
-  stepClick = output<any>(); // output<string> but generic is safer for now if I don't import the type
+  stepClick = output<string>();
 }

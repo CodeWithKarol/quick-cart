@@ -4,7 +4,7 @@ import { RouterLink } from '@angular/router';
 import { CartItem } from '../../models/cart-item';
 
 @Component({
-  selector: 'li[app-cart-item]',
+  selector: 'app-cart-item',
   imports: [CommonModule, RouterLink, NgOptimizedImage],
   template: `
     <div class="flex-shrink-0">

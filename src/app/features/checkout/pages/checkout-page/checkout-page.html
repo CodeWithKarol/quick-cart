@@ -19,7 +19,7 @@
       <app-checkout-steps
         [steps]="steps"
         [currentStep]="currentStep()"
-        (stepClick)="goToStep($event)"
+        (stepClick)="goToStep($any($event))"
       ></app-checkout-steps>
 
       <form [formGroup]="checkoutForm" (ngSubmit)="onSubmit()">

@@ -80,9 +80,12 @@
   @if (!billingSameAsShipping()) {
     <div class="bg-gray-50 p-4 rounded-md space-y-4">
       <div>
-        <label class="block text-sm font-medium leading-6 text-gray-900">Name</label>
+        <label for="billingFullName" class="block text-sm font-medium leading-6 text-gray-900"
+          >Name</label
+        >
         <div class="mt-2">
           <input
+            id="billingFullName"
             type="text"
             formControlName="billingFullName"
             class="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -90,9 +93,12 @@
         </div>
       </div>
       <div>
-        <label class="block text-sm font-medium leading-6 text-gray-900">Address</label>
+        <label for="billingAddress" class="block text-sm font-medium leading-6 text-gray-900"
+          >Address</label
+        >
         <div class="mt-2">
           <input
+            id="billingAddress"
             type="text"
             formControlName="billingAddress"
             class="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -101,9 +107,12 @@
       </div>
       <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6 pl-1">
         <div class="sm:col-span-4">
-          <label class="block text-sm font-medium leading-6 text-gray-900">City</label>
+          <label for="billingCity" class="block text-sm font-medium leading-6 text-gray-900"
+            >City</label
+          >
           <div class="mt-2">
             <input
+              id="billingCity"
               type="text"
               formControlName="billingCity"
               class="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -111,9 +120,12 @@
           </div>
         </div>
         <div class="sm:col-span-2">
-          <label class="block text-sm font-medium leading-6 text-gray-900">Zip Code</label>
+          <label for="billingZipCode" class="block text-sm font-medium leading-6 text-gray-900"
+            >Zip Code</label
+          >
           <div class="mt-2">
             <input
+              id="billingZipCode"
               type="text"
               formControlName="billingZipCode"
               class="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"

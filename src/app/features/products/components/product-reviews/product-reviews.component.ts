@@ -1,4 +1,18 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { Product } from '../../models/product';
+
+export interface ReviewBreakdownItem {
+  label: string;
+  value: number;
+}
+
+export interface Review {
+  id: number;
+  author: string;
+  rating: number;
+  avatar: string;
+  content: string;
+}
 
 @Component({
   selector: 'app-product-reviews',
@@ -129,10 +143,10 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductReviews {
-  product = input.required<any>(); // or Product
-  reviewBreakdown = input.required<any[]>();
+  product = input.required<Product>();
+  reviewBreakdown = input.required<ReviewBreakdownItem[]>();
   customerPhotos = input.required<string[]>();
-  reviews = input.required<any[]>();
+  reviews = input.required<Review[]>();
 
   readonly stars = [0, 1, 2, 3, 4];
 }

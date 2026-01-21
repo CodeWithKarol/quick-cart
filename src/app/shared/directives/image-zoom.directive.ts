@@ -1,16 +1,14 @@
-import { Directive, ElementRef, HostListener, Renderer2, Input } from '@angular/core';
+import { Directive, ElementRef, HostListener, Renderer2, Input, inject } from '@angular/core';
 
 @Directive({
   selector: '[appImageZoom]',
   standalone: true,
 })
 export class ImageZoomDirective {
-  @Input('appImageZoom') zoomScale = 2;
+  private el = inject(ElementRef);
+  private renderer = inject(Renderer2);
 
-  constructor(
-    private el: ElementRef,
-    private renderer: Renderer2,
-  ) {}
+  @Input('appImageZoom') zoomScale = 2;
 
   @HostListener('mouseenter')
   onMouseEnter() {

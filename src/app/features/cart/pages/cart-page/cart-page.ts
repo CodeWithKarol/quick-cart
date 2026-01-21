@@ -33,14 +33,15 @@ import { CartOrderSummaryComponent } from '../../components/cart-order-summary/c
 
               <ul role="list" class="divide-y divide-gray-200 border-t border-b border-gray-200">
                 @for (item of cartItems(); track item.product.id; let first = $first) {
-                  <li
-                    app-cart-item
-                    class="cart-item flex py-6 sm:py-10"
-                    [item]="item"
-                    [priority]="first"
-                    (quantityUpdate)="updateQuantity(item.product.id, $event)"
-                    (remove)="removeItem(item.product.id)"
-                  ></li>
+                  <li class="flex py-6 sm:py-10">
+                    <app-cart-item
+                      class="flex w-full"
+                      [item]="item"
+                      [priority]="first"
+                      (quantityUpdate)="updateQuantity(item.product.id, $event)"
+                      (remove)="removeItem(item.product.id)"
+                    ></app-cart-item>
+                  </li>
                 }
               </ul>
             </section>

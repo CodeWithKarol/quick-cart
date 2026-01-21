@@ -137,7 +137,7 @@ import { ChangeDetectionStrategy, Component, input, output } from '@angular/core
       <div class="mt-6">
         <button
           type="button"
-          (click)="reset.emit()"
+          (click)="resetFilters.emit()"
           class="flex w-full items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
         >
           Reset Filters
@@ -158,7 +158,7 @@ export class ProductFilters {
   minPriceChange = output<number | null>();
   maxPriceChange = output<number | null>();
   ratingChange = output<number>();
-  reset = output<void>();
+  resetFilters = output<void>();
 
   updateMinPrice(event: Event) {
     const input = event.target as HTMLInputElement;

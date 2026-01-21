@@ -10,6 +10,8 @@
         [class.ring-indigo-500]="deliveryMethod() === 'standard'"
         [class.border-gray-300]="deliveryMethod() !== 'standard'"
         (click)="deliveryMethodChange.emit('standard')"
+        (keyup.enter)="deliveryMethodChange.emit('standard')"
+        tabindex="0"
       >
         <span class="flex flex-1">
           <span class="flex flex-col">
@@ -48,6 +50,8 @@
         [class.ring-indigo-500]="deliveryMethod() === 'express'"
         [class.border-gray-300]="deliveryMethod() !== 'express'"
         (click)="deliveryMethodChange.emit('express')"
+        (keyup.enter)="deliveryMethodChange.emit('express')"
+        tabindex="0"
       >
         <span class="flex flex-1">
           <span class="flex flex-col">
