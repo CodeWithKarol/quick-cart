@@ -1,0 +1,53 @@
+import { Component, input, output, ChangeDetectionStrategy } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+@Component({
+  selector: 'app-checkout-steps',
+  standalone: true,
+  imports: [CommonModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: `
+    <nav aria-label="Progress" class="mb-8">
+      <ol role="list" class="space-y-4 md:flex md:space-y-0 md:space-x-8">
+        @for (step of steps(); track step; let i = $index) {
+          <li class="md:flex-1">
+            @if (currentStep() === step) {
+              <a
+                class="group flex flex-col border-l-4 border-indigo-600 py-2 pl-4 md:border-l-0 md:border-t-4 md:pl-0 md:pt-4"
+                aria-current="step"
+              >
+                <span class="text-sm font-medium text-indigo-600">Step {{ i + 1 }}</span>
+                <span class="text-sm font-medium text-gray-900 capitalize">{{ step }}</span>
+              </a>
+            } @else if (steps().indexOf(currentStep()) > i) {
+              <a
+                (click)="stepClick.emit(step)"
+                class="group flex flex-col border-l-4 border-indigo-600 py-2 pl-4 hover:border-indigo-800 md:border-l-0 md:border-t-4 md:pl-0 md:pt-4 cursor-pointer"
+              >
+                <span class="text-sm font-medium text-indigo-600 group-hover:text-indigo-800"
+                  >Step {{ i + 1 }}</span
+                >
+                <span
+                  class="text-sm font-medium text-gray-900 group-hover:text-gray-900 capitalize"
+                  >{{ step }}</span
+                >
+              </a>
+            } @else {
+              <div
+                class="group flex flex-col border-l-4 border-gray-200 py-2 pl-4 md:border-l-0 md:border-t-4 md:pl-0 md:pt-4"
+              >
+                <span class="text-sm font-medium text-gray-500">Step {{ i + 1 }}</span>
+                <span class="text-sm font-medium text-gray-500 capitalize">{{ step }}</span>
+              </div>
+            }
+          </li>
+        }
+      </ol>
+    </nav>
+  `,
+})
+export class CheckoutStepsComponent {
+  steps = input.required<readonly string[]>(); // Or specific type
+  currentStep = input.required<string>();
+  stepClick = output<any>(); // output<string> but generic is safer for now if I don't import the type
+}
