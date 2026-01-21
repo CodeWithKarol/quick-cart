@@ -30,7 +30,7 @@ import { ProductCard } from '../../components/product-card/product-card';
         >
           <li>
             <div class="flex items-center">
-              <a routerLink="/" class="mr-2 text-sm font-medium text-gray-900">Products</a>
+              <a routerLink="/" class="mr-2 text-sm font-medium text-gray-900">Home</a>
               <svg
                 width="16"
                 height="20"
@@ -43,11 +43,34 @@ import { ProductCard } from '../../components/product-card/product-card';
               </svg>
             </div>
           </li>
-          <li class="text-sm">
-            <a href="#" aria-current="page" class="font-medium text-gray-500 hover:text-gray-600">{{
-              product()?.name
-            }}</a>
-          </li>
+          @if (product(); as p) {
+            <li>
+              <div class="flex items-center">
+                <a
+                  routerLink="/"
+                  [queryParams]="{ category: p.category }"
+                  class="mr-2 text-sm font-medium text-gray-900"
+                >
+                  {{ p.category }}
+                </a>
+                <svg
+                  width="16"
+                  height="20"
+                  viewBox="0 0 16 20"
+                  fill="currentColor"
+                  aria-hidden="true"
+                  class="h-5 w-4 text-gray-300"
+                >
+                  <path d="M5.697 4.34L8.98 16.532h1.327L7.025 4.341H5.697z" />
+                </svg>
+              </div>
+            </li>
+            <li class="text-sm">
+              <a href="#" aria-current="page" class="font-medium text-gray-500 hover:text-gray-600">
+                {{ p.name }}
+              </a>
+            </li>
+          }
         </ol>
       </nav>
 

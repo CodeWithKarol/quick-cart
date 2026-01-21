@@ -374,6 +374,9 @@ export class ProductListPage implements OnInit {
       if (params['q']) {
         this.searchQuery.set(params['q']);
       }
+      if (params['category']) {
+        this.selectedCategory.set(params['category']);
+      }
     });
   }
 
