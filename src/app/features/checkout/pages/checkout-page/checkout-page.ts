@@ -279,11 +279,32 @@ import { CartService } from '../../../cart/services/cart-service';
                         Shipping address
                       </h3>
 
-                      <div class="mt-6 grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-3">
+                      <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
                         <div class="sm:col-span-3">
-                          <label for="full-name" class="block text-sm font-medium text-gray-700"
-                            >Full name</label
-                          >
+                          <div class="flex justify-between items-center">
+                            <label for="full-name" class="block text-sm font-medium text-gray-700"
+                              >Full name</label
+                            >
+                            <button
+                              type="button"
+                              class="text-xs text-indigo-600 hover:text-indigo-500 flex items-center gap-1"
+                              (click)="fillMockData()"
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 20 20"
+                                fill="currentColor"
+                                class="w-3 h-3"
+                              >
+                                <path
+                                  fill-rule="evenodd"
+                                  d="M9.69 18.933l.003.001C9.89 19.02 10 19 10 19s.11.02.308-.066l.002-.001.006-.003.018-.008a5.741 5.741 0 00.281-.14c.186-.096.446-.24.757-.433.62-.384 1.445-.966 2.274-1.765C15.302 14.988 17 12.493 17 9A7 7 0 103 9c0 3.492 1.698 5.988 3.355 7.584a13.731 13.731 0 002.273 1.765 11.842 11.842 0 00.976.544l.062.029.018.008.006.003zM10 11.25a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5z"
+                                  clip-rule="evenodd"
+                                />
+                              </svg>
+                              Use my location
+                            </button>
+                          </div>
                           <div class="relative mt-1 rounded-md shadow-sm">
                             <div
                               class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
@@ -721,6 +742,68 @@ import { CartService } from '../../../cart/services/cart-service';
                             <p class="mt-2 text-sm text-red-600">Required</p>
                           }
                         </div>
+
+                        <div class="col-span-3 sm:col-span-4 mt-6 border-t pt-4">
+                          <div class="flex items-center">
+                            <input
+                              id="billing-same"
+                              type="checkbox"
+                              [checked]="billingSameAsShipping()"
+                              (change)="billingSameAsShipping.set(!billingSameAsShipping())"
+                              class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                            />
+                            <label for="billing-same" class="ml-2 block text-sm text-gray-900">
+                              Billing address same as shipping
+                            </label>
+                          </div>
+
+                          @if (!billingSameAsShipping()) {
+                            <div class="mt-4 grid grid-cols-1 gap-y-4">
+                              <div>
+                                <label class="block text-sm font-medium text-gray-700"
+                                  >Billing Full Name</label
+                                >
+                                <input
+                                  type="text"
+                                  formControlName="billingFullName"
+                                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border p-2"
+                                />
+                              </div>
+                              <div>
+                                <label class="block text-sm font-medium text-gray-700"
+                                  >Billing Address</label
+                                >
+                                <input
+                                  type="text"
+                                  formControlName="billingAddress"
+                                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border p-2"
+                                />
+                              </div>
+                              <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                  <label class="block text-sm font-medium text-gray-700"
+                                    >Billing City</label
+                                  >
+                                  <input
+                                    type="text"
+                                    formControlName="billingCity"
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border p-2"
+                                  />
+                                </div>
+                                <div>
+                                  <label class="block text-sm font-medium text-gray-700"
+                                    >Billing Zip</label
+                                  >
+                                  <input
+                                    type="text"
+                                    formControlName="billingZipCode"
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border p-2"
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          }
+                        </div>
                       </div>
                     </div>
 
@@ -788,20 +871,38 @@ export class CheckoutPage {
   readonly currentStep = signal<'information' | 'shipping' | 'payment'>('information');
   readonly steps = ['information', 'shipping', 'payment'] as const;
 
+  billingSameAsShipping = signal(true);
+
   deliveryMethod = signal<'standard' | 'express'>('standard');
   shippingCost = computed(() => (this.deliveryMethod() === 'express' ? 15.0 : 5.0));
   total = computed(() => this.cartTotal() + this.shippingCost());
 
   checkoutForm = this.fb.group({
-    fullName: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
+    fullName: ['', Validators.required],
     address: ['', Validators.required],
     city: ['', Validators.required],
     zipCode: ['', Validators.required],
+
+    // Billing
+    billingFullName: [''],
+    billingAddress: [''],
+    billingCity: [''],
+    billingZipCode: [''],
+
     cardNumber: ['', [Validators.required, Validators.pattern(/^\d{16}$/)]],
     expiry: ['', [Validators.required, Validators.pattern(/^(0[1-9]|1[0-2])\/\d{2}$/)]],
     cvv: ['', [Validators.required, Validators.pattern(/^\d{3,4}$/)]],
   });
+
+  fillMockData() {
+    this.checkoutForm.patchValue({
+      fullName: 'Jane Doe',
+      address: '123 Market St',
+      city: 'San Francisco',
+      zipCode: '94105',
+    });
+  }
 
   setDeliveryMethod(method: 'standard' | 'express') {
     this.deliveryMethod.set(method);

@@ -2,6 +2,8 @@ import { Component, inject, ChangeDetectionStrategy, signal, computed } from '@a
 import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { CartService } from './features/cart/services/cart-service';
 import { WishlistService } from './features/wishlist/services/wishlist.service';
+import { ProductService } from './features/products/services/product-service';
+import { Product } from './features/products/models/product';
 import { CommonModule } from '@angular/common';
 import { ToastContainerComponent } from './shared/components/toast/toast.component';
 import { CartDrawerComponent } from './shared/components/cart-drawer/cart-drawer.component';
@@ -66,7 +68,7 @@ import { CartDrawerComponent } from './shared/components/cart-drawer/cart-drawer
 
             <!-- Global Search -->
             <div class="flex flex-1 items-center justify-center px-6 lg:ml-6 lg:justify-end">
-              <div class="w-full max-w-lg lg:max-w-xs">
+              <div class="w-full max-w-lg lg:max-w-xs relative">
                 <label for="search" class="sr-only">Search</label>
                 <div class="relative text-gray-400 focus-within:text-gray-600">
                   <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
@@ -83,9 +85,44 @@ import { CartDrawerComponent } from './shared/components/cart-drawer/cart-drawer
                     class="block w-full rounded-md border border-gray-300 bg-white py-1.5 pl-10 pr-3 text-gray-900 placeholder-gray-500 focus:border-indigo-500 focus:placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
                     placeholder="Search products..."
                     type="search"
+                    [value]="searchQuery()"
                     (input)="onSearch($event)"
+                    (focus)="isSearchFocused.set(true)"
+                    (blur)="isSearchFocused.set(false)"
+                    (keydown.enter)="onSearchSubmit($event)"
                   />
                 </div>
+
+                <!-- Autocomplete Dropdown -->
+                @if (isSearchFocused() && searchResults().length > 0) {
+                  <div
+                    class="absolute z-10 w-full bg-white shadow-lg rounded-b-md border border-gray-200 mt-1"
+                  >
+                    <ul class="max-h-60 overflow-y-auto py-1">
+                      @for (product of searchResults(); track product.id) {
+                        <li>
+                          <a
+                            [routerLink]="['/product', product.id]"
+                            (mousedown)="$event.preventDefault()"
+                            class="block px-4 py-2 hover:bg-gray-100"
+                          >
+                            <div class="flex items-center">
+                              <img
+                                [src]="product.imageUrl"
+                                class="h-8 w-8 object-cover rounded mr-3"
+                                alt=""
+                              />
+                              <div>
+                                <p class="text-sm font-medium text-gray-900">{{ product.name }}</p>
+                                <p class="text-xs text-gray-500">{{ product.category }}</p>
+                              </div>
+                            </div>
+                          </a>
+                        </li>
+                      }
+                    </ul>
+                  </div>
+                }
               </div>
             </div>
 
@@ -344,10 +381,17 @@ import { CartDrawerComponent } from './shared/components/cart-drawer/cart-drawer
 export class AppShell {
   private cartService = inject(CartService);
   private wishlistService = inject(WishlistService);
+  private productService = inject(ProductService);
   private router = inject(Router);
+
   cartCount = this.cartService.cartCount;
   wishlistCount = computed(() => this.wishlistService.wishlist().length);
   isMobileMenuOpen = signal(false);
+
+  // Search
+  searchQuery = signal('');
+  isSearchFocused = signal(false);
+  searchResults = signal<Product[]>([]);
 
   toggleMobileMenu() {
     this.isMobileMenuOpen.update((v) => !v);
@@ -355,7 +399,25 @@ export class AppShell {
 
   onSearch(event: Event) {
     const input = event.target as HTMLInputElement;
-    this.router.navigate(['/'], { queryParams: { q: input.value } });
+    const value = input.value;
+    this.searchQuery.set(value);
+
+    // Simple mock search
+    if (value.length > 1) {
+      this.productService.getProducts().subscribe((products) => {
+        this.searchResults.set(
+          products.filter((p) => p.name.toLowerCase().includes(value.toLowerCase())).slice(0, 5),
+        );
+      });
+    } else {
+      this.searchResults.set([]);
+    }
+  }
+
+  onSearchSubmit(event: Event) {
+    event.preventDefault();
+    this.router.navigate(['/'], { queryParams: { q: this.searchQuery() } });
+    this.isSearchFocused.set(false);
   }
 
   openCart() {

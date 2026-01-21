@@ -7,11 +7,12 @@ import { WishlistService } from '../../../../features/wishlist/services/wishlist
 import { RecentlyViewedService } from '../../services/recently-viewed.service';
 import { Product } from '../../models/product';
 import { ProductCard } from '../../components/product-card/product-card';
+import { ImageZoomDirective } from '../../../../shared/directives/image-zoom.directive';
 
 @Component({
   selector: 'app-product-overview',
   standalone: true,
-  imports: [CommonModule, NgOptimizedImage, RouterLink, ProductCard],
+  imports: [CommonModule, NgOptimizedImage, RouterLink, ProductCard, ImageZoomDirective],
   styles: [
     `
       :host {
@@ -112,6 +113,7 @@ import { ProductCard } from '../../components/product-card/product-card';
 
                 <div
                   class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-gray-100 sm:aspect-h-3 sm:aspect-w-2"
+                  [appImageZoom]="2"
                 >
                   <img
                     [ngSrc]="selectedImage() || product.imageUrl"
