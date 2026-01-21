@@ -1,5 +1,12 @@
-import { Component, OnInit, inject, signal, computed } from '@angular/core';
-import { CommonModule, NgOptimizedImage } from '@angular/common';
+import {
+  Component,
+  OnInit,
+  inject,
+  signal,
+  computed,
+  ChangeDetectionStrategy,
+} from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ProductService } from '../../services/product-service';
 import { CartService } from '../../../cart/services/cart-service';
@@ -8,18 +15,21 @@ import { RecentlyViewedService } from '../../services/recently-viewed.service';
 import { Product } from '../../models/product';
 import { ProductCard } from '../../components/product-card/product-card';
 import { QuickViewComponent } from '../../components/quick-view/quick-view.component';
-import { ImageZoomDirective } from '../../../../shared/directives/image-zoom.directive';
+import { ProductGallery } from '../../components/product-gallery/product-gallery.component';
+import { ProductDetails } from '../../components/product-details/product-details.component';
+import { ProductReviews } from '../../components/product-reviews/product-reviews.component';
 
 @Component({
   selector: 'app-product-overview',
   standalone: true,
   imports: [
     CommonModule,
-    NgOptimizedImage,
     RouterLink,
     ProductCard,
-    ImageZoomDirective,
     QuickViewComponent,
+    ProductGallery,
+    ProductDetails,
+    ProductReviews,
   ],
   styles: [
     `
@@ -30,6 +40,7 @@ import { ImageZoomDirective } from '../../../../shared/directives/image-zoom.dir
       }
     `,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="bg-white flex-1 flex flex-col">
       <nav aria-label="Breadcrumb" class="pt-4 sm:pt-8">
@@ -88,312 +99,30 @@ import { ImageZoomDirective } from '../../../../shared/directives/image-zoom.dir
           <div class="mx-auto mt-8 max-w-2xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
             <div class="lg:grid lg:grid-cols-2 lg:gap-x-8 lg:items-start">
               <!-- Image gallery -->
-              <div class="flex flex-col-reverse">
-                <div class="mx-auto mt-6 w-full max-w-2xl sm:block lg:max-w-none">
-                  <div class="grid grid-cols-4 gap-6" aria-orientation="horizontal" role="tablist">
-                    @for (image of product.images || [product.imageUrl]; track image) {
-                      <button
-                        id="tabs-1-tab-1"
-                        class="relative flex h-24 cursor-pointer items-center justify-center rounded-md bg-white text-sm font-medium uppercase text-gray-900 hover:bg-gray-50 focus:outline-none focus:ring focus:ring-opacity-50 focus:ring-offset-4"
-                        [class.ring-indigo-500]="selectedImage() === image"
-                        (click)="selectedImage.set(image)"
-                        type="button"
-                        role="tab"
-                      >
-                        <span class="sr-only">Image view</span>
-                        <span class="absolute inset-0 overflow-hidden rounded-md">
-                          <img
-                            [src]="image"
-                            alt=""
-                            class="h-full w-full object-cover object-center"
-                          />
-                        </span>
-                        <span
-                          class="pointer-events-none absolute inset-0 rounded-md ring-2 ring-offset-2"
-                          [class.ring-indigo-500]="selectedImage() === image"
-                          [class.ring-transparent]="selectedImage() !== image"
-                          aria-hidden="true"
-                        ></span>
-                      </button>
-                    }
-                  </div>
-                </div>
-
-                <div
-                  class="relative aspect-square w-full overflow-hidden rounded-lg bg-gray-100 sm:aspect-[2/3]"
-                  [appImageZoom]="2"
-                >
-                  <img
-                    [ngSrc]="selectedImage() || product.imageUrl"
-                    [alt]="product.name"
-                    fill
-                    priority
-                    class="h-full w-full object-cover object-center sm:rounded-lg"
-                  />
-                </div>
-              </div>
+              <app-product-gallery
+                [product]="product"
+                [selectedImage]="selectedImage()"
+                (selectedImageChange)="selectedImage.set($event)"
+              />
 
               <!-- Product info -->
-              <div class="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0">
-                <h1 class="text-3xl font-bold tracking-tight text-gray-900">{{ product.name }}</h1>
-
-                <div class="mt-3">
-                  <h2 class="sr-only">Product information</h2>
-                  <p class="text-3xl tracking-tight text-gray-900">
-                    {{ product.price | currency }}
-                  </p>
-                </div>
-
-                <!-- Reviews -->
-                <div class="mt-3">
-                  <h3 class="sr-only">Reviews</h3>
-                  <div class="flex items-center">
-                    <div class="flex items-center">
-                      @for (star of [0, 1, 2, 3, 4]; track star) {
-                        <svg
-                          class="h-5 w-5 text-indigo-500 flex-shrink-0"
-                          viewBox="0 0 20 20"
-                          fill="currentColor"
-                          aria-hidden="true"
-                        >
-                          <path
-                            fill-rule="evenodd"
-                            d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z"
-                            clip-rule="evenodd"
-                          />
-                        </svg>
-                      }
-                    </div>
-                    <p class="sr-only">5 out of 5 stars</p>
-                  </div>
-                </div>
-
-                <!-- Colors -->
-                @if (product.colors && product.colors.length > 0) {
-                  <!-- Changed mt-6 to mt-10 for better separation -->
-                  <div class="mt-10">
-                    <h3 class="text-sm font-medium text-gray-900">Color</h3>
-                    <div class="mt-4 flex items-center space-x-3">
-                      @for (color of product.colors; track color.name) {
-                        <button
-                          type="button"
-                          class="relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 focus:outline-none ring-2 focus:ring focus:ring-offset-1"
-                          [class.ring-offset-1]="selectedColor() === color.name"
-                          [class]="
-                            selectedColor() === color.name
-                              ? color.selectedClass
-                              : 'ring-transparent'
-                          "
-                          (click)="selectedColor.set(color.name)"
-                          [title]="color.name"
-                          [attr.aria-label]="color.name"
-                        >
-                          <span class="sr-only">{{ color.name }}</span>
-                          <span
-                            aria-hidden="true"
-                            class="h-8 w-8 rounded-full border border-black border-opacity-10"
-                            [class]="color.class"
-                          ></span>
-                        </button>
-                      }
-                    </div>
-                  </div>
-                }
-
-                <div class="mt-10">
-                  <h3 class="sr-only">Description</h3>
-                  <div class="space-y-6 text-base text-gray-700">
-                    <p>{{ product.description }}</p>
-                  </div>
-                </div>
-
-                <div class="mt-6">
-                  <div class="flex items-center">
-                    <svg
-                      class="h-5 w-5 flex-shrink-0 text-green-500"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                      aria-hidden="true"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
-                        clip-rule="evenodd"
-                      />
-                    </svg>
-                    <p class="ml-2 text-sm text-gray-500">In stock and ready to ship</p>
-                  </div>
-                </div>
-
-                <div class="mt-10 flex gap-4">
-                  <button
-                    type="button"
-                    (click)="addToCart(product)"
-                    class="flex max-w-xs flex-1 items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50 sm:w-full"
-                  >
-                    Add to cart
-                  </button>
-
-                  <button
-                    type="button"
-                    (click)="toggleWishlist(product)"
-                    class="flex items-center justify-center rounded-md border border-gray-300 bg-white px-8 py-3 text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
-                    [class.text-red-500]="isWishlisted()"
-                  >
-                    <span class="sr-only">Add to wishlist</span>
-                    <svg
-                      class="h-6 w-6 flex-shrink-0"
-                      [class.fill-current]="isWishlisted()"
-                      viewBox="0 0 20 20"
-                      stroke="currentColor"
-                      aria-hidden="true"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
-                      />
-                    </svg>
-                  </button>
-                </div>
-
-                <div class="mt-10 border-t border-gray-200 pt-10">
-                  <h3 class="text-sm font-medium text-gray-900">Highlights</h3>
-                  <div class="mt-4 prose prose-sm text-gray-500">
-                    <ul role="list">
-                      <li>Durable and long-lasting material</li>
-                      <li>Designed for comfort and style</li>
-                      <li>Premium finish and attention to detail</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
+              <app-product-details
+                [product]="product"
+                [selectedColor]="selectedColor()"
+                [isWishlisted]="isWishlisted()"
+                (selectedColorChange)="selectedColor.set($event)"
+                (addToCart)="addToCart($event)"
+                (toggleWishlist)="toggleWishlist($event)"
+              />
             </div>
 
             <!-- Reviews Section -->
-            <section aria-labelledby="reviews-heading" class="mt-16 border-t border-gray-200 pt-16">
-              <h2 id="reviews-heading" class="text-2xl font-bold tracking-tight text-gray-900">
-                Customer Reviews
-              </h2>
-
-              <div class="mt-6 lg:grid lg:grid-cols-12 lg:gap-x-8">
-                <!-- Review Summary & Breakdown -->
-                <div class="lg:col-span-4">
-                  <div class="flex items-center">
-                    <div class="flex items-center">
-                      @for (star of [0, 1, 2, 3, 4]; track star) {
-                        <svg
-                          class="h-5 w-5 flex-shrink-0"
-                          [class.text-yellow-400]="(product.rating || 0) > star"
-                          [class.text-gray-300]="(product.rating || 0) <= star"
-                          viewBox="0 0 20 20"
-                          fill="currentColor"
-                          aria-hidden="true"
-                        >
-                          <path
-                            fill-rule="evenodd"
-                            d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z"
-                            clip-rule="evenodd"
-                          />
-                        </svg>
-                      }
-                    </div>
-                    <p class="ml-2 text-sm text-gray-900">Based on {{ product.reviews }} reviews</p>
-                  </div>
-
-                  <div class="mt-6">
-                    <h3 class="sr-only">Review data</h3>
-                    <dl class="space-y-3">
-                      @for (item of reviewBreakdown; track item.label) {
-                        <div class="flex items-center text-sm">
-                          <dt class="flex-1 text-gray-500">{{ item.label }}</dt>
-                          <dd class="ml-3 flex flex-1 items-center">
-                            <div class="flex-1 rounded-full bg-gray-200 h-2">
-                              <div
-                                class="h-2 rounded-full bg-indigo-600"
-                                [style.width.%]="item.value"
-                              ></div>
-                            </div>
-                            <span class="ml-3 w-9 text-right text-gray-900">{{ item.value }}%</span>
-                          </dd>
-                        </div>
-                      }
-                    </dl>
-                  </div>
-
-                  <div class="mt-10">
-                    <h3 class="text-sm font-medium text-gray-900">Share your thoughts</h3>
-                    <p class="mt-1 text-sm text-gray-600">
-                      If you’ve used this product, share your thoughts with other customers.
-                    </p>
-                    <a
-                      href="#"
-                      class="mt-6 inline-flex w-full items-center justify-center rounded-md border border-gray-300 bg-white px-8 py-2 text-sm font-medium text-gray-900 hover:bg-gray-50 sm:w-auto lg:w-full"
-                    >
-                      Write a review
-                    </a>
-                  </div>
-                </div>
-
-                <!-- Recent Reviews & Photos -->
-                <div class="mt-16 lg:col-span-7 lg:col-start-6 lg:mt-0">
-                  <h3 class="text-lg font-medium text-gray-900">Customer Photos</h3>
-                  <div
-                    class="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-4 sm:gap-6 lg:grid-cols-4 lg:gap-8"
-                  >
-                    @for (photo of mockCustomerPhotos; track photo) {
-                      <img
-                        [src]="photo"
-                        alt="Customer photo"
-                        class="rounded-lg bg-gray-100 object-cover h-24 w-full"
-                      />
-                    }
-                  </div>
-
-                  <div class="flow-root mt-10">
-                    <h3 class="text-lg font-medium text-gray-900">Recent Reviews</h3>
-                    <div class="mt-6 divide-y divide-gray-200">
-                      @for (review of mockReviews; track review.id) {
-                        <div class="py-6">
-                          <div class="flex items-center">
-                            <img
-                              [src]="review.avatar"
-                              [alt]="review.author"
-                              class="h-10 w-10 rounded-full object-cover"
-                            />
-                            <div class="ml-4">
-                              <h4 class="text-sm font-bold text-gray-900">{{ review.author }}</h4>
-                              <div class="mt-1 flex items-center">
-                                @for (star of [0, 1, 2, 3, 4]; track star) {
-                                  <svg
-                                    class="h-4 w-4"
-                                    [class.text-yellow-400]="review.rating > star"
-                                    [class.text-gray-300]="review.rating <= star"
-                                    fill="currentColor"
-                                    viewBox="0 0 20 20"
-                                  >
-                                    <path
-                                      fill-rule="evenodd"
-                                      d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.453 1.415 1.02L10 15.591l4.069 2.485c.724.442 1.609-.198 1.415-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.651l-4.752-.382-1.831-4.401z"
-                                      clip-rule="evenodd"
-                                    />
-                                  </svg>
-                                }
-                              </div>
-                            </div>
-                          </div>
-
-                          <div class="mt-4 space-y-6 text-sm text-gray-600 italic">
-                            <p>{{ review.content }}</p>
-                          </div>
-                          <p class="mt-2 text-xs text-gray-500 font-medium">Verified Purchase</p>
-                        </div>
-                      }
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </section>
+            <app-product-reviews
+              [product]="product"
+              [reviewBreakdown]="reviewBreakdown"
+              [customerPhotos]="mockCustomerPhotos"
+              [reviews]="mockReviews"
+            />
 
             @if (relatedProducts().length > 0) {
               <div class="mt-16 border-t border-gray-200 pt-16">

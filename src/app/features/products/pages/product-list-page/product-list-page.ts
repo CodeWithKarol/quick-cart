@@ -14,38 +14,25 @@ import { ProductCard } from '../../components/product-card/product-card';
 import { QuickViewComponent } from '../../components/quick-view/quick-view.component';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Product } from '../../models/product';
+import { ProductListHero } from '../../components/product-list-hero/product-list-hero.component';
+import { ProductFilters } from '../../components/product-filters/product-filters.component';
+import { ProductEmptyState } from '../../components/product-empty-state/product-empty-state.component';
 
 @Component({
   selector: 'app-product-list',
   standalone: true,
-  imports: [CommonModule, ProductCard, QuickViewComponent],
+  imports: [
+    CommonModule,
+    ProductCard,
+    QuickViewComponent,
+    ProductListHero,
+    ProductFilters,
+    ProductEmptyState,
+  ],
   template: `
     <div class="bg-white min-h-screen">
       <!-- Hero Section -->
-      <div class="relative bg-gray-900 border-b-4 border-indigo-600">
-        <div aria-hidden="true" class="absolute inset-0 overflow-hidden">
-          <img
-            src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80"
-            alt=""
-            class="h-full w-full object-cover object-center"
-          />
-          <div class="absolute inset-0 bg-gray-900/60"></div>
-        </div>
-        <div
-          class="relative mx-auto max-w-3xl flex flex-col items-center px-6 py-32 text-center sm:py-48 lg:px-0"
-        >
-          <h1 class="text-4xl font-bold tracking-tight text-white sm:text-6xl">New Arrivals</h1>
-          <p class="mt-4 text-xl text-gray-200">
-            Check out our latest collection of premium products. Designed for style, engineered for
-            performance.
-          </p>
-          <a
-            href="#products-heading"
-            class="mt-8 inline-block rounded-md border border-transparent bg-white px-8 py-3 text-base font-medium text-gray-900 hover:bg-gray-100 shadow-sm transform hover:scale-105 transition-all duration-200"
-            >Shop Now</a
-          >
-        </div>
-      </div>
+      <app-product-list-hero />
 
       <main class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div class="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-16">
@@ -71,162 +58,18 @@ import { Product } from '../../models/product';
 
           <div class="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
             <!-- Filters -->
-            <form class="hidden lg:block lg:sticky lg:top-24 h-fit">
-              <h3 class="sr-only">Categories</h3>
-              <ul
-                role="list"
-                class="space-y-4 border-b border-gray-200 pb-6 text-sm font-medium text-gray-900"
-              >
-                <li
-                  class="flex items-center justify-between cursor-pointer group"
-                  tabindex="0"
-                  (click)="selectedCategory.set('')"
-                  (keyup.enter)="selectedCategory.set('')"
-                >
-                  <span [class.text-indigo-600]="selectedCategory() === ''">All Categories</span>
-                </li>
-                @for (cat of categories(); track cat) {
-                  <li
-                    class="flex items-center justify-between cursor-pointer group"
-                    tabindex="0"
-                    (click)="selectedCategory.set(cat)"
-                    (keyup.enter)="selectedCategory.set(cat)"
-                  >
-                    <span [class.text-indigo-600]="selectedCategory() === cat">{{ cat }}</span>
-                    @if (selectedCategory() === cat) {
-                      <svg
-                        class="h-4 w-4 text-indigo-600"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke-width="2"
-                        stroke="currentColor"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M4.5 12.75l6 6 9-13.5"
-                        />
-                      </svg>
-                    }
-                  </li>
-                }
-              </ul>
-
-              <div class="border-b border-gray-200 py-6">
-                <h3 class="-my-3 flow-root">
-                  <span class="font-medium text-gray-900">Price</span>
-                </h3>
-                <div class="pt-6" id="filter-section-price">
-                  <div class="space-y-4">
-                    <div class="flex items-center gap-2">
-                      <div class="relative rounded-md shadow-sm">
-                        <div
-                          class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
-                        >
-                          <span class="text-gray-500 sm:text-sm">$</span>
-                        </div>
-                        <input
-                          type="number"
-                          [value]="minPrice()"
-                          (input)="updateMinPrice($event)"
-                          placeholder="Min"
-                          class="block w-full rounded-md border-0 py-1.5 pl-7 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                        />
-                      </div>
-                      <span class="text-gray-500">-</span>
-                      <div class="relative rounded-md shadow-sm">
-                        <div
-                          class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
-                        >
-                          <span class="text-gray-500 sm:text-sm">$</span>
-                        </div>
-                        <input
-                          type="number"
-                          [value]="maxPrice()"
-                          (input)="updateMaxPrice($event)"
-                          placeholder="Max"
-                          class="block w-full rounded-md border-0 py-1.5 pl-7 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="border-b border-gray-200 py-6">
-                <h3 class="-my-3 flow-root">
-                  <span class="font-medium text-gray-900">Rating</span>
-                </h3>
-                <div class="pt-6 space-y-2">
-                  <label class="flex items-center gap-2 cursor-pointer">
-                    <input
-                      type="radio"
-                      name="rating"
-                      [checked]="minRating() === 4"
-                      (change)="minRating.set(4)"
-                      class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                    />
-                    <span class="text-sm text-gray-600 flex items-center">
-                      4+ Stars
-                      <svg
-                        class="h-4 w-4 text-yellow-400 ml-1"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                      >
-                        <path
-                          fill-rule="evenodd"
-                          d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z"
-                          clip-rule="evenodd"
-                        />
-                      </svg>
-                    </span>
-                  </label>
-                  <label class="flex items-center gap-2 cursor-pointer">
-                    <input
-                      type="radio"
-                      name="rating"
-                      [checked]="minRating() === 3"
-                      (change)="minRating.set(3)"
-                      class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                    />
-                    <span class="text-sm text-gray-600 flex items-center">
-                      3+ Stars
-                      <svg
-                        class="h-4 w-4 text-yellow-400 ml-1"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                      >
-                        <path
-                          fill-rule="evenodd"
-                          d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z"
-                          clip-rule="evenodd"
-                        />
-                      </svg>
-                    </span>
-                  </label>
-                  <label class="flex items-center gap-2 cursor-pointer">
-                    <input
-                      type="radio"
-                      name="rating"
-                      [checked]="minRating() === 0"
-                      (change)="minRating.set(0)"
-                      class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                    />
-                    <span class="text-sm text-gray-600">All Ratings</span>
-                  </label>
-                </div>
-              </div>
-
-              <div class="mt-6">
-                <button
-                  type="button"
-                  (click)="resetFilters()"
-                  class="flex w-full items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
-                >
-                  Reset Filters
-                </button>
-              </div>
-            </form>
+            <app-product-filters
+              [categories]="categories()"
+              [selectedCategory]="selectedCategory()"
+              [minPrice]="minPrice()"
+              [maxPrice]="maxPrice()"
+              [minRating]="minRating()"
+              (categoryChange)="selectedCategory.set($event)"
+              (minPriceChange)="minPrice.set($event)"
+              (maxPriceChange)="maxPrice.set($event)"
+              (ratingChange)="minRating.set($event)"
+              (reset)="resetFilters()"
+            />
 
             <!-- Product grid -->
             <div class="lg:col-span-3">
@@ -251,71 +94,11 @@ import { Product } from '../../models/product';
                     }
                   </div>
                 } @else {
-                  <div class="flex flex-col items-center justify-center py-12">
-                    <div
-                      class="w-full text-center py-24 bg-gray-50 rounded-lg border border-dashed border-gray-300"
-                    >
-                      <svg
-                        class="mx-auto h-12 w-12 text-gray-400"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        aria-hidden="true"
-                      >
-                        <path
-                          vector-effect="non-scaling-stroke"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"
-                        />
-                      </svg>
-                      <h3 class="mt-2 text-sm font-semibold text-gray-900">No products found</h3>
-                      <p class="mt-1 text-sm text-gray-500">
-                        Try adjusting your search or filter to find what you're looking for.
-                      </p>
-                      <div class="mt-6">
-                        <button
-                          (click)="resetFilters()"
-                          class="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                        >
-                          Clear filters
-                        </button>
-                      </div>
-
-                      @if (trendingProducts().length > 0) {
-                        <div
-                          class="mt-10 border-t border-gray-200 pt-10 text-left w-full max-w-2xl mx-auto"
-                        >
-                          <h4 class="text-sm font-medium text-gray-900 mb-4">Trending Now</h4>
-                          <div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
-                            @for (item of trendingProducts(); track item.id) {
-                              <div class="group relative flex flex-col items-center">
-                                <div
-                                  class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 group-hover:opacity-75"
-                                >
-                                  <img
-                                    [src]="item.imageUrl"
-                                    [alt]="item.name"
-                                    class="h-full w-full object-cover object-center"
-                                  />
-                                </div>
-                                <p class="mt-2 text-xs text-gray-900 truncate w-full text-center">
-                                  {{ item.name }}
-                                </p>
-                                <button
-                                  (click)="onAddToCart(item); $event.stopPropagation()"
-                                  class="mt-1 text-xs font-semibold text-indigo-600 hover:text-indigo-500 cursor-pointer"
-                                >
-                                  Add to Cart
-                                </button>
-                              </div>
-                            }
-                          </div>
-                        </div>
-                      }
-                    </div>
-                  </div>
+                  <app-product-empty-state
+                    [trendingProducts]="trendingProducts()"
+                    (reset)="resetFilters()"
+                    (addToCart)="onAddToCart($event)"
+                  />
                 }
               }
             </div>
@@ -418,21 +201,6 @@ export class ProductListPage implements OnInit {
   updateSort(event: Event) {
     const input = event.target as HTMLSelectElement;
     this.sortOption.set(input.value);
-  }
-
-  updateSearch(event: Event) {
-    const input = event.target as HTMLInputElement;
-    this.searchQuery.set(input.value);
-  }
-
-  updateMinPrice(event: Event) {
-    const input = event.target as HTMLInputElement;
-    this.minPrice.set(input.value ? Number(input.value) : null);
-  }
-
-  updateMaxPrice(event: Event) {
-    const input = event.target as HTMLInputElement;
-    this.maxPrice.set(input.value ? Number(input.value) : null);
   }
 
   resetFilters() {
