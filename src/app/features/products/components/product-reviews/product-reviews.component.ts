@@ -14,7 +14,7 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
         <div class="lg:col-span-4">
           <div class="flex items-center">
             <div class="flex items-center">
-              @for (star of [0, 1, 2, 3, 4]; track star) {
+              @for (star of stars; track star) {
                 <svg
                   class="h-5 w-5 flex-shrink-0"
                   [class.text-yellow-400]="(product().rating || 0) > star"
@@ -95,7 +95,7 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
                     <div class="ml-4">
                       <h4 class="text-sm font-bold text-gray-900">{{ review.author }}</h4>
                       <div class="mt-1 flex items-center">
-                        @for (star of [0, 1, 2, 3, 4]; track star) {
+                        @for (star of stars; track star) {
                           <svg
                             class="h-4 w-4"
                             [class.text-yellow-400]="review.rating > star"
@@ -133,4 +133,6 @@ export class ProductReviews {
   reviewBreakdown = input.required<any[]>();
   customerPhotos = input.required<string[]>();
   reviews = input.required<any[]>();
+
+  readonly stars = [0, 1, 2, 3, 4];
 }

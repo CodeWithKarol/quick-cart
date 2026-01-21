@@ -22,7 +22,7 @@ import { Product } from '../../models/product';
         <h3 class="sr-only">Reviews</h3>
         <div class="flex items-center">
           <div class="flex items-center">
-            @for (star of [0, 1, 2, 3, 4]; track star) {
+            @for (star of stars; track star) {
               <svg
                 class="h-5 w-5 text-indigo-500 flex-shrink-0"
                 viewBox="0 0 20 20"
@@ -146,4 +146,6 @@ export class ProductDetails {
   isWishlisted = input(false);
   addToCart = output<Product>();
   toggleWishlist = output<Product>();
+
+  readonly stars = [0, 1, 2, 3, 4];
 }

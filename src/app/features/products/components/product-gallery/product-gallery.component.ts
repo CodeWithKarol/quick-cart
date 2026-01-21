@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output, computed } from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { ImageZoomDirective } from '../../../../shared/directives/image-zoom.directive';
 import { Product } from '../../models/product';
@@ -11,7 +11,7 @@ import { Product } from '../../models/product';
     <div class="flex flex-col-reverse">
       <div class="mx-auto mt-6 w-full max-w-2xl sm:block lg:max-w-none">
         <div class="grid grid-cols-4 gap-6" aria-orientation="horizontal" role="tablist">
-          @for (image of product().images || [product().imageUrl]; track image) {
+          @for (image of galleryImages(); track $index) {
             <button
               class="relative flex h-24 cursor-pointer items-center justify-center rounded-md bg-white text-sm font-medium uppercase text-gray-900 hover:bg-gray-50 focus:outline-none focus:ring focus:ring-opacity-50 focus:ring-offset-4"
               [class.ring-indigo-500]="selectedImage() === image"
@@ -54,4 +54,9 @@ export class ProductGallery {
   product = input.required<Product>();
   selectedImage = input.required<string>();
   selectedImageChange = output<string>();
+
+  galleryImages = computed(() => {
+    const product = this.product();
+    return product.images && product.images.length > 0 ? product.images : [product.imageUrl];
+  });
 }
