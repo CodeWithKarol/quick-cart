@@ -82,6 +82,69 @@ export class ProductService {
       rating: 4.6,
       reviews: 142,
     },
+    {
+      id: 6,
+      name: 'Premium Coffee Maker',
+      price: 129.99,
+      description: 'Brew the perfect cup of coffee every morning.',
+      imageUrl:
+        'https://images.unsplash.com/photo-1517668808822-9ebb02f2a0e6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+      category: 'Home',
+      rating: 4.7,
+      reviews: 320,
+    },
+    {
+      id: 7,
+      name: 'Modern Desk Lamp',
+      price: 35.99,
+      description: 'Adjustable LED desk lamp with multiple color temperatures.',
+      imageUrl:
+        'https://images.unsplash.com/photo-1550989460-0adf9ea622e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+      category: 'Home',
+      rating: 4.4,
+      reviews: 42,
+    },
+    {
+      id: 8,
+      name: 'Urban Backpack',
+      price: 49.99,
+      description: 'Durable backpack for travel and school.',
+      imageUrl:
+        'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+      category: 'Accessories',
+      rating: 4.6,
+      reviews: 45,
+    },
+    {
+      id: 9,
+      name: 'Insulated Water Bottle',
+      price: 24.99,
+      description: 'Insulated stainless steel water bottle keeps drinks cold for 24h.',
+      imageUrl:
+        'https://images.unsplash.com/photo-1610824352934-c10d87b700cc?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+      category: 'Accessories',
+      rating: 4.5,
+      reviews: 89,
+    },
+    {
+      id: 10,
+      name: 'Mechanical Keyboard',
+      price: 149.99,
+      description: 'Tactile mechanical switch keyboard for typing enthusiasts.',
+      imageUrl:
+        'https://images.unsplash.com/photo-1595225476474-87563907a212?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+      category: 'Electronics',
+      rating: 4.9,
+      reviews: 412,
+      images: [
+        'https://images.unsplash.com/photo-1595225476474-87563907a212?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+        'https://images.unsplash.com/photo-1511467687858-23d96c32e4ae?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+      ],
+      colors: [
+        { name: 'Black', class: 'bg-gray-900', selectedClass: 'ring-gray-900' },
+        { name: 'White', class: 'bg-white', selectedClass: 'ring-gray-400' },
+      ],
+    },
   ];
 
   getProducts(): Observable<Product[]> {
