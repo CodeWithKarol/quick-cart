@@ -7,7 +7,7 @@ import {
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { ProductService } from '../../services/product-api';
 import { CartService } from '../../../cart/services/cart-store';
 import { WishlistService } from '../../../../features/wishlist/services/wishlist-store';
@@ -18,18 +18,19 @@ import { QuickViewComponent } from '../../components/quick-view/quick-view-dialo
 import { ProductGallery } from '../../components/product-gallery/product-gallery.component';
 import { ProductDetails } from '../../components/product-details/product-details.component';
 import { ProductReviews } from '../../components/product-reviews/product-reviews.component';
+import { Breadcrumb } from '../../../../shared/components/breadcrumb/breadcrumb';
 
 @Component({
   selector: 'app-product-overview',
   standalone: true,
   imports: [
     CommonModule,
-    RouterLink,
     ProductCard,
     QuickViewComponent,
     ProductGallery,
     ProductDetails,
     ProductReviews,
+    Breadcrumb,
   ],
   styles: [
     `
@@ -43,56 +44,9 @@ import { ProductReviews } from '../../components/product-reviews/product-reviews
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="bg-white flex-1 flex flex-col">
-      <nav aria-label="Breadcrumb" class="pt-4 sm:pt-8">
-        <ol
-          role="list"
-          class="mx-auto flex max-w-2xl items-center space-x-2 px-4 sm:px-6 lg:max-w-7xl lg:px-8"
-        >
-          <li>
-            <div class="flex items-center">
-              <a routerLink="/" class="mr-2 text-sm font-medium text-gray-900">Home</a>
-              <svg
-                width="16"
-                height="20"
-                viewBox="0 0 16 20"
-                fill="currentColor"
-                aria-hidden="true"
-                class="h-5 w-4 text-gray-300"
-              >
-                <path d="M5.697 4.34L8.98 16.532h1.327L7.025 4.341H5.697z" />
-              </svg>
-            </div>
-          </li>
-          @if (product(); as p) {
-            <li>
-              <div class="flex items-center">
-                <a
-                  routerLink="/"
-                  [queryParams]="{ category: p.category }"
-                  class="mr-2 text-sm font-medium text-gray-900"
-                >
-                  {{ p.category }}
-                </a>
-                <svg
-                  width="16"
-                  height="20"
-                  viewBox="0 0 16 20"
-                  fill="currentColor"
-                  aria-hidden="true"
-                  class="h-5 w-4 text-gray-300"
-                >
-                  <path d="M5.697 4.34L8.98 16.532h1.327L7.025 4.341H5.697z" />
-                </svg>
-              </div>
-            </li>
-            <li class="text-sm">
-              <a href="#" aria-current="page" class="font-medium text-gray-500 hover:text-gray-600">
-                {{ p.name }}
-              </a>
-            </li>
-          }
-        </ol>
-      </nav>
+      @if (breadcrumbs().length > 0) {
+        <app-breadcrumb [items]="breadcrumbs()" />
+      }
 
       <div class="pt-6 pb-16 sm:pb-24">
         @if (product(); as product) {
@@ -211,6 +165,16 @@ export class ProductOverviewPage implements OnInit {
   selectedImage = signal<string>('');
   selectedColor = signal<string | null>(null);
   selectedQuickViewProduct = signal<Product | undefined>(undefined);
+
+  breadcrumbs = computed(() => {
+    const p = this.product();
+    if (!p) return [];
+    return [
+      { label: 'Home', link: '/' },
+      { label: p.category, link: '/shop', queryParams: { category: p.category } },
+      { label: p.name },
+    ];
+  });
 
   // Mock Review Data
   reviewBreakdown = [
