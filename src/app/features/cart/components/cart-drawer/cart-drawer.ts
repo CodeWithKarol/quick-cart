@@ -128,13 +128,15 @@ import { CartService } from '../../services/cart-store';
                       Shipping and taxes calculated at checkout.
                     </p>
                     <div class="mt-6">
-                      <a
+                      <button
+                        type="button"
                         routerLink="/checkout"
                         (click)="close()"
-                        class="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
+                        [disabled]="cartItems().length === 0"
+                        class="w-full flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         Checkout
-                      </a>
+                      </button>
                     </div>
                     <div class="mt-6 flex justify-center text-center text-sm text-gray-500">
                       <p>

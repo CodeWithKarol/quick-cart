@@ -1,11 +1,14 @@
 import { Injectable, signal, effect, inject } from '@angular/core';
 import { ToastService } from '../../../shared/services/toast-service';
+import { ProductService } from '../../products/services/product-api';
+import { take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
 })
 export class WishlistService {
   private toastService = inject(ToastService);
+  private productService = inject(ProductService);
 
   readonly wishlist = signal<number[]>([]);
 
@@ -16,13 +19,28 @@ export class WishlistService {
     effect(() => {
       localStorage.setItem('wishlist', JSON.stringify(this.wishlist()));
     });
+
+    // Validate wishlist against available products to remove stale items
+    this.productService
+      .getProducts()
+      .pipe(take(1))
+      .subscribe((products) => {
+        const activeProductIds = new Set(products.map((p) => p.id));
+        this.wishlist.update((currentIds) => {
+          // Filter out IDs that don't exist in the product catalog
+          const validIds = currentIds.filter((id) => activeProductIds.has(id));
+          return validIds;
+        });
+      });
   }
 
   private loadWishlist() {
     const saved = localStorage.getItem('wishlist');
     if (saved) {
       try {
-        this.wishlist.set(JSON.parse(saved));
+        const parsedIds: number[] = JSON.parse(saved);
+        // Remove duplicates on load
+        this.wishlist.set([...new Set(parsedIds)]);
       } catch (e) {
         console.error('Failed to parse wishlist', e);
       }

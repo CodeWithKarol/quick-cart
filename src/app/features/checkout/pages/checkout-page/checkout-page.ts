@@ -62,12 +62,17 @@ export class CheckoutPage {
 
   fillMockData() {
     this.checkoutForm.patchValue({
+      email: 'jane@example.com',
       fullName: 'Jane Doe',
       address: '123 Market St',
       city: 'San Francisco',
       zipCode: '94105',
     });
-    this.checkoutForm.markAllAsTouched();
+
+    ['email', 'fullName', 'address', 'city', 'zipCode'].forEach((key) => {
+      this.checkoutForm.get(key)?.markAsDirty();
+      this.checkoutForm.get(key)?.updateValueAndValidity();
+    });
   }
 
   setDeliveryMethod(method: 'standard' | 'express') {
