@@ -95,13 +95,14 @@ import { ProductService } from '../../features/products/services/product-api';
                           class="block px-4 py-2 hover:bg-gray-100"
                         >
                           <div class="flex items-center">
-                            <img
-                              [ngSrc]="product.imageUrl"
-                              width="32"
-                              height="32"
-                              class="object-cover rounded mr-3"
-                              alt=""
-                            />
+                            <div class="relative w-8 h-8 mr-3 flex-shrink-0">
+                              <img
+                                [ngSrc]="product.imageUrl"
+                                fill
+                                class="object-cover rounded"
+                                alt=""
+                              />
+                            </div>
                             <div>
                               <p class="text-sm font-medium text-gray-900">{{ product.name }}</p>
                               <p class="text-xs text-gray-500">{{ product.category }}</p>
