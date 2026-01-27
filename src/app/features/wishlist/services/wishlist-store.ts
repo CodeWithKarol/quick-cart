@@ -17,7 +17,9 @@ export class WishlistService {
 
     // Auto-save whenever signal changes
     effect(() => {
-      localStorage.setItem('wishlist', JSON.stringify(this.wishlist()));
+      if (typeof localStorage !== 'undefined' && typeof localStorage.setItem === 'function') {
+        localStorage.setItem('wishlist', JSON.stringify(this.wishlist()));
+      }
     });
 
     // Validate wishlist against available products to remove stale items
@@ -35,6 +37,8 @@ export class WishlistService {
   }
 
   private loadWishlist() {
+    if (typeof localStorage === 'undefined' || typeof localStorage.getItem !== 'function') return;
+
     const saved = localStorage.getItem('wishlist');
     if (saved) {
       try {

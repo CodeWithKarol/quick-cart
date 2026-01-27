@@ -6,8 +6,9 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test",
-    "lint": "ng lint"
+    "test": "ng test --watch=false",
+    "lint": "ng lint",
+    "build:ci": "npm run lint && npm run test && npm run build"
   },
   "prettier": {
     "printWidth": 100,

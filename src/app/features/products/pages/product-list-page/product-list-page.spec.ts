@@ -115,7 +115,7 @@ describe('ProductListPage', () => {
     expect(component.filteredProducts().length).toBe(0);
 
     // Check if "No products found" message is displayed
-    const debugElement = fixture.debugElement.query(By.css('h3'));
+    const debugElement = fixture.debugElement.query(By.css('app-product-empty-state h3'));
     expect(debugElement.nativeElement.textContent).toContain('No products found');
   });
 

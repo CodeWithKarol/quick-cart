@@ -126,8 +126,7 @@ describe('CheckoutPage', () => {
 
     expect(component.isProcessing).toBe(false);
     expect(cartServiceSpy.clearCart).toHaveBeenCalled();
-    expect(window.alert).toHaveBeenCalledWith('Order placed successfully!');
-    expect(navigateSpy).toHaveBeenCalledWith(['/']);
+    expect(navigateSpy).toHaveBeenCalledWith(['/order-success']);
 
     vi.useRealTimers();
   });

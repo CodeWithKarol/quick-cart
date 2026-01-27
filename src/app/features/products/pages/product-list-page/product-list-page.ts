@@ -203,6 +203,11 @@ export class ProductListPage implements OnInit {
     this.sortOption.set(input.value);
   }
 
+  updateSearch(event: Event) {
+    const input = event.target as HTMLInputElement;
+    this.searchQuery.set(input.value);
+  }
+
   resetFilters() {
     this.searchQuery.set('');
     this.selectedCategory.set('');

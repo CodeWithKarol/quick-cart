@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CartPage } from './cart-page';
-import { CartService } from '../../services/cart.service';
+import { CartService } from '../../services/cart-store';
 import { provideRouter } from '@angular/router';
 import { signal, computed } from '@angular/core';
 import { CartItem } from '../../models/cart-item';
@@ -53,8 +53,8 @@ describe('CartPage', () => {
 
   it('should display cart items', () => {
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelectorAll('.cart-item').length).toBe(1);
-    expect(compiled.querySelector('.item-details h3')?.textContent).toContain('P1');
+    expect(compiled.querySelectorAll('app-cart-item').length).toBe(1);
+    expect(compiled.querySelector('app-cart-item')?.textContent).toContain('P1');
   });
 
   it('should call updateQuantity', () => {
