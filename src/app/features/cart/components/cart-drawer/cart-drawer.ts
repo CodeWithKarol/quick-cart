@@ -12,7 +12,7 @@ import { CartService } from '../../services/cart-store';
       <div class="relative z-50" aria-labelledby="slide-over-title" role="dialog" aria-modal="true">
         <!-- Background backdrop -->
         <div
-          class="fixed inset-0 bg-gray-500/75 transition-opacity"
+          class="fixed inset-0 bg-primary-950/40 backdrop-blur-sm transition-opacity"
           (click)="close()"
           (keyup.enter)="close()"
           tabindex="0"
@@ -25,13 +25,13 @@ import { CartService } from '../../services/cart-store';
                 <div class="flex h-full flex-col bg-white shadow-xl">
                   <div class="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
                     <div class="flex items-start justify-between">
-                      <h2 class="text-lg font-medium text-gray-900" id="slide-over-title">
+                      <h2 class="text-xl font-medium font-display text-primary-900" id="slide-over-title">
                         Shopping cart
                       </h2>
                       <div class="ml-3 flex h-7 items-center">
                         <button
                           type="button"
-                          class="relative -m-2 p-2 text-gray-400 hover:text-gray-500"
+                          class="relative -m-2 p-2 text-primary-400 hover:text-primary-500"
                           (click)="close()"
                         >
                           <span class="absolute -inset-0.5"></span>
@@ -56,14 +56,19 @@ import { CartService } from '../../services/cart-store';
 
                     <div class="mt-8">
                       <div class="flow-root">
-                        <ul role="list" class="-my-6 divide-y divide-gray-200">
+                        <ul role="list" class="-my-6 divide-y divide-primary-100">
                           @if (cartItems().length === 0) {
-                            <li class="py-6 text-center text-gray-500">Your cart is empty</li>
+                            <li class="py-12 text-center flex flex-col items-center">
+                              <svg class="h-10 w-10 text-primary-200 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                              </svg>
+                              <p class="text-primary-500 font-light">Your cart is empty</p>
+                            </li>
                           }
                           @for (item of cartItems(); track item.product.id; let first = $first) {
                             <li class="flex py-6">
                               <div
-                                class="relative h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200"
+                                class="relative h-24 w-24 flex-shrink-0 overflow-hidden border border-primary-100 bg-secondary-50"
                               >
                                 <img
                                   [ngSrc]="item.product.imageUrl"
@@ -77,35 +82,36 @@ import { CartService } from '../../services/cart-store';
                               <div class="ml-4 flex flex-1 flex-col">
                                 <div>
                                   <div
-                                    class="flex justify-between text-base font-medium text-gray-900"
+                                    class="flex justify-between text-base font-medium text-primary-900"
                                   >
                                     <h3>
                                       <a
                                         [routerLink]="['/product', item.product.id]"
                                         (click)="close()"
+                                        class="font-display hover:text-primary-600 transition-colors"
                                       >
                                         {{ item.product.name }}
                                       </a>
                                     </h3>
-                                    <p class="ml-4">{{ item.product.price | currency }}</p>
+                                    <p class="ml-4 font-light">{{ item.product.price | currency }}</p>
                                   </div>
-                                  <p class="mt-1 text-sm text-gray-500">
+                                  <p class="mt-1 text-sm text-primary-500 font-light">
                                     {{ item.product.category }}
                                     @if (item.variant) {
-                                      <span class="ml-2 text-xs text-gray-500"
+                                      <span class="ml-2 text-xs text-primary-400"
                                         >Variant: {{ item.variant }}</span
                                       >
                                     }
                                   </p>
                                 </div>
                                 <div class="flex flex-1 items-end justify-between text-sm">
-                                  <p class="text-gray-500">Qty {{ item.quantity }}</p>
+                                  <p class="text-primary-500 font-light">Qty {{ item.quantity }}</p>
 
                                   <div class="flex">
                                     <button
                                       type="button"
                                       (click)="removeItem(item.product.id, item.variant)"
-                                      class="font-medium text-indigo-600 hover:text-indigo-500"
+                                      class="font-medium text-primary-900 hover:text-accent-600 transition-colors text-xs uppercase tracking-widest"
                                     >
                                       Remove
                                     </button>
@@ -119,12 +125,12 @@ import { CartService } from '../../services/cart-store';
                     </div>
                   </div>
 
-                  <div class="border-t border-gray-200 px-4 py-6 sm:px-6">
-                    <div class="flex justify-between text-base font-medium text-gray-900">
-                      <p>Subtotal</p>
-                      <p>{{ cartTotal() | currency }}</p>
+                  <div class="border-t border-primary-100 px-4 py-6 sm:px-6 bg-secondary-50/30">
+                    <div class="flex justify-between text-base font-medium text-primary-900">
+                      <p class="font-display">Subtotal</p>
+                      <p class="font-display">{{ cartTotal() | currency }}</p>
                     </div>
-                    <p class="mt-0.5 text-sm text-gray-500">
+                    <p class="mt-0.5 text-sm text-primary-500 font-light">
                       Shipping and taxes calculated at checkout.
                     </p>
                     <div class="mt-6">
@@ -133,17 +139,17 @@ import { CartService } from '../../services/cart-store';
                         routerLink="/checkout"
                         (click)="close()"
                         [disabled]="cartItems().length === 0"
-                        class="w-full flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                        class="w-full flex items-center justify-center border border-transparent bg-primary-900 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-primary-800 disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-widest transition-colors"
                       >
                         Checkout
                       </button>
                     </div>
-                    <div class="mt-6 flex justify-center text-center text-sm text-gray-500">
+                    <div class="mt-6 flex justify-center text-center text-sm text-primary-500">
                       <p>
                         or
                         <button
                           type="button"
-                          class="font-medium text-indigo-600 hover:text-indigo-500"
+                          class="font-medium text-primary-900 hover:text-primary-700 uppercase tracking-widest text-xs"
                           (click)="close()"
                         >
                           Continue Shopping
@@ -153,55 +159,25 @@ import { CartService } from '../../services/cart-store';
                     </div>
 
                     <!-- Trust Badges -->
-                    <div class="mt-8 border-t border-gray-100 pt-6">
-                      <div class="flex items-center justify-center space-x-6 text-gray-400">
-                        <div class="flex flex-col items-center">
-                          <svg
-                            class="h-6 w-6 mb-1"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              stroke-width="1.5"
-                              d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-                            />
+                    <div class="mt-8 border-t border-primary-100 pt-6">
+                      <div class="flex items-center justify-center space-x-8 text-primary-400">
+                        <div class="flex flex-col items-center gap-1">
+                          <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                           </svg>
-                          <span class="text-xs">Secure</span>
+                          <span class="text-[10px] uppercase tracking-widest">Secure</span>
                         </div>
-                        <div class="flex flex-col items-center">
-                          <svg
-                            class="h-6 w-6 mb-1"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              stroke-width="1.5"
-                              d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
-                            />
+                        <div class="flex flex-col items-center gap-1">
+                          <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                           </svg>
-                          <span class="text-xs">Free Ship</span>
+                          <span class="text-[10px] uppercase tracking-widest">Free Ship</span>
                         </div>
-                        <div class="flex flex-col items-center">
-                          <svg
-                            class="h-6 w-6 mb-1"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              stroke-width="1.5"
-                              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                            />
+                        <div class="flex flex-col items-center gap-1">
+                          <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                           </svg>
-                          <span class="text-xs">Returns</span>
+                          <span class="text-[10px] uppercase tracking-widest">Returns</span>
                         </div>
                       </div>
                     </div>

@@ -79,8 +79,8 @@ import { Breadcrumb } from '../../../../shared/components/breadcrumb/breadcrumb'
             />
 
             @if (relatedProducts().length > 0) {
-              <div class="mt-16 border-t border-gray-200 pt-16">
-                <h2 class="text-2xl font-bold tracking-tight text-gray-900">
+              <div class="mt-16 border-t border-primary-200 pt-16">
+                <h2 class="text-2xl font-medium font-display tracking-tight text-primary-900">
                   Customers also purchased
                 </h2>
                 <div
@@ -99,8 +99,8 @@ import { Breadcrumb } from '../../../../shared/components/breadcrumb/breadcrumb'
             }
 
             @if (recentlyViewedProducts().length > 0) {
-              <div class="mt-16 border-t border-gray-200 pt-16">
-                <h2 class="text-2xl font-bold tracking-tight text-gray-900">Recently Viewed</h2>
+              <div class="mt-16 border-t border-primary-200 pt-16">
+                <h2 class="text-2xl font-medium font-display tracking-tight text-primary-900">Recently Viewed</h2>
                 <div
                   class="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8"
                 >
@@ -118,7 +118,7 @@ import { Breadcrumb } from '../../../../shared/components/breadcrumb/breadcrumb'
           </div>
         } @else {
           <div class="flex justify-center items-center h-96">
-            <p class="text-gray-500">Product not found.</p>
+            <p class="text-primary-500">Product not found.</p>
           </div>
         }
       </div>
@@ -130,13 +130,13 @@ import { Breadcrumb } from '../../../../shared/components/breadcrumb/breadcrumb'
         >
           <div class="flex items-center justify-between gap-4">
             <div class="flex-1 min-w-0">
-              <p class="text-sm font-medium text-gray-900 truncate">{{ product.name }}</p>
-              <p class="text-sm text-gray-500">{{ product.price | currency }}</p>
+              <p class="text-sm font-medium text-primary-900 truncate font-display">{{ product.name }}</p>
+              <p class="text-sm text-primary-500">{{ product.price | currency }}</p>
             </div>
             <button
               type="button"
               (click)="addToCart(product)"
-              class="flex-shrink-0 bg-indigo-600 border border-transparent rounded-md py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              class="flex-shrink-0 bg-primary-900 border border-transparent py-2 px-6 text-sm font-bold uppercase tracking-widest text-white hover:bg-primary-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-900"
             >
               Add to Cart
             </button>

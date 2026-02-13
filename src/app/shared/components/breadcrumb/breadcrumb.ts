@@ -14,7 +14,7 @@ export interface BreadcrumbItem {
   imports: [RouterLink, CommonModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <nav aria-label="Breadcrumb" class="pt-4 sm:pt-8 bg-white">
+    <nav aria-label="Breadcrumb" class="pt-4 sm:pt-8">
       <ol
         role="list"
         class="mx-auto flex max-w-2xl items-center space-x-2 px-4 sm:px-6 lg:max-w-7xl lg:px-8"
@@ -26,7 +26,7 @@ export interface BreadcrumbItem {
                 <a
                   [routerLink]="item.link"
                   [queryParams]="item.queryParams"
-                  class="mr-2 text-sm font-medium text-gray-900 hover:text-indigo-600 transition-colors"
+                  class="mr-2 text-xs font-bold uppercase tracking-widest text-primary-900 hover:text-primary-600 transition-colors"
                 >
                   {{ item.label }}
                 </a>
@@ -36,12 +36,12 @@ export interface BreadcrumbItem {
                   viewBox="0 0 16 20"
                   fill="currentColor"
                   aria-hidden="true"
-                  class="h-5 w-4 text-gray-300"
+                  class="h-5 w-4 text-primary-300"
                 >
                   <path d="M5.697 4.34L8.98 16.532h1.327L7.025 4.341H5.697z" />
                 </svg>
               } @else {
-                <span class="text-sm font-medium text-gray-500" aria-current="page">
+                <span class="text-xs font-bold uppercase tracking-widest text-primary-500" aria-current="page">
                   {{ item.label }}
                 </span>
               }

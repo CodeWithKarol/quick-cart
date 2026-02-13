@@ -35,13 +35,17 @@ import { ProductEmptyState } from '../../components/product-empty-state/product-
       <app-product-list-hero />
 
       <main class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div class="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-16">
-          <h2 class="text-2xl font-bold tracking-tight text-gray-900">All Products</h2>
+        <div class="flex items-end justify-between border-b border-primary-100 pb-6 pt-12">
+          <p class="text-sm text-primary-500 font-light">
+            Showing <span class="font-medium text-primary-900">{{ filteredProducts().length }}</span> results
+          </p>
 
           <div class="flex items-center">
-            <div class="relative inline-block text-left">
+            <div class="relative inline-block text-left group">
+              <label for="sort" class="sr-only">Sort by</label>
               <select
-                class="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900 border-none bg-transparent focus:ring-0"
+                id="sort"
+                class="cursor-pointer text-sm font-medium text-primary-900 hover:text-primary-600 border-none bg-transparent focus:ring-0 pr-8 py-0 pl-0 transition-colors uppercase tracking-widest text-xs"
                 (change)="updateSort($event)"
               >
                 <option value="newest">Newest</option>
@@ -53,10 +57,10 @@ import { ProductEmptyState } from '../../components/product-empty-state/product-
           </div>
         </div>
 
-        <section aria-labelledby="products-heading" class="pb-24 pt-6">
+        <section aria-labelledby="products-heading" class="pb-24 pt-12">
           <h2 id="products-heading" class="sr-only">Products</h2>
 
-          <div class="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
+          <div class="grid grid-cols-1 gap-x-12 gap-y-16 lg:grid-cols-4">
             <!-- Filters -->
             <app-product-filters
               [categories]="categories()"
@@ -68,7 +72,7 @@ import { ProductEmptyState } from '../../components/product-empty-state/product-
               (minPriceChange)="minPrice.set($event)"
               (maxPriceChange)="maxPrice.set($event)"
               (ratingChange)="minRating.set($event)"
-              (reset)="resetFilters()"
+              (resetFilters)="resetFilters()"
             />
 
             <!-- Product grid -->
@@ -76,19 +80,19 @@ import { ProductEmptyState } from '../../components/product-empty-state/product-
               @if (isLoading()) {
                 <div class="flex justify-center items-center h-64">
                   <div
-                    class="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"
+                    class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-900"
                   ></div>
                 </div>
               } @else {
                 @if (filteredProducts().length > 0) {
-                  <div class="grid grid-cols-1 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
+                  <div class="grid grid-cols-1 gap-y-12 gap-x-6 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
                     @for (product of filteredProducts(); track product.id; let i = $index) {
                       <app-product-card
                         [product]="product"
                         [priority]="i < 4"
                         (addToCart)="onAddToCart($event)"
                         (quickView)="onQuickView($event)"
-                        class="bg-white rounded-lg"
+                        class="group"
                       >
                       </app-product-card>
                     }
@@ -96,7 +100,7 @@ import { ProductEmptyState } from '../../components/product-empty-state/product-
                 } @else {
                   <app-product-empty-state
                     [trendingProducts]="trendingProducts()"
-                    (reset)="resetFilters()"
+                    (resetFilters)="resetFilters()"
                     (addToCart)="onAddToCart($event)"
                   />
                 }

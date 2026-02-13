@@ -8,23 +8,23 @@ import { Product } from '../../models/product';
   imports: [CommonModule],
   template: `
     <div class="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0">
-      <h1 class="text-3xl font-bold tracking-tight text-gray-900">{{ product().name }}</h1>
+      <h1 class="text-3xl font-medium font-display tracking-tight text-primary-900">{{ product().name }}</h1>
 
-      <div class="mt-3">
+      <div class="mt-4">
         <h2 class="sr-only">Product information</h2>
-        <p class="text-3xl tracking-tight text-gray-900">
+        <p class="text-3xl tracking-tight text-primary-900 font-light">
           {{ product().price | currency }}
         </p>
       </div>
 
       <!-- Reviews -->
-      <div class="mt-3">
+      <div class="mt-6">
         <h3 class="sr-only">Reviews</h3>
         <div class="flex items-center">
           <div class="flex items-center">
             @for (star of stars; track star) {
               <svg
-                class="h-5 w-5 text-indigo-500 flex-shrink-0"
+                class="h-5 w-5 text-secondary-400 flex-shrink-0"
                 viewBox="0 0 20 20"
                 fill="currentColor"
                 aria-hidden="true"
@@ -44,14 +44,14 @@ import { Product } from '../../models/product';
       <!-- Colors -->
       @if (product().colors && product().colors!.length > 0) {
         <div class="mt-10">
-          <h3 class="text-sm font-medium text-gray-900">Color</h3>
+          <h3 class="text-sm font-medium text-primary-900 uppercase tracking-widest">Color</h3>
           <div class="mt-4 flex items-center space-x-3">
             @for (color of product().colors; track color.name) {
               <button
                 type="button"
                 class="relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 focus:outline-none ring-2 focus:ring focus:ring-offset-1"
                 [class.ring-offset-1]="selectedColor() === color.name"
-                [class]="selectedColor() === color.name ? color.selectedClass : 'ring-transparent'"
+                [class]="selectedColor() === color.name ? 'ring-primary-900 ' + color.selectedClass : 'ring-transparent'"
                 (click)="selectedColorChange.emit(color.name)"
                 [title]="color.name"
                 [attr.aria-label]="color.name"
@@ -70,15 +70,15 @@ import { Product } from '../../models/product';
 
       <div class="mt-10">
         <h3 class="sr-only">Description</h3>
-        <div class="space-y-6 text-base text-gray-700">
+        <div class="space-y-6 text-base text-primary-600 font-light">
           <p>{{ product().description }}</p>
         </div>
       </div>
 
-      <div class="mt-6">
+      <div class="mt-8">
         <div class="flex items-center">
           <svg
-            class="h-5 w-5 flex-shrink-0 text-green-500"
+            class="h-5 w-5 flex-shrink-0 text-emerald-500"
             viewBox="0 0 20 20"
             fill="currentColor"
             aria-hidden="true"
@@ -89,7 +89,7 @@ import { Product } from '../../models/product';
               clip-rule="evenodd"
             />
           </svg>
-          <p class="ml-2 text-sm text-gray-500">In stock and ready to ship</p>
+          <p class="ml-2 text-sm text-primary-500">In stock and ready to ship</p>
         </div>
       </div>
 
@@ -97,7 +97,7 @@ import { Product } from '../../models/product';
         <button
           type="button"
           (click)="addToCart.emit(product())"
-          class="flex max-w-xs flex-1 items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50 sm:w-full"
+          class="flex max-w-xs flex-1 items-center justify-center border border-transparent bg-primary-900 px-8 py-3 text-sm font-bold uppercase tracking-widest text-white hover:bg-primary-800 focus:outline-none focus:ring-2 focus:ring-primary-900 focus:ring-offset-2 focus:ring-offset-gray-50 sm:w-full transition-colors"
         >
           Add to cart
         </button>
@@ -105,8 +105,8 @@ import { Product } from '../../models/product';
         <button
           type="button"
           (click)="toggleWishlist.emit(product())"
-          class="flex items-center justify-center rounded-md border border-gray-300 bg-white px-8 py-3 text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
-          [class.text-red-500]="isWishlisted()"
+          class="flex items-center justify-center border border-primary-200 bg-white px-8 py-3 text-base font-medium text-primary-700 hover:bg-secondary-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-gray-50 transition-colors"
+          [class.text-accent-500]="isWishlisted()"
         >
           <span class="sr-only">Add to wishlist</span>
           <svg

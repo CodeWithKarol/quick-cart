@@ -7,6 +7,7 @@ import { QuickViewComponent } from '../../../products/components/quick-view/quic
 import { map } from 'rxjs/operators';
 import { Product } from '../../../products/models/product';
 import { HomeHeroComponent } from '../../components/home-hero/home-hero.component';
+import { HomePhilosophyComponent } from '../../components/home-philosophy/home-philosophy.component';
 import { HomeFeaturesComponent } from '../../components/home-features/home-features.component';
 import { HomeFeaturedProductsComponent } from '../../components/home-featured-products/home-featured-products.component';
 import { HomeNewsletterComponent } from '../../components/home-newsletter/home-newsletter.component';
@@ -17,6 +18,7 @@ import { HomeNewsletterComponent } from '../../components/home-newsletter/home-n
     CommonModule,
     QuickViewComponent,
     HomeHeroComponent,
+    HomePhilosophyComponent,
     HomeFeaturesComponent,
     HomeFeaturedProductsComponent,
     HomeNewsletterComponent,

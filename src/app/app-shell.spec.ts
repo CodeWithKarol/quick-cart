@@ -95,7 +95,7 @@ describe('AppShell', () => {
 
     it('should render the promo bar with correct text', () => {
       const compiled = fixture.nativeElement as HTMLElement;
-      const promoBar = compiled.querySelector('.bg-indigo-600');
+      const promoBar = compiled.querySelector('.bg-secondary-50');
 
       expect(promoBar).toBeTruthy();
       expect(promoBar?.textContent).toContain('Get free delivery on orders over $100');

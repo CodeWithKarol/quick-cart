@@ -1,6 +1,11 @@
-<div class="bg-white">
-  <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
-    <h2 class="text-3xl font-bold tracking-tight text-gray-900">Your Wishlist</h2>
+<div class="bg-secondary-50 min-h-screen">
+  <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+    <div class="border-b border-primary-200 pb-10">
+      <h2 class="text-4xl font-medium font-display tracking-tight text-primary-900">Your Wishlist</h2>
+      <p class="mt-4 text-primary-500 font-light max-w-xl">
+        A curated collection of your favorite items.
+      </p>
+    </div>
 
     @if (wishlistItems().length === 0) {
       <app-wishlist-empty-state />

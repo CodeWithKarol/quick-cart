@@ -13,19 +13,19 @@ import { Product } from '../../models/product';
         <div class="grid grid-cols-4 gap-6" aria-orientation="horizontal" role="tablist">
           @for (image of galleryImages(); track $index) {
             <button
-              class="relative flex h-24 cursor-pointer items-center justify-center rounded-md bg-white text-sm font-medium uppercase text-gray-900 hover:bg-gray-50 focus:outline-none focus:ring focus:ring-opacity-50 focus:ring-offset-4"
-              [class.ring-indigo-500]="selectedImage() === image"
+              class="relative flex h-24 cursor-pointer items-center justify-center bg-secondary-50 text-sm font-medium uppercase text-primary-900 hover:bg-secondary-100 focus:outline-none focus:ring focus:ring-opacity-50 focus:ring-offset-4"
+              [class.ring-primary-900]="selectedImage() === image"
               (click)="selectedImageChange.emit(image)"
               type="button"
               role="tab"
             >
               <span class="sr-only">Image view</span>
-              <span class="absolute inset-0 overflow-hidden rounded-md">
+              <span class="absolute inset-0 overflow-hidden">
                 <img [src]="image" alt="" class="h-full w-full object-cover object-center" />
               </span>
               <span
-                class="pointer-events-none absolute inset-0 rounded-md ring-2 ring-offset-2"
-                [class.ring-indigo-500]="selectedImage() === image"
+                class="pointer-events-none absolute inset-0 ring-2 ring-offset-2"
+                [class.ring-primary-900]="selectedImage() === image"
                 [class.ring-transparent]="selectedImage() !== image"
                 aria-hidden="true"
               ></span>
@@ -35,7 +35,7 @@ import { Product } from '../../models/product';
       </div>
 
       <div
-        class="relative aspect-square w-full overflow-hidden rounded-lg bg-gray-100 sm:aspect-[2/3]"
+        class="relative aspect-square w-full overflow-hidden bg-secondary-50 sm:aspect-[4/5]"
         [appImageZoom]="2"
       >
         <img
@@ -43,7 +43,7 @@ import { Product } from '../../models/product';
           [alt]="product().name"
           fill
           priority
-          class="h-full w-full object-cover object-center sm:rounded-lg"
+          class="h-full w-full object-cover object-center"
         />
       </div>
     </div>

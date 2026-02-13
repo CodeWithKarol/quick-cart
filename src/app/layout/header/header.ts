@@ -12,18 +12,30 @@ import { ProductService } from '../../features/products/services/product-api';
   selector: 'app-header',
   imports: [RouterLink, RouterLinkActive, NgOptimizedImage],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  styles: [
+    `
+      input[type='search']::-webkit-search-cancel-button {
+        -webkit-appearance: none;
+        display: none;
+      }
+    `,
+  ],
   template: `
-    <header class="bg-white shadow-sm sticky top-0 z-40">
-      <nav class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-label="Top">
-        <div class="flex h-16 items-center justify-between w-full">
-          <div class="flex items-center">
-            <a routerLink="/" class="flex items-center gap-2 group">
+     <header class="sticky top-0 z-40 transition-all duration-300">
+      <div class="absolute inset-0 bg-primary-950/95 backdrop-blur-md shadow-lg border-b border-white/5" aria-hidden="true"></div>
+      
+      <nav class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-label="Top">
+        <div class="flex h-20 items-center justify-between w-full">
+          <!-- Logo & Nav -->
+          <div class="flex items-center gap-12">
+            <a routerLink="/" class="flex items-center gap-3 group">
               <span class="sr-only">QuickCart</span>
+              <!-- Logo Icon - Simplified -->
               <svg
-                class="h-8 w-8 text-indigo-600 transition-transform group-hover:scale-110"
+                class="h-8 w-8 text-white transition-transform duration-500 group-hover:rotate-12"
                 fill="none"
                 viewBox="0 0 24 24"
-                stroke-width="1.5"
+                stroke-width="1"
                 stroke="currentColor"
               >
                 <path
@@ -33,34 +45,38 @@ import { ProductService } from '../../features/products/services/product-api';
                 />
               </svg>
               <span
-                class="logo text-xl font-bold text-gray-900 tracking-tight group-hover:text-indigo-600 transition-colors"
+                class="logo text-2xl font-display font-medium text-white tracking-wide"
                 >QuickCart</span
               >
             </a>
-            <div class="hidden ml-10 space-x-8 md:block">
+            
+            <!-- Desktop Nav -->
+            <div class="hidden md:flex space-x-8">
               <a
                 routerLink="/"
-                class="text-sm font-medium text-gray-700 hover:text-indigo-600 transition-colors"
-                routerLinkActive="text-indigo-600"
+                class="text-xs font-bold uppercase tracking-widest text-secondary-300 hover:text-white transition-colors py-1"
+                routerLinkActive="text-white border-b border-white"
                 [routerLinkActiveOptions]="{ exact: true }"
                 >Home</a
               >
               <a
                 routerLink="/shop"
-                class="text-sm font-medium text-gray-700 hover:text-indigo-600 transition-colors"
-                routerLinkActive="text-indigo-600"
+                class="text-xs font-bold uppercase tracking-widest text-secondary-300 hover:text-white transition-colors py-1"
+                routerLinkActive="text-white border-b border-white"
                 >Shop</a
               >
             </div>
           </div>
 
-          <!-- Global Search -->
-          <div class="flex flex-1 items-center justify-center px-6 lg:ml-6 lg:justify-end">
-            <div class="w-full max-w-lg lg:max-w-xs relative">
+          <!-- Search & Actions -->
+          <div class="flex items-center gap-6">
+            
+            <!-- Search Bar (Desktop) -->
+            <div class="hidden lg:block relative w-72 group">
               <label for="search" class="sr-only">Search</label>
-              <div class="relative text-gray-400 focus-within:text-gray-600">
-                <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                  <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <div class="relative">
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                  <svg class="h-4 w-4 text-primary-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                     <path
                       fill-rule="evenodd"
                       d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z"
@@ -70,7 +86,7 @@ import { ProductService } from '../../features/products/services/product-api';
                 </div>
                 <input
                   id="search"
-                  class="block w-full rounded-md border border-gray-300 bg-white py-1.5 pl-10 pr-3 text-gray-900 placeholder-gray-500 focus:border-indigo-500 focus:placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
+                  class="block w-full rounded border-0 bg-primary-900/80 py-2 pr-10 pl-4 text-primary-100 shadow-sm ring-1 ring-inset ring-primary-800 placeholder:text-primary-500 focus:bg-primary-900 focus:ring-2 focus:ring-inset focus:ring-primary-600 sm:text-sm sm:leading-6 transition-all"
                   placeholder="Search products..."
                   type="search"
                   [value]="searchQuery()"
@@ -84,28 +100,28 @@ import { ProductService } from '../../features/products/services/product-api';
               <!-- Autocomplete Dropdown -->
               @if (isSearchFocused() && searchResults().length > 0) {
                 <div
-                  class="absolute z-10 w-full bg-white shadow-lg rounded-b-md border border-gray-200 mt-1"
+                  class="absolute right-0 z-50 w-80 bg-white shadow-xl rounded-sm mt-2 overflow-hidden ring-1 ring-black/5"
                 >
-                  <ul class="max-h-60 overflow-y-auto py-1">
+                  <ul class="max-h-80 overflow-y-auto w-full">
                     @for (product of searchResults(); track product.id) {
                       <li>
                         <a
                           [routerLink]="['/product', product.id]"
                           (mousedown)="$event.preventDefault()"
-                          class="block px-4 py-2 hover:bg-gray-100"
+                          class="block px-4 py-3 hover:bg-secondary-50 transition-colors group/item"
                         >
-                          <div class="flex items-center">
-                            <div class="relative w-8 h-8 mr-3 flex-shrink-0">
+                          <div class="flex items-center gap-4">
+                            <div class="relative w-10 h-12 flex-shrink-0 bg-secondary-100">
                               <img
                                 [ngSrc]="product.imageUrl"
                                 fill
-                                class="object-cover rounded"
+                                class="object-cover"
                                 alt=""
                               />
                             </div>
                             <div>
-                              <p class="text-sm font-medium text-gray-900">{{ product.name }}</p>
-                              <p class="text-xs text-gray-500">{{ product.category }}</p>
+                              <p class="text-sm font-medium text-primary-900 group-hover/item:text-primary-600 font-display">{{ product.name }}</p>
+                              <p class="text-xs text-primary-500">{{ product.category }}</p>
                             </div>
                           </div>
                         </a>
@@ -115,19 +131,19 @@ import { ProductService } from '../../features/products/services/product-api';
                 </div>
               }
             </div>
-          </div>
 
-          <div class="flex items-center gap-4">
-            <a
-              routerLink="/wishlist"
-              class="group -m-2 flex items-center p-2 text-gray-700 hover:text-indigo-600 transition-colors"
-            >
-              <div class="relative">
+            <!-- Icons -->
+            <div class="flex items-center gap-5">
+              <a
+                routerLink="/wishlist"
+                class="group flex items-center text-secondary-300 hover:text-white transition-colors relative"
+              >
+                <span class="sr-only">Wishlist</span>
                 <svg
-                  class="h-6 w-6 flex-shrink-0 group-hover:text-indigo-600 transition-colors"
+                  class="h-6 w-6"
                   fill="none"
                   viewBox="0 0 24 24"
-                  stroke-width="1.5"
+                  stroke-width="1"
                   stroke="currentColor"
                 >
                   <path
@@ -138,30 +154,25 @@ import { ProductService } from '../../features/products/services/product-api';
                 </svg>
                 @if (wishlistCount() > 0) {
                   <span
-                    class="absolute -top-2 -right-2 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/4 -translate-y-1/4 bg-red-500 rounded-full min-w-[1.25rem] h-5 ring-2 ring-white"
+                    class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-white text-[10px] font-bold text-primary-900"
                   >
                     {{ wishlistCount() }}
                   </span>
                 }
-              </div>
-              <span class="sr-only">Wishlist</span>
-            </a>
-
-            <button
-              type="button"
-              (click)="openCart()"
-              class="group -m-2 flex items-center p-2 text-gray-700 hover:text-indigo-600 transition-colors"
-              style="background: none; border: none; cursor: pointer;"
-            >
-              <span class="sr-only">items in cart, view bag</span>
-              <div class="relative">
+              </a>
+  
+              <button
+                type="button"
+                (click)="openCart()"
+                class="group flex items-center text-secondary-300 hover:text-white transition-colors relative"
+              >
+                <span class="sr-only">Cart</span>
                 <svg
-                  class="h-6 w-6 flex-shrink-0 group-hover:text-indigo-600 transition-colors"
+                  class="h-6 w-6"
                   fill="none"
                   viewBox="0 0 24 24"
-                  stroke-width="1.5"
+                  stroke-width="1"
                   stroke="currentColor"
-                  aria-hidden="true"
                 >
                   <path
                     stroke-linecap="round"
@@ -171,73 +182,53 @@ import { ProductService } from '../../features/products/services/product-api';
                 </svg>
                 @if (cartCount() > 0) {
                   <span
-                    class="absolute -top-2 -right-2 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/4 -translate-y-1/4 bg-indigo-600 rounded-full min-w-[1.25rem] h-5 ring-2 ring-white"
+                    class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-white text-[10px] font-bold text-primary-900"
                   >
                     {{ cartCount() }}
                   </span>
                 }
-              </div>
-              <span
-                class="ml-2 text-sm font-medium text-gray-700 group-hover:text-indigo-600 hidden sm:block"
-                >Cart</span
-              >
-            </button>
-            <div class="flex md:hidden">
-              <button
-                type="button"
-                (click)="toggleMobileMenu()"
-                class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
-              >
-                <span class="sr-only">Open main menu</span>
-                <svg
-                  class="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="1.5"
-                  stroke="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-                  />
-                </svg>
               </button>
+  
+              <div class="flex md:hidden">
+                <button
+                  type="button"
+                  (click)="toggleMobileMenu()"
+                  class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-white"
+                >
+                  <span class="sr-only">Open main menu</span>
+                  <svg
+                    class="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+                    />
+                  </svg>
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </nav>
-      <!-- Mobile menu, show/hide based on menu state. -->
+      
+      <!-- Mobile menu -->
       @if (isMobileMenuOpen()) {
-        <div class="md:hidden" role="dialog" aria-modal="true">
-          <!-- Background backdrop, show/hide based on slide-over state. -->
-          <div class="fixed inset-0 z-50"></div>
-          <div
-            class="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10 shadow-xl"
-          >
+        <div class="md:hidden relative z-50">
+          <button type="button" class="fixed inset-0 bg-black/80 backdrop-blur-sm transition-opacity w-full h-full border-none cursor-default" (click)="toggleMobileMenu()" tabindex="-1" aria-hidden="true"></button>
+          <div class="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-primary-950 px-6 py-6 sm:max-w-sm border-l border-white/10">
             <div class="flex items-center justify-between">
               <a routerLink="/" class="-m-1.5 p-1.5 flex items-center gap-2">
-                <span class="sr-only">QuickCart</span>
-                <svg
-                  class="h-8 w-8 text-indigo-600"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="1.5"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"
-                  />
-                </svg>
-                <span class="text-xl font-bold text-gray-900 tracking-tight">QuickCart</span>
+                 <span class="text-xl font-bold font-display text-white tracking-wide">QuickCart</span>
               </a>
               <button
                 type="button"
                 (click)="toggleMobileMenu()"
-                class="-m-2.5 rounded-md p-2.5 text-gray-700"
+                class="-m-2.5 rounded-md p-2.5 text-gray-400 hover:text-white"
               >
                 <span class="sr-only">Close menu</span>
                 <svg
@@ -246,29 +237,31 @@ import { ProductService } from '../../features/products/services/product-api';
                   viewBox="0 0 24 24"
                   stroke-width="1.5"
                   stroke="currentColor"
-                  aria-hidden="true"
                 >
                   <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
             </div>
-            <div class="mt-6 flow-root">
-              <div class="-my-6 divide-y divide-gray-500/10">
+            <div class="mt-8 flow-root">
+              <div class="-my-6 divide-y divide-white/10">
                 <div class="space-y-2 py-6">
                   <a
                     routerLink="/"
                     (click)="toggleMobileMenu()"
-                    class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                    routerLinkActive="bg-gray-50 text-indigo-600"
-                    [routerLinkActiveOptions]="{ exact: true }"
+                    class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-white/5"
                     >Home</a
                   >
                   <a
                     routerLink="/shop"
                     (click)="toggleMobileMenu()"
-                    class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                    routerLinkActive="bg-gray-50 text-indigo-600"
+                    class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-white/5"
                     >Shop</a
+                  >
+                  <a
+                    routerLink="/wishlist"
+                    (click)="toggleMobileMenu()"
+                    class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-white/5"
+                    >Wishlist</a
                   >
                 </div>
               </div>
