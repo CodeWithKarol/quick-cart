@@ -1,67 +1,63 @@
+import { CurrencyPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { Product } from '../../models/product';
 
 @Component({
   selector: 'app-product-empty-state',
   standalone: true,
+  imports: [CurrencyPipe],
   template: `
-    <div class="flex flex-col items-center justify-center py-12">
+    <div class="flex flex-col items-center justify-center py-24">
       <div
-        class="w-full text-center py-24 bg-gray-50 rounded-lg border border-dashed border-gray-300"
+        class="w-full text-center max-w-md mx-auto"
       >
         <svg
-          class="mx-auto h-12 w-12 text-gray-400"
+          class="mx-auto h-16 w-16 text-primary-200"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
+          stroke-width="1"
           aria-hidden="true"
         >
           <path
-            vector-effect="non-scaling-stroke"
             stroke-linecap="round"
             stroke-linejoin="round"
-            stroke-width="2"
-            d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"
+            d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
           />
         </svg>
-        <h3 class="mt-2 text-sm font-semibold text-gray-900">No products found</h3>
-        <p class="mt-1 text-sm text-gray-500">
-          Try adjusting your search or filter to find what you're looking for.
+        <h3 class="mt-4 text-lg font-display font-medium text-primary-900">No products found</h3>
+        <p class="mt-2 text-sm text-primary-500 font-light">
+          We couldn't find any matches for your filters. Try adjusting your search.
         </p>
-        <div class="mt-6">
+        <div class="mt-8">
           <button
             (click)="resetFilters.emit()"
-            class="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            class="inline-flex items-center border-b border-primary-900 pb-1 text-xs font-bold uppercase tracking-widest text-primary-900 hover:text-primary-600 hover:border-primary-600 transition-colors"
           >
-            Clear filters
+            Clear all filters
           </button>
         </div>
 
         @if (trendingProducts().length > 0) {
-          <div class="mt-10 border-t border-gray-200 pt-10 text-left w-full max-w-2xl mx-auto">
-            <h4 class="text-sm font-medium text-gray-900 mb-4">Trending Now</h4>
-            <div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
+          <div class="mt-16 border-t border-primary-100 pt-10 text-center w-full">
+            <h4 class="text-xs font-bold uppercase tracking-widest text-primary-400 mb-8">You might also like</h4>
+            <div class="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-4">
               @for (item of trendingProducts(); track item.id) {
-                <div class="group relative flex flex-col items-center">
+                <button type="button" class="group relative flex flex-col items-start text-left cursor-pointer w-full bg-transparent border-none p-0" (click)="addToCart.emit(item)">
                   <div
-                    class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 group-hover:opacity-75"
+                    class="aspect-[4/5] w-full overflow-hidden bg-secondary-100 mb-3"
                   >
                     <img
                       [src]="item.imageUrl"
                       [alt]="item.name"
-                      class="h-full w-full object-cover object-center"
+                      class="h-full w-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
                     />
                   </div>
-                  <p class="mt-2 text-xs text-gray-900 truncate w-full text-center">
+                  <p class="text-sm font-medium text-primary-900 font-display">
                     {{ item.name }}
                   </p>
-                  <button
-                    (click)="addToCart.emit(item); $event.stopPropagation()"
-                    class="mt-1 text-xs font-semibold text-indigo-600 hover:text-indigo-500 cursor-pointer"
-                  >
-                    Add to Cart
-                  </button>
-                </div>
+                  <p class="text-xs text-primary-500 mt-1">{{ item.price | currency }}</p>
+                </button>
               }
             </div>
           </div>

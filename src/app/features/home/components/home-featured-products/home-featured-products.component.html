@@ -1,36 +1,30 @@
-<div class="bg-white">
-  <div class="mx-auto max-w-2xl py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
-    <div class="md:flex md:items-center md:justify-between">
-      <h2 class="text-2xl font-bold tracking-tight text-gray-900">Trending Now</h2>
+<div class="bg-white pb-16 pt-24 sm:pb-24 sm:pt-32">
+  <div class="mx-auto max-w-7xl px-6 lg:px-8">
+    <div class="flex flex-col items-center justify-center mb-16 text-center">
+      <h2 class="text-3xl font-bold tracking-tight text-primary-900 sm:text-5xl font-display mb-4">Trending Now</h2>
+      <p class="max-w-2xl text-lg relative text-primary-600 font-light">
+        A selection of our most coveted pieces, available for a limited time.
+      </p>
       <a
         routerLink="/shop"
-        class="hidden text-sm font-medium text-indigo-600 hover:text-indigo-500 md:block cursor-pointer"
+        class="mt-8 text-sm font-bold tracking-widest uppercase border-b border-primary-900 pb-1 hover:text-primary-600 hover:border-primary-600 transition-colors"
       >
-        Browse the collection
-        <span aria-hidden="true"> &rarr;</span>
+        View All Products
       </a>
     </div>
 
-    <div class="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+    <!-- Product Grid -->
+    <div class="grid grid-cols-1 gap-y-12 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
       @for (product of products(); track product.id; let i = $index) {
         <app-product-card
           [product]="product"
           [priority]="i < 4"
           (addToCart)="addToCart.emit($event)"
           (quickView)="quickView.emit($event)"
+          class="group"
         >
         </app-product-card>
       }
-    </div>
-
-    <div class="mt-8 text-sm md:hidden">
-      <a
-        routerLink="/shop"
-        class="font-medium text-indigo-600 hover:text-indigo-500 cursor-pointer"
-      >
-        Browse the collection
-        <span aria-hidden="true"> &rarr;</span>
-      </a>
     </div>
   </div>
 </div>

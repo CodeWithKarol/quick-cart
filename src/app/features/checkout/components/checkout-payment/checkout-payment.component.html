@@ -1,9 +1,9 @@
 <div [formGroup]="form()" class="space-y-6">
   <div>
-    <h3 class="text-lg font-medium text-gray-900">Payment details</h3>
+    <h3 class="text-lg font-medium font-display text-primary-900">Payment details</h3>
     <div class="mt-4 grid grid-cols-4 gap-y-6 gap-x-4">
       <div class="col-span-4">
-        <label for="card-number" class="block text-sm font-medium leading-6 text-gray-900"
+        <label for="card-number" class="block text-sm font-medium leading-6 text-primary-900"
           >Card number</label
         >
         <div class="mt-2">
@@ -13,7 +13,7 @@
             formControlName="cardNumber"
             autocomplete="cc-number"
             placeholder="0000 0000 0000 0000"
-            class="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            class="block w-full rounded-none border-0 py-1.5 px-3 text-primary-900 shadow-sm ring-1 ring-inset ring-primary-200 placeholder:text-primary-400 focus:ring-2 focus:ring-inset focus:ring-primary-900 sm:text-sm sm:leading-6 bg-white"
           />
         </div>
         @if (form().get('cardNumber')?.touched && form().get('cardNumber')?.invalid) {
@@ -22,7 +22,7 @@
       </div>
 
       <div class="col-span-2">
-        <label for="expiration-date" class="block text-sm font-medium leading-6 text-gray-900"
+        <label for="expiration-date" class="block text-sm font-medium leading-6 text-primary-900"
           >Expiration date (MM/YY)</label
         >
         <div class="mt-2">
@@ -32,7 +32,7 @@
             formControlName="expiry"
             autocomplete="cc-exp"
             placeholder="MM/YY"
-            class="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            class="block w-full rounded-none border-0 py-1.5 px-3 text-primary-900 shadow-sm ring-1 ring-inset ring-primary-200 placeholder:text-primary-400 focus:ring-2 focus:ring-inset focus:ring-primary-900 sm:text-sm sm:leading-6 bg-white"
           />
         </div>
         @if (form().get('expiry')?.touched && form().get('expiry')?.invalid) {
@@ -41,7 +41,7 @@
       </div>
 
       <div class="col-span-2">
-        <label for="cvc" class="block text-sm font-medium leading-6 text-gray-900">CVC</label>
+        <label for="cvc" class="block text-sm font-medium leading-6 text-primary-900">CVC</label>
         <div class="mt-2">
           <input
             type="text"
@@ -49,7 +49,7 @@
             formControlName="cvv"
             autocomplete="csc"
             placeholder="123"
-            class="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            class="block w-full rounded-none border-0 py-1.5 px-3 text-primary-900 shadow-sm ring-1 ring-inset ring-primary-200 placeholder:text-primary-400 focus:ring-2 focus:ring-inset focus:ring-primary-900 sm:text-sm sm:leading-6 bg-white"
           />
         </div>
         @if (form().get('cvv')?.touched && form().get('cvv')?.invalid) {
@@ -62,7 +62,7 @@
   <!-- Billing Address-->
   <div class="relative flex items-start py-4">
     <div class="min-w-0 flex-1 text-sm">
-      <label for="comments" class="font-medium text-gray-700">Billing address</label>
+      <label for="comments" class="font-medium text-primary-700">Billing address</label>
     </div>
     <div class="ml-3 flex h-5 items-center">
       <input
@@ -71,16 +71,16 @@
         type="checkbox"
         [checked]="billingSameAsShipping()"
         (change)="billingSameAsShippingChange.emit(!billingSameAsShipping())"
-        class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+        class="h-4 w-4 rounded border-gray-300 text-primary-900 focus:ring-primary-900"
       />
-      <span class="ml-2 text-sm text-gray-500">Same as shipping address</span>
+      <span class="ml-2 text-sm text-primary-500 font-light">Same as shipping address</span>
     </div>
   </div>
 
   @if (!billingSameAsShipping()) {
-    <div class="bg-gray-50 p-4 rounded-md space-y-4">
+    <div class="bg-secondary-50/50 p-4 rounded-none space-y-4 border border-primary-100">
       <div>
-        <label for="billingFullName" class="block text-sm font-medium leading-6 text-gray-900"
+        <label for="billingFullName" class="block text-sm font-medium leading-6 text-primary-900"
           >Name</label
         >
         <div class="mt-2">
@@ -88,12 +88,12 @@
             id="billingFullName"
             type="text"
             formControlName="billingFullName"
-            class="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            class="block w-full rounded-none border-0 py-1.5 px-3 text-primary-900 shadow-sm ring-1 ring-inset ring-primary-200 placeholder:text-primary-400 focus:ring-2 focus:ring-inset focus:ring-primary-900 sm:text-sm sm:leading-6 bg-white"
           />
         </div>
       </div>
       <div>
-        <label for="billingAddress" class="block text-sm font-medium leading-6 text-gray-900"
+        <label for="billingAddress" class="block text-sm font-medium leading-6 text-primary-900"
           >Address</label
         >
         <div class="mt-2">
@@ -101,13 +101,13 @@
             id="billingAddress"
             type="text"
             formControlName="billingAddress"
-            class="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            class="block w-full rounded-none border-0 py-1.5 px-3 text-primary-900 shadow-sm ring-1 ring-inset ring-primary-200 placeholder:text-primary-400 focus:ring-2 focus:ring-inset focus:ring-primary-900 sm:text-sm sm:leading-6 bg-white"
           />
         </div>
       </div>
       <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6 pl-1">
         <div class="sm:col-span-4">
-          <label for="billingCity" class="block text-sm font-medium leading-6 text-gray-900"
+          <label for="billingCity" class="block text-sm font-medium leading-6 text-primary-900"
             >City</label
           >
           <div class="mt-2">
@@ -115,12 +115,12 @@
               id="billingCity"
               type="text"
               formControlName="billingCity"
-              class="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              class="block w-full rounded-none border-0 py-1.5 px-3 text-primary-900 shadow-sm ring-1 ring-inset ring-primary-200 placeholder:text-primary-400 focus:ring-2 focus:ring-inset focus:ring-primary-900 sm:text-sm sm:leading-6 bg-white"
             />
           </div>
         </div>
         <div class="sm:col-span-2">
-          <label for="billingZipCode" class="block text-sm font-medium leading-6 text-gray-900"
+          <label for="billingZipCode" class="block text-sm font-medium leading-6 text-primary-900"
             >Zip Code</label
           >
           <div class="mt-2">
@@ -128,7 +128,7 @@
               id="billingZipCode"
               type="text"
               formControlName="billingZipCode"
-              class="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              class="block w-full rounded-none border-0 py-1.5 px-3 text-primary-900 shadow-sm ring-1 ring-inset ring-primary-200 placeholder:text-primary-400 focus:ring-2 focus:ring-inset focus:ring-primary-900 sm:text-sm sm:leading-6 bg-white"
             />
           </div>
         </div>
@@ -140,14 +140,14 @@
     <button
       type="button"
       (click)="back.emit()"
-      class="text-sm font-medium text-indigo-600 hover:text-indigo-500"
+      class="text-sm font-medium text-primary-600 hover:text-primary-500"
     >
       <span aria-hidden="true"> &larr;</span> Back to Shipping
     </button>
     <button
       type="submit"
       [disabled]="form().invalid || isProcessing()"
-      class="rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50"
+      class="rounded-none border border-transparent bg-primary-900 px-8 py-3 text-sm font-bold uppercase tracking-widest text-white shadow-sm hover:bg-primary-800 focus:outline-none focus:ring-2 focus:ring-primary-900 focus:ring-offset-2 disabled:opacity-50 transition-colors"
     >
       {{ isProcessing() ? 'Processing...' : 'Pay ' + (total() | currency) }}
     </button>
