@@ -94,4 +94,19 @@ describe('CartService', () => {
     expect(service.cartCount()).toBe(0);
     expect(service.cartTotal()).toBe(0);
   });
+
+  it('should calculate free shipping progress correctly', () => {
+    // Threshold is 100
+    service.addToCart(mockProduct); // $10
+    expect(service.remainingForFreeShipping()).toBe(90);
+    expect(service.freeShippingProgress()).toBe(10);
+
+    service.updateQuantity(mockProduct.id, 10); // $100
+    expect(service.remainingForFreeShipping()).toBe(0);
+    expect(service.freeShippingProgress()).toBe(100);
+
+    service.updateQuantity(mockProduct.id, 15); // $150
+    expect(service.remainingForFreeShipping()).toBe(0);
+    expect(service.freeShippingProgress()).toBe(100);
+  });
 });

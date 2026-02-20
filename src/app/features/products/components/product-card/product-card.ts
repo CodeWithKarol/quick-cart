@@ -17,9 +17,7 @@ import { WishlistService } from '../../../../features/wishlist/services/wishlist
     `,
   ],
   template: `
-    <div
-      class="group relative h-full flex flex-col items-center text-center"
-    >
+    <div class="group relative h-full flex flex-col items-center text-center">
       <button
         type="button"
         (click)="toggleWishlist($event)"
@@ -59,7 +57,7 @@ import { WishlistService } from '../../../../features/wishlist/services/wishlist
         <button
           type="button"
           (click)="onQuickView($event)"
-          class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm text-primary-900 px-6 py-2 shadow-sm text-xs font-bold tracking-widest uppercase opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-white z-20 translate-y-4 group-hover:translate-y-0"
+          class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm text-primary-900 px-6 py-2.5 shadow-sm text-[10px] font-bold tracking-widest uppercase opacity-100 md:opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-white z-20 translate-y-0 md:translate-y-4 md:group-hover:translate-y-0 active:scale-95"
         >
           Quick View
         </button>
@@ -94,15 +92,41 @@ import { WishlistService } from '../../../../features/wishlist/services/wishlist
         <p class="mt-1 text-xs text-primary-400">{{ product().reviews }} reviews</p>
       </div>
 
-      <p class="price mt-3 text-base font-light text-primary-600">{{ product().price | currency }}</p>
+      <p class="mt-3 flex items-center justify-center gap-2">
+        @if (hasDiscount()) {
+          <span class="text-xs line-through text-primary-300 decoration-accent-500/30">{{
+            product().originalPrice | currency
+          }}</span>
+        }
+        <span class="price text-base font-light text-primary-600">{{
+          product().price | currency
+        }}</span>
+      </p>
+
+      <!-- Alert Badges -->
+      <div class="h-5 mt-2 flex items-center justify-center">
+        @if (isLowStock()) {
+          <span class="text-[9px] font-bold uppercase tracking-[0.2em] text-accent-600">
+            Limited: {{ product().stockCount }} left
+          </span>
+        } @else if (hasDiscount()) {
+          <span class="text-[9px] font-bold uppercase tracking-[0.2em] text-secondary-600">
+            Special Selection
+          </span>
+        }
+      </div>
 
       <!-- Colors -->
       @if (product().colors && product().colors!.length > 0) {
-        <div class="mt-4 flex items-center justify-center space-x-2">
+        <div class="mt-4 flex items-center justify-center space-x-3">
           @for (color of product().colors; track color.name) {
             <span
-              class="h-3 w-3 rounded-full border border-primary-100"
+              class="h-2.5 w-2.5 rounded-full border border-primary-100 transition-all duration-500"
               [class]="color.class"
+              [class.ring-1]="selectedVariant() === color.name"
+              [class.ring-primary-900]="selectedVariant() === color.name"
+              [class.ring-offset-2]="selectedVariant() === color.name"
+              [class.scale-125]="selectedVariant() === color.name"
               [attr.aria-label]="color.name"
               [title]="color.name"
             ></span>
@@ -113,7 +137,7 @@ import { WishlistService } from '../../../../features/wishlist/services/wishlist
       <button
         type="button"
         (click)="onAddToCart($event)"
-        class="relative z-10 mt-4 w-full rounded-none bg-primary-900 px-3 py-3 text-xs font-bold uppercase tracking-widest text-white shadow-sm hover:bg-primary-800 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0"
+        class="relative z-10 mt-6 w-full rounded-none bg-primary-900 px-3 py-3.5 text-[10px] font-bold uppercase tracking-widest text-white shadow-sm hover:bg-primary-800 opacity-100 md:opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-0 md:translate-y-2 md:group-hover:translate-y-0 active:scale-[0.98]"
       >
         Add to bag
       </button>
@@ -126,10 +150,20 @@ export class ProductCard {
 
   product = input.required<Product>();
   priority = input(false);
+  selectedVariant = input<string>(); // Used to highlight chosen variant in wishlist
   addToCart = output<Product>();
   quickView = output<Product>();
 
-  isWishlisted = computed(() => this.wishlistService.isInWishlist(this.product().id));
+  isWishlisted = computed(() =>
+    this.wishlistService.isInWishlist(this.product().id, this.selectedVariant()),
+  );
+
+  isLowStock = computed(
+    () => (this.product().stockCount || 0) > 0 && (this.product().stockCount || 0) < 5,
+  );
+  hasDiscount = computed(
+    () => !!this.product().originalPrice && this.product().originalPrice! > this.product().price,
+  );
 
   toggleWishlist(event: Event) {
     event.stopPropagation();

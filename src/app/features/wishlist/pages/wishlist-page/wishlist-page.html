@@ -1,10 +1,46 @@
 <div class="bg-secondary-50 min-h-screen">
   <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
     <div class="border-b border-primary-200 pb-10">
-      <h2 class="text-4xl font-medium font-display tracking-tight text-primary-900">Your Wishlist</h2>
-      <p class="mt-4 text-primary-500 font-light max-w-xl">
-        A curated collection of your favorite items.
-      </p>
+      <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+        <div>
+          <h2 class="text-4xl font-medium font-display tracking-tight text-primary-900">
+            Your Wishlist
+          </h2>
+          <p class="mt-4 text-primary-500 font-light max-w-xl text-lg italic">
+            A curated space for your most coveted pieces.
+          </p>
+        </div>
+
+        <!-- Collection / Board Tabs -->
+        <div class="flex items-center gap-2 overflow-x-auto pb-2 -mb-2 no-scrollbar">
+          @for (collection of collections(); track collection) {
+            <button
+              (click)="setCollection(collection)"
+              class="px-5 py-2 text-xs font-bold uppercase tracking-widest transition-all duration-300 whitespace-nowrap"
+              [class.bg-primary-900]="selectedCollection() === collection"
+              [class.text-white]="selectedCollection() === collection"
+              [class.text-primary-400]="selectedCollection() !== collection"
+              [class.hover:text-primary-900]="selectedCollection() !== collection"
+            >
+              {{ collection }}
+            </button>
+          }
+          <button
+            (click)="shareCollection()"
+            class="ml-4 p-2.5 text-primary-400 hover:text-primary-900 transition-colors border border-primary-100 hover:border-primary-900"
+            title="Share Lookbook"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.5"
+                d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6a3 3 0 100-2.684m0 2.684l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
     </div>
 
     @if (wishlistItems().length === 0) {

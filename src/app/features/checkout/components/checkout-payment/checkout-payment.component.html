@@ -6,15 +6,28 @@
         <label for="card-number" class="block text-sm font-medium leading-6 text-primary-900"
           >Card number</label
         >
-        <div class="mt-2">
+        <div class="mt-2 relative">
           <input
             type="text"
             id="card-number"
             formControlName="cardNumber"
             autocomplete="cc-number"
             placeholder="0000 0000 0000 0000"
-            class="block w-full rounded-none border-0 py-1.5 px-3 text-primary-900 shadow-sm ring-1 ring-inset ring-primary-200 placeholder:text-primary-400 focus:ring-2 focus:ring-inset focus:ring-primary-900 sm:text-sm sm:leading-6 bg-white"
+            [class.ring-red-500]="
+              form().get('cardNumber')?.touched && form().get('cardNumber')?.invalid
+            "
+            [class.ring-green-500]="
+              form().get('cardNumber')?.touched && form().get('cardNumber')?.valid
+            "
+            class="block w-full rounded-none border-0 py-1.5 px-3 text-primary-900 shadow-sm ring-1 ring-inset ring-primary-200 placeholder:text-primary-400 focus:ring-2 focus:ring-inset focus:ring-primary-900 sm:text-sm sm:leading-6 bg-white transition-all"
           />
+          <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+            <svg class="h-5 w-8 text-primary-400" fill="currentColor" viewBox="0 0 24 24">
+              <path
+                d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"
+              />
+            </svg>
+          </div>
         </div>
         @if (form().get('cardNumber')?.touched && form().get('cardNumber')?.invalid) {
           <p class="mt-2 text-sm text-red-600">Valid card number is required (16 digits)</p>
@@ -32,7 +45,9 @@
             formControlName="expiry"
             autocomplete="cc-exp"
             placeholder="MM/YY"
-            class="block w-full rounded-none border-0 py-1.5 px-3 text-primary-900 shadow-sm ring-1 ring-inset ring-primary-200 placeholder:text-primary-400 focus:ring-2 focus:ring-inset focus:ring-primary-900 sm:text-sm sm:leading-6 bg-white"
+            [class.ring-red-500]="form().get('expiry')?.touched && form().get('expiry')?.invalid"
+            [class.ring-green-500]="form().get('expiry')?.touched && form().get('expiry')?.valid"
+            class="block w-full rounded-none border-0 py-1.5 px-3 text-primary-900 shadow-sm ring-1 ring-inset ring-primary-200 placeholder:text-primary-400 focus:ring-2 focus:ring-inset focus:ring-primary-900 sm:text-sm sm:leading-6 bg-white transition-all"
           />
         </div>
         @if (form().get('expiry')?.touched && form().get('expiry')?.invalid) {
@@ -49,12 +64,46 @@
             formControlName="cvv"
             autocomplete="csc"
             placeholder="123"
-            class="block w-full rounded-none border-0 py-1.5 px-3 text-primary-900 shadow-sm ring-1 ring-inset ring-primary-200 placeholder:text-primary-400 focus:ring-2 focus:ring-inset focus:ring-primary-900 sm:text-sm sm:leading-6 bg-white"
+            [class.ring-red-500]="form().get('cvv')?.touched && form().get('cvv')?.invalid"
+            [class.ring-green-500]="form().get('cvv')?.touched && form().get('cvv')?.valid"
+            class="block w-full rounded-none border-0 py-1.5 px-3 text-primary-900 shadow-sm ring-1 ring-inset ring-primary-200 placeholder:text-primary-400 focus:ring-2 focus:ring-inset focus:ring-primary-900 sm:text-sm sm:leading-6 bg-white transition-all"
           />
         </div>
         @if (form().get('cvv')?.touched && form().get('cvv')?.invalid) {
           <p class="mt-2 text-sm text-red-600">3 or 4 digits</p>
         }
+      </div>
+    </div>
+
+    <!-- Trust Badges -->
+    <div class="mt-6 flex items-center justify-between border-t border-primary-100 pt-6">
+      <div class="flex items-center space-x-4">
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/5/5c/Visa_Inc._logo_%282021%E2%80%93present%29.svg"
+          alt="Visa"
+          class="h-4 opacity-50 grayscale hover:grayscale-0 transition-all cursor-default"
+        />
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg"
+          alt="Mastercard"
+          class="h-6 opacity-50 grayscale hover:grayscale-0 transition-all cursor-default"
+        />
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg"
+          alt="PayPal"
+          class="h-4 opacity-50 grayscale hover:grayscale-0 transition-all cursor-default"
+        />
+      </div>
+      <div class="flex items-center text-primary-400 text-xs uppercase tracking-tighter">
+        <svg class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+          />
+        </svg>
+        Secure SSL Checkout
       </div>
     </div>
   </div>

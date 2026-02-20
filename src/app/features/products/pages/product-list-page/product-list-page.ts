@@ -32,27 +32,56 @@ import { ProductEmptyState } from '../../components/product-empty-state/product-
   template: `
     <div class="bg-white min-h-screen">
       <!-- Hero Section -->
-      <app-product-list-hero />
+      <app-product-list-hero
+        [searchQuery]="searchQuery()"
+        (searchChange)="searchQuery.set($event)"
+      />
 
       <main class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div class="flex items-end justify-between border-b border-primary-100 pb-6 pt-12">
           <p class="text-sm text-primary-500 font-light">
-            Showing <span class="font-medium text-primary-900">{{ filteredProducts().length }}</span> results
+            Showing
+            <span class="font-medium text-primary-900">{{ filteredProducts().length }}</span>
+            results
           </p>
 
-          <div class="flex items-center">
+          <div class="flex items-center gap-4">
             <div class="relative inline-block text-left group">
               <label for="sort" class="sr-only">Sort by</label>
-              <select
-                id="sort"
-                class="cursor-pointer text-sm font-medium text-primary-900 hover:text-primary-600 border-none bg-transparent focus:ring-0 pr-8 py-0 pl-0 transition-colors uppercase tracking-widest text-xs"
-                (change)="updateSort($event)"
+              <div
+                class="flex items-center gap-2 border-b border-primary-100 pb-1 focus-within:border-primary-900 transition-colors"
               >
-                <option value="newest">Newest</option>
-                <option value="price-asc">Price: Low to High</option>
-                <option value="price-desc">Price: High to Low</option>
-                <option value="rating">Best Rating</option>
-              </select>
+                <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-primary-400"
+                  >Sort:</span
+                >
+                <select
+                  id="sort"
+                  class="cursor-pointer text-xs font-bold uppercase tracking-widest text-primary-900 hover:text-primary-600 border-none bg-transparent focus:ring-0 py-0 pl-0 pr-6 transition-colors appearance-none"
+                  (change)="updateSort($event)"
+                >
+                  <option value="newest">Featured</option>
+                  <option value="price-asc">Price: Low to High</option>
+                  <option value="price-desc">Price: High to Low</option>
+                  <option value="rating">Top Rated</option>
+                </select>
+                <div
+                  class="absolute inset-y-0 right-0 flex items-center pointer-events-none text-primary-400"
+                >
+                  <svg
+                    class="h-3 w-3"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="2.5"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+                    />
+                  </svg>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -65,10 +94,12 @@ import { ProductEmptyState } from '../../components/product-empty-state/product-
             <app-product-filters
               [categories]="categories()"
               [selectedCategory]="selectedCategory()"
+              [searchQuery]="searchQuery()"
               [minPrice]="minPrice()"
               [maxPrice]="maxPrice()"
               [minRating]="minRating()"
               (categoryChange)="selectedCategory.set($event)"
+              (searchChange)="searchQuery.set($event)"
               (minPriceChange)="minPrice.set($event)"
               (maxPriceChange)="maxPrice.set($event)"
               (ratingChange)="minRating.set($event)"
@@ -85,7 +116,9 @@ import { ProductEmptyState } from '../../components/product-empty-state/product-
                 </div>
               } @else {
                 @if (filteredProducts().length > 0) {
-                  <div class="grid grid-cols-1 gap-y-12 gap-x-6 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
+                  <div
+                    class="grid grid-cols-1 gap-y-12 gap-x-6 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8"
+                  >
                     @for (product of filteredProducts(); track product.id; let i = $index) {
                       <app-product-card
                         [product]="product"

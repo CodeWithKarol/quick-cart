@@ -1,5 +1,7 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, signal, inject } from '@angular/core';
 import { Product } from '../../models/product';
+import { ReviewForm } from './review-form.component';
+import { ToastService } from '../../../../shared/services/toast-service';
 
 export interface ReviewBreakdownItem {
   label: string;
@@ -17,9 +19,13 @@ export interface Review {
 @Component({
   selector: 'app-product-reviews',
   standalone: true,
+  imports: [ReviewForm],
   template: `
     <section aria-labelledby="reviews-heading" class="mt-16 border-t border-primary-200 pt-16">
-      <h2 id="reviews-heading" class="text-2xl font-medium font-display tracking-tight text-primary-900">
+      <h2
+        id="reviews-heading"
+        class="text-2xl font-medium font-display tracking-tight text-primary-900"
+      >
         Customer Reviews
       </h2>
 
@@ -69,20 +75,31 @@ export interface Review {
           </div>
 
           <div class="mt-10">
-            <h3 class="text-sm font-medium text-primary-900 uppercase tracking-widest">Share your thoughts</h3>
+            <h3 class="text-sm font-medium text-primary-900 uppercase tracking-widest">
+              Share your thoughts
+            </h3>
             <p class="mt-1 text-sm text-primary-500 font-light">
               If you’ve used this product, share your thoughts with other customers.
             </p>
-            <a
-              href="#"
-              class="mt-6 inline-flex w-full items-center justify-center border border-primary-200 bg-white px-8 py-2 text-sm font-bold uppercase tracking-widest text-primary-900 hover:bg-secondary-50 sm:w-auto lg:w-full transition-colors"
-            >
-              Write a review
-            </a>
+            @if (!isAddingReview()) {
+              <button
+                (click)="isAddingReview.set(true)"
+                class="mt-6 inline-flex w-full items-center justify-center border border-primary-200 bg-white px-8 py-2 text-sm font-bold uppercase tracking-widest text-primary-900 hover:bg-secondary-50 sm:w-auto lg:w-full transition-colors"
+              >
+                Write a review
+              </button>
+            }
+
+            @if (isAddingReview()) {
+              <app-review-form
+                (reviewSubmit)="handleReviewSubmit()"
+                (reviewCancel)="isAddingReview.set(false)"
+              />
+            }
           </div>
         </div>
 
-        <!-- Recent Reviews & Photos -->
+        <!-- Rest of the component remains same ... -->
         <div class="mt-16 lg:col-span-7 lg:col-start-6 lg:mt-0">
           <h3 class="text-lg font-medium text-primary-900 font-display">Customer Photos</h3>
           <div class="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-4 sm:gap-6 lg:grid-cols-4 lg:gap-8">
@@ -131,7 +148,9 @@ export interface Review {
                   <div class="mt-4 space-y-6 text-sm text-primary-600 italic font-light">
                     <p>{{ review.content }}</p>
                   </div>
-                  <p class="mt-2 text-xs text-primary-400 font-medium uppercase tracking-widest">Verified Purchase</p>
+                  <p class="mt-2 text-xs text-primary-400 font-medium uppercase tracking-widest">
+                    Verified Purchase
+                  </p>
                 </div>
               }
             </div>
@@ -143,10 +162,19 @@ export interface Review {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductReviews {
+  private toastService = inject(ToastService);
+
   product = input.required<Product>();
   reviewBreakdown = input.required<ReviewBreakdownItem[]>();
   customerPhotos = input.required<string[]>();
   reviews = input.required<Review[]>();
 
+  isAddingReview = signal(false);
+
   readonly stars = [0, 1, 2, 3, 4];
+
+  handleReviewSubmit() {
+    this.isAddingReview.set(false);
+    this.toastService.success('Review submitted. Your thoughts are now part of our community.');
+  }
 }

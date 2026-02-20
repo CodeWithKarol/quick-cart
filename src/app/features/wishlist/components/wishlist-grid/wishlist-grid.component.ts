@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { Product } from '../../../products/models/product';
 import { ProductCard } from '../../../products/components/product-card/product-card';
+import { WishlistProduct } from '../../models/wishlist-item';
 
 @Component({
   selector: 'app-wishlist-grid',
@@ -8,11 +9,16 @@ import { ProductCard } from '../../../products/components/product-card/product-c
   imports: [ProductCard],
   template: `
     <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-      @for (product of products(); track product.id; let i = $index) {
+      @for (
+        product of products();
+        track product.id + (product.wishlistVariant || '');
+        let i = $index
+      ) {
         <app-product-card
           [product]="product"
           [priority]="i < 4"
-          (addToCart)="addToCart.emit($event)"
+          [selectedVariant]="product.wishlistVariant"
+          (addToCart)="addToCart.emit(product)"
           (quickView)="quickView.emit($event)"
         ></app-product-card>
       }
@@ -21,7 +27,7 @@ import { ProductCard } from '../../../products/components/product-card/product-c
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WishlistGrid {
-  products = input.required<Product[]>();
-  addToCart = output<Product>();
+  products = input.required<WishlistProduct[]>();
+  addToCart = output<WishlistProduct>();
   quickView = output<Product>();
 }

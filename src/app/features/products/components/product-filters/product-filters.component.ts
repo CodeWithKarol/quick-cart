@@ -5,6 +5,37 @@ import { ChangeDetectionStrategy, Component, input, output } from '@angular/core
   standalone: true,
   template: `
     <form class="hidden lg:block lg:sticky lg:top-24 h-fit">
+      <!-- Sidebar Search -->
+      <div class="mb-10">
+        <h3 class="text-xs font-bold uppercase tracking-widest text-primary-900 mb-4">Search</h3>
+        <div class="relative group">
+          <input
+            type="text"
+            [value]="searchQuery()"
+            (input)="onSearchInput($event)"
+            placeholder="Search products..."
+            class="block w-full border-0 border-b border-primary-200 bg-transparent py-2 pl-4 pr-8 text-primary-900 placeholder:text-primary-300 focus:ring-0 focus:border-primary-900 sm:text-sm transition-colors"
+          />
+          <div
+            class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none text-primary-300 group-focus-within:text-primary-900 transition-colors"
+          >
+            <svg
+              class="h-4 w-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
+              />
+            </svg>
+          </div>
+        </div>
+      </div>
+
       <h3 class="sr-only">Categories</h3>
       <ul
         role="list"
@@ -17,7 +48,12 @@ import { ChangeDetectionStrategy, Component, input, output } from '@angular/core
           (click)="categoryChange.emit('')"
           (keyup.enter)="categoryChange.emit('')"
         >
-          <span [class.text-primary-900]="selectedCategory() === ''" [class.font-bold]="selectedCategory() === ''" class="group-hover:text-primary-900 transition-colors">All Categories</span>
+          <span
+            [class.text-primary-900]="selectedCategory() === ''"
+            [class.font-bold]="selectedCategory() === ''"
+            class="group-hover:text-primary-900 transition-colors"
+            >All Categories</span
+          >
         </li>
         @for (cat of categories(); track cat) {
           <li
@@ -27,7 +63,12 @@ import { ChangeDetectionStrategy, Component, input, output } from '@angular/core
             (click)="categoryChange.emit(cat)"
             (keyup.enter)="categoryChange.emit(cat)"
           >
-            <span [class.text-primary-900]="selectedCategory() === cat" [class.font-bold]="selectedCategory() === cat" class="group-hover:text-primary-900 transition-colors">{{ cat }}</span>
+            <span
+              [class.text-primary-900]="selectedCategory() === cat"
+              [class.font-bold]="selectedCategory() === cat"
+              class="group-hover:text-primary-900 transition-colors"
+              >{{ cat }}</span
+            >
             @if (selectedCategory() === cat) {
               <svg
                 class="h-4 w-4 text-primary-900"
@@ -95,7 +136,9 @@ import { ChangeDetectionStrategy, Component, input, output } from '@angular/core
                 class="peer h-4 w-4 border-primary-300 text-primary-900 focus:ring-primary-900"
               />
             </div>
-            <span class="text-sm text-primary-600 group-hover:text-primary-900 flex items-center transition-colors">
+            <span
+              class="text-sm text-primary-600 group-hover:text-primary-900 flex items-center transition-colors"
+            >
               4+ Stars
               <svg class="h-3 w-3 text-primary-900 ml-1" viewBox="0 0 20 20" fill="currentColor">
                 <path
@@ -107,7 +150,7 @@ import { ChangeDetectionStrategy, Component, input, output } from '@angular/core
             </span>
           </label>
           <label class="flex items-center gap-2 cursor-pointer group">
-             <div class="relative flex items-center">
+            <div class="relative flex items-center">
               <input
                 type="radio"
                 name="rating"
@@ -116,7 +159,9 @@ import { ChangeDetectionStrategy, Component, input, output } from '@angular/core
                 class="peer h-4 w-4 border-primary-300 text-primary-900 focus:ring-primary-900"
               />
             </div>
-            <span class="text-sm text-primary-600 group-hover:text-primary-900 flex items-center transition-colors">
+            <span
+              class="text-sm text-primary-600 group-hover:text-primary-900 flex items-center transition-colors"
+            >
               3+ Stars
               <svg class="h-3 w-3 text-primary-900 ml-1" viewBox="0 0 20 20" fill="currentColor">
                 <path
@@ -128,7 +173,7 @@ import { ChangeDetectionStrategy, Component, input, output } from '@angular/core
             </span>
           </label>
           <label class="flex items-center gap-2 cursor-pointer group">
-             <div class="relative flex items-center">
+            <div class="relative flex items-center">
               <input
                 type="radio"
                 name="rating"
@@ -137,7 +182,9 @@ import { ChangeDetectionStrategy, Component, input, output } from '@angular/core
                 class="peer h-4 w-4 border-primary-300 text-primary-900 focus:ring-primary-900"
               />
             </div>
-            <span class="text-sm text-primary-600 group-hover:text-primary-900 transition-colors">All Ratings</span>
+            <span class="text-sm text-primary-600 group-hover:text-primary-900 transition-colors"
+              >All Ratings</span
+            >
           </label>
         </div>
       </div>
@@ -158,15 +205,22 @@ import { ChangeDetectionStrategy, Component, input, output } from '@angular/core
 export class ProductFilters {
   categories = input.required<string[]>();
   selectedCategory = input.required<string>();
+  searchQuery = input<string>('');
   minPrice = input<number | null>(null);
   maxPrice = input<number | null>(null);
   minRating = input<number>(0);
 
   categoryChange = output<string>();
+  searchChange = output<string>();
   minPriceChange = output<number | null>();
   maxPriceChange = output<number | null>();
   ratingChange = output<number>();
   resetFilters = output<void>();
+
+  onSearchInput(event: Event) {
+    const input = event.target as HTMLInputElement;
+    this.searchChange.emit(input.value);
+  }
 
   updateMinPrice(event: Event) {
     const input = event.target as HTMLInputElement;

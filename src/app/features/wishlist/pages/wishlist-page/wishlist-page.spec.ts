@@ -5,6 +5,8 @@ import { WishlistService } from '../../services/wishlist-store';
 import { CartService } from '../../../cart/services/cart-store';
 import { of } from 'rxjs';
 import { Product } from '../../../products/models/product';
+import { WishlistItem } from '../../services/wishlist-store';
+import { WishlistProduct } from '../../models/wishlist-item';
 import { NO_ERRORS_SCHEMA, signal, WritableSignal } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
@@ -13,7 +15,8 @@ describe('WishlistPage', () => {
   let fixture: ComponentFixture<WishlistPage>;
   let productServiceSpy: { getProducts: ReturnType<typeof vi.fn> };
   let wishlistServiceSpy: {
-    wishlist: WritableSignal<number[]>;
+    wishlist: WritableSignal<WishlistItem[]>;
+    collections: WritableSignal<string[]>;
     isInWishlist: ReturnType<typeof vi.fn>;
   };
   let cartServiceSpy: { addToCart: ReturnType<typeof vi.fn> };
@@ -47,8 +50,9 @@ describe('WishlistPage', () => {
     };
 
     wishlistServiceSpy = {
-      // Mock signal containing IDs
-      wishlist: signal([1]),
+      // Mock signal containing Wishlist items
+      wishlist: signal<WishlistItem[]>([{ productId: 1, collection: 'All' }]),
+      collections: signal<string[]>(['All']),
       isInWishlist: vi.fn().mockReturnValue(true),
     };
 
@@ -77,13 +81,18 @@ describe('WishlistPage', () => {
 
   it('should create and calculate wishlistItems correctly', () => {
     expect(component).toBeTruthy();
-    // Signal resolution: wishlist is [1], so wishlisted products is just mockProducts[0]
-    expect(component.wishlistItems()).toEqual([mockProducts[0]]);
+    const expectedItem: WishlistProduct = {
+      ...mockProducts[0],
+      wishlistVariant: undefined,
+      wishlistCollection: 'All',
+    };
+    expect(component.wishlistItems()).toEqual([expectedItem]);
   });
 
   it('should call cartService when onAddToCart is triggered', () => {
-    component.onAddToCart(mockProducts[0]);
-    expect(cartServiceSpy.addToCart).toHaveBeenCalledWith(mockProducts[0]);
+    const item: WishlistProduct = { ...mockProducts[0], wishlistCollection: 'All' };
+    component.onAddToCart(item);
+    expect(cartServiceSpy.addToCart).toHaveBeenCalledWith(item, undefined);
   });
 
   it('should open quick view when onQuickView is triggered', () => {

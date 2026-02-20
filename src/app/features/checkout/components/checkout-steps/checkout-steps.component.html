@@ -1,38 +1,101 @@
 <nav aria-label="Progress" class="mb-12">
-  <ol role="list" class="space-y-4 md:flex md:space-y-0 md:space-x-8">
+  <ol role="list" class="mx-auto flex w-full max-w-md items-start">
     @for (step of steps(); track step; let i = $index) {
-      <li class="md:flex-1">
-        @if (currentStep() === step) {
-          <a
-            class="group flex flex-col border-l-4 border-primary-900 py-2 pl-4 md:border-l-0 md:border-t-4 md:pl-0 md:pt-4"
-            aria-current="step"
-          >
-            <span class="text-xs font-bold uppercase tracking-widest text-primary-900">Step {{ i + 1 }}</span>
-            <span class="text-sm font-medium font-display text-primary-900 capitalize">{{ step }}</span>
-          </a>
-        } @else if (steps().indexOf(currentStep()) > i) {
-          <a
-            (click)="stepClick.emit(step)"
-            (keyup.enter)="stepClick.emit(step)"
-            tabindex="0"
-            role="button"
-            class="group flex flex-col border-l-4 border-primary-900 py-2 pl-4 hover:border-primary-700 md:border-l-0 md:border-t-4 md:pl-0 md:pt-4 cursor-pointer"
-          >
-            <span class="text-xs font-bold uppercase tracking-widest text-primary-900 group-hover:text-primary-700"
-              >Step {{ i + 1 }}</span
-            >
-            <span class="text-sm font-medium font-display text-primary-900 group-hover:text-primary-700 capitalize">{{
-              step
-            }}</span>
-          </a>
-        } @else {
+      <li
+        class="relative flex-1"
+        [class.pr-8]="i !== steps().length - 1"
+        [class.sm:pr-20]="i !== steps().length - 1"
+      >
+        <!-- Connecting Line -->
+        @if (i !== steps().length - 1) {
           <div
-            class="group flex flex-col border-l-4 border-primary-200 py-2 pl-4 md:border-l-0 md:border-t-4 md:pl-0 md:pt-4"
+            class="absolute inset-0 left-1/2 top-3 -ml-px flex h-0.5 w-[calc(100%+2rem)] sm:w-[calc(100%+5rem)]"
+            aria-hidden="true"
           >
-            <span class="text-xs font-bold uppercase tracking-widest text-primary-400">Step {{ i + 1 }}</span>
-            <span class="text-sm font-medium font-display text-primary-400 capitalize">{{ step }}</span>
+            <div
+              class="w-full bg-primary-200 transition-colors duration-500 rounded-full"
+              [class.bg-primary-900]="steps().indexOf(currentStep()) > i"
+            ></div>
           </div>
         }
+
+        <!-- Step Indicator -->
+        <a
+          [attr.role]="steps().indexOf(currentStep()) > i ? 'button' : null"
+          [attr.tabindex]="steps().indexOf(currentStep()) > i ? '0' : null"
+          (click)="steps().indexOf(currentStep()) > i ? stepClick.emit(step) : null"
+          (keyup.enter)="steps().indexOf(currentStep()) > i ? stepClick.emit(step) : null"
+          class="group relative flex flex-col items-center justify-start text-center outline-none transition-all"
+          [class.cursor-pointer]="steps().indexOf(currentStep()) > i"
+          [attr.aria-current]="currentStep() === step ? 'step' : null"
+        >
+          <!-- The Dot -->
+          <span class="flex h-6 w-full items-center justify-center relative z-10 bg-secondary-50">
+            @if (currentStep() === step) {
+              <!-- Active Step: Ringed Dot -->
+              <span
+                class="relative flex h-2.5 w-2.5 items-center justify-center rounded-full bg-primary-900"
+              >
+                <span
+                  class="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary-900 opacity-20"
+                ></span>
+                <span
+                  class="absolute inline-flex h-5 w-5 rounded-full ring-1 ring-primary-900 ring-offset-2 ring-offset-secondary-50"
+                ></span>
+              </span>
+            } @else if (steps().indexOf(currentStep()) > i) {
+              <!-- Completed Step: Solid Dot with Check -->
+              <span
+                class="flex h-5 w-5 items-center justify-center rounded-full bg-primary-900 transition-colors group-hover:bg-primary-700"
+              >
+                <svg
+                  class="h-3 w-3 text-white"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              </span>
+            } @else {
+              <!-- Upcoming Step: Hollow Outline -->
+              <span
+                class="flex h-3 w-3 items-center justify-center rounded-full border border-primary-300 bg-secondary-50"
+              ></span>
+            }
+          </span>
+
+          <!-- Step Text -->
+          <div class="mt-4 flex flex-col items-center">
+            <span
+              class="text-[9px] font-black uppercase tracking-[0.2em] transition-colors"
+              [class.text-primary-900]="
+                currentStep() === step || steps().indexOf(currentStep()) > i
+              "
+              [class.text-primary-300]="
+                currentStep() !== step && steps().indexOf(currentStep()) <= i
+              "
+              [class.group-hover:text-primary-700]="steps().indexOf(currentStep()) > i"
+            >
+              Step 0{{ i + 1 }}
+            </span>
+            <span
+              class="mt-1 text-[11px] sm:text-xs font-bold font-display capitalize transition-colors whitespace-nowrap"
+              [class.text-primary-950]="currentStep() === step"
+              [class.text-primary-600]="steps().indexOf(currentStep()) > i"
+              [class.text-primary-400]="
+                currentStep() !== step && steps().indexOf(currentStep()) <= i
+              "
+              [class.group-hover:text-primary-800]="steps().indexOf(currentStep()) > i"
+            >
+              {{ step }}
+            </span>
+          </div>
+        </a>
       </li>
     }
   </ol>

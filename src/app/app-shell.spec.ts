@@ -95,14 +95,15 @@ describe('AppShell', () => {
 
     it('should render the promo bar with correct text', () => {
       const compiled = fixture.nativeElement as HTMLElement;
-      const promoBar = compiled.querySelector('.bg-secondary-50');
+      // Search for any element starting with the secondary background color class
+      const promoBar = compiled.querySelector('[class*="bg-secondary-50"]');
 
       expect(promoBar).toBeTruthy();
-      expect(promoBar?.textContent).toContain('Get free delivery on orders over $100');
+      expect(promoBar?.textContent).toContain('Free delivery on orders over $100');
 
       const promoLink = promoBar?.querySelector('a');
       expect(promoLink).toBeTruthy();
-      expect(promoLink?.textContent).toContain('Browse products');
+      expect(promoLink?.textContent).toContain('Browse Collections');
     });
 
     it('should have the correct base layout classes', () => {

@@ -2,9 +2,11 @@ import { Component, inject, effect, ChangeDetectionStrategy } from '@angular/cor
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { CartService } from '../../services/cart-store';
+import { WishlistService } from '../../../wishlist/services/wishlist-store';
 import { CartDrawerItemComponent } from './cart-drawer-item.component';
 import { CartDrawerEmptyComponent } from './cart-drawer-empty.component';
 import { CartDrawerTrustBadgesComponent } from './cart-drawer-trust-badges.component';
+import { CartShippingProgressComponent } from './cart-shipping-progress.component';
 
 @Component({
   selector: 'app-cart-drawer',
@@ -14,11 +16,17 @@ import { CartDrawerTrustBadgesComponent } from './cart-drawer-trust-badges.compo
     CartDrawerItemComponent,
     CartDrawerEmptyComponent,
     CartDrawerTrustBadgesComponent,
+    CartShippingProgressComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     @if (isOpen()) {
-      <div class="relative z-50" aria-labelledby="slide-over-title" role="dialog" aria-modal="true">
+      <div
+        class="relative z-[60]"
+        aria-labelledby="slide-over-title"
+        role="dialog"
+        aria-modal="true"
+      >
         <!-- Background backdrop -->
         <div
           class="fixed inset-0 bg-primary-950/40 backdrop-blur-sm transition-opacity"
@@ -68,14 +76,25 @@ import { CartDrawerTrustBadgesComponent } from './cart-drawer-trust-badges.compo
 
                     <div class="mt-8">
                       <div class="flow-root">
+                        @if (cartItems().length > 0) {
+                          <app-cart-shipping-progress />
+                        }
                         <ul role="list" class="-my-6 divide-y divide-primary-100">
                           @if (cartItems().length === 0) {
                             <app-cart-drawer-empty />
                           }
-                          @for (item of cartItems(); track item.product.id; let first = $first) {
+                          @for (
+                            item of cartItems();
+                            track item.product.id + '-' + (item.variant || '');
+                            let first = $first
+                          ) {
                             <app-cart-drawer-item
                               [item]="item"
                               [priority]="first"
+                              (quantityChange)="
+                                updateItemQuantity(item.product.id, $event, item.variant)
+                              "
+                              (saveForLater)="onSaveForLater(item.product.id, item.variant)"
                               (remove)="removeItem(item.product.id, item.variant)"
                               (navigate)="close()"
                             />
@@ -134,6 +153,7 @@ import { CartDrawerTrustBadgesComponent } from './cart-drawer-trust-badges.compo
 })
 export class CartDrawerComponent {
   private cartService = inject(CartService);
+  private wishlistService = inject(WishlistService);
 
   isOpen = this.cartService.isDrawerOpen;
   cartItems = this.cartService.cartItems;
@@ -154,6 +174,15 @@ export class CartDrawerComponent {
   }
 
   removeItem(id: number, variant?: string) {
+    this.cartService.removeFromCart(id, variant);
+  }
+
+  updateItemQuantity(id: number, quantity: number, variant?: string) {
+    this.cartService.updateQuantity(id, quantity, variant);
+  }
+
+  onSaveForLater(id: number, variant?: string) {
+    this.wishlistService.add(id, variant);
     this.cartService.removeFromCart(id, variant);
   }
 }
