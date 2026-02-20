@@ -1,11 +1,20 @@
 import { Component, inject, effect, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule, NgOptimizedImage } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { CartService } from '../../services/cart-store';
+import { CartDrawerItemComponent } from './cart-drawer-item.component';
+import { CartDrawerEmptyComponent } from './cart-drawer-empty.component';
+import { CartDrawerTrustBadgesComponent } from './cart-drawer-trust-badges.component';
 
 @Component({
   selector: 'app-cart-drawer',
-  imports: [CommonModule, RouterLink, NgOptimizedImage],
+  imports: [
+    CommonModule,
+    RouterLink,
+    CartDrawerItemComponent,
+    CartDrawerEmptyComponent,
+    CartDrawerTrustBadgesComponent,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     @if (isOpen()) {
@@ -25,7 +34,10 @@ import { CartService } from '../../services/cart-store';
                 <div class="flex h-full flex-col bg-white shadow-xl">
                   <div class="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
                     <div class="flex items-start justify-between">
-                      <h2 class="text-xl font-medium font-display text-primary-900" id="slide-over-title">
+                      <h2
+                        class="text-xl font-medium font-display text-primary-900"
+                        id="slide-over-title"
+                      >
                         Shopping cart
                       </h2>
                       <div class="ml-3 flex h-7 items-center">
@@ -58,67 +70,15 @@ import { CartService } from '../../services/cart-store';
                       <div class="flow-root">
                         <ul role="list" class="-my-6 divide-y divide-primary-100">
                           @if (cartItems().length === 0) {
-                            <li class="py-12 text-center flex flex-col items-center">
-                              <svg class="h-10 w-10 text-primary-200 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                              </svg>
-                              <p class="text-primary-500 font-light">Your cart is empty</p>
-                            </li>
+                            <app-cart-drawer-empty />
                           }
                           @for (item of cartItems(); track item.product.id; let first = $first) {
-                            <li class="flex py-6">
-                              <div
-                                class="relative h-24 w-24 flex-shrink-0 overflow-hidden border border-primary-100 bg-secondary-50"
-                              >
-                                <img
-                                  [ngSrc]="item.product.imageUrl"
-                                  [alt]="item.product.name"
-                                  fill
-                                  [priority]="first"
-                                  class="h-full w-full object-cover object-center"
-                                />
-                              </div>
-
-                              <div class="ml-4 flex flex-1 flex-col">
-                                <div>
-                                  <div
-                                    class="flex justify-between text-base font-medium text-primary-900"
-                                  >
-                                    <h3>
-                                      <a
-                                        [routerLink]="['/product', item.product.id]"
-                                        (click)="close()"
-                                        class="font-display hover:text-primary-600 transition-colors"
-                                      >
-                                        {{ item.product.name }}
-                                      </a>
-                                    </h3>
-                                    <p class="ml-4 font-light">{{ item.product.price | currency }}</p>
-                                  </div>
-                                  <p class="mt-1 text-sm text-primary-500 font-light">
-                                    {{ item.product.category }}
-                                    @if (item.variant) {
-                                      <span class="ml-2 text-xs text-primary-400"
-                                        >Variant: {{ item.variant }}</span
-                                      >
-                                    }
-                                  </p>
-                                </div>
-                                <div class="flex flex-1 items-end justify-between text-sm">
-                                  <p class="text-primary-500 font-light">Qty {{ item.quantity }}</p>
-
-                                  <div class="flex">
-                                    <button
-                                      type="button"
-                                      (click)="removeItem(item.product.id, item.variant)"
-                                      class="font-medium text-primary-900 hover:text-accent-600 transition-colors text-xs uppercase tracking-widest"
-                                    >
-                                      Remove
-                                    </button>
-                                  </div>
-                                </div>
-                              </div>
-                            </li>
+                            <app-cart-drawer-item
+                              [item]="item"
+                              [priority]="first"
+                              (remove)="removeItem(item.product.id, item.variant)"
+                              (navigate)="close()"
+                            />
                           }
                         </ul>
                       </div>
@@ -160,26 +120,7 @@ import { CartService } from '../../services/cart-store';
 
                     <!-- Trust Badges -->
                     <div class="mt-8 border-t border-primary-100 pt-6">
-                      <div class="flex items-center justify-center space-x-8 text-primary-400">
-                        <div class="flex flex-col items-center gap-1">
-                          <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                          </svg>
-                          <span class="text-[10px] uppercase tracking-widest">Secure</span>
-                        </div>
-                        <div class="flex flex-col items-center gap-1">
-                          <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                          </svg>
-                          <span class="text-[10px] uppercase tracking-widest">Free Ship</span>
-                        </div>
-                        <div class="flex flex-col items-center gap-1">
-                          <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                          </svg>
-                          <span class="text-[10px] uppercase tracking-widest">Returns</span>
-                        </div>
-                      </div>
+                      <app-cart-drawer-trust-badges />
                     </div>
                   </div>
                 </div>

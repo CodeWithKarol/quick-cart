@@ -1,21 +1,19 @@
 import { Component, ChangeDetectionStrategy, input, output } from '@angular/core';
-import { CommonModule, NgOptimizedImage } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { CartItem } from '../../models/cart-item';
 
 @Component({
   selector: 'app-cart-item',
-  imports: [CommonModule, RouterLink, NgOptimizedImage],
+  imports: [CommonModule, RouterLink],
   template: `
     <div class="flex-shrink-0">
       <div
         class="relative h-24 w-24 rounded-md border border-gray-200 overflow-hidden sm:h-48 sm:w-48"
       >
         <img
-          [ngSrc]="item().product.imageUrl"
+          [src]="item().product.imageUrl"
           [alt]="item().product.name"
-          [priority]="priority()"
-          fill
           class="h-full w-full object-cover object-center"
         />
       </div>
