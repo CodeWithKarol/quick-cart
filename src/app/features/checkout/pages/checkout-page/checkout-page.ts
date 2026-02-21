@@ -38,9 +38,52 @@ export class CheckoutPage {
 
   billingSameAsShipping = signal(true);
 
+  // Promo code logic
+  appliedPromo = signal<string | null>(null);
+  promoError = signal<string | null>(null);
+
+  discount = computed(() => {
+    if (this.appliedPromo() === 'SAVE10') {
+      return this.cartTotal() * 0.1;
+    }
+    return 0;
+  });
+
   deliveryMethod = signal<'standard' | 'express'>('standard');
   shippingCost = computed(() => (this.deliveryMethod() === 'express' ? 15.0 : 5.0));
-  total = computed(() => this.cartTotal() + this.shippingCost());
+
+  deliveryDates = computed(() => {
+    const today = new Date();
+    const min = new Date(today);
+    const max = new Date(today);
+
+    if (this.deliveryMethod() === 'express') {
+      min.setDate(today.getDate() + 1);
+      max.setDate(today.getDate() + 2);
+    } else {
+      min.setDate(today.getDate() + 5);
+      max.setDate(today.getDate() + 7);
+    }
+
+    const options: Intl.DateTimeFormatOptions = {
+      month: 'short',
+      day: 'numeric',
+      weekday: 'short',
+    };
+    return `${min.toLocaleDateString('en-US', options)} - ${max.toLocaleDateString('en-US', options)}`;
+  });
+
+  total = computed(() => this.cartTotal() + this.shippingCost() - this.discount());
+
+  applyPromo(code: string) {
+    if (code.trim().toUpperCase() === 'SAVE10') {
+      this.appliedPromo.set('SAVE10');
+      this.promoError.set(null);
+    } else {
+      this.promoError.set('Invalid promo code');
+      this.appliedPromo.set(null);
+    }
+  }
 
   checkoutForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],

@@ -25,6 +25,19 @@ export class CartService {
   // Expose the cartItems signal as readonly
   readonly cartItems = this.cartItemsSignal.asReadonly();
 
+  // Free shipping logic
+  readonly FREE_SHIPPING_THRESHOLD = 100;
+
+  readonly remainingForFreeShipping = computed(() => {
+    const total = this.cartTotal();
+    return Math.max(0, this.FREE_SHIPPING_THRESHOLD - total);
+  });
+
+  readonly freeShippingProgress = computed(() => {
+    const total = this.cartTotal();
+    return Math.min(100, (total / this.FREE_SHIPPING_THRESHOLD) * 100);
+  });
+
   // Drawer state
   readonly isDrawerOpen = signal(false);
 

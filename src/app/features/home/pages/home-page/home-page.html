@@ -1,12 +1,19 @@
 <app-home-hero></app-home-hero>
-<app-home-philosophy></app-home-philosophy>
-<app-home-features></app-home-features>
+<app-home-categories></app-home-categories>
 <app-home-featured-products
   [products]="featuredProducts()"
   (addToCart)="onAddToCart($event)"
   (quickView)="onQuickView($event)"
 >
 </app-home-featured-products>
+<app-home-philosophy></app-home-philosophy>
+<app-home-testimonials></app-home-testimonials>
+<app-home-features></app-home-features>
+<app-home-recently-viewed
+  (addToCart)="onAddToCart($event)"
+  (quickView)="onQuickView($event)"
+></app-home-recently-viewed>
+<app-home-faq></app-home-faq>
 <app-home-newsletter></app-home-newsletter>
 
 <app-quick-view

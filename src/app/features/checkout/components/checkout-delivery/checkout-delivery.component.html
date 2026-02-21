@@ -16,7 +16,9 @@
         <span class="flex flex-1">
           <span class="flex flex-col">
             <span class="block text-sm font-medium text-primary-900">Standard</span>
-            <span class="mt-1 flex items-center text-sm text-primary-500 font-light">4–10 business days</span>
+            <span class="mt-1 flex items-center text-sm text-primary-500 font-light"
+              >Arrives by {{ standardDeliveryDate() }}</span
+            >
             <span class="mt-6 text-sm font-medium text-primary-900">$5.00</span>
           </span>
         </span>
@@ -56,7 +58,9 @@
         <span class="flex flex-1">
           <span class="flex flex-col">
             <span class="block text-sm font-medium text-primary-900">Express</span>
-            <span class="mt-1 flex items-center text-sm text-primary-500 font-light">2–5 business days</span>
+            <span class="mt-1 flex items-center text-sm text-primary-500 font-light"
+              >Arrives by {{ expressDeliveryDate() }}</span
+            >
             <span class="mt-6 text-sm font-medium text-primary-900">$15.00</span>
           </span>
         </span>

@@ -53,6 +53,8 @@ export class ProductService {
       id: 3,
       name: 'Running Shoes',
       price: 79.99,
+      originalPrice: 120.0,
+      stockCount: 3,
       description: 'Comfortable running shoes for all terrains.',
       imageUrl:
         'https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
@@ -75,6 +77,7 @@ export class ProductService {
       id: 5,
       name: 'City Runner Sneakers',
       price: 129.99,
+      stockCount: 2,
       description: 'Stylish black sneakers perfect for urban life.',
       imageUrl:
         'https://images.unsplash.com/photo-1491553895911-0055eca6402d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
@@ -108,6 +111,7 @@ export class ProductService {
       id: 8,
       name: 'Urban Backpack',
       price: 49.99,
+      originalPrice: 65.0,
       description: 'Durable backpack for travel and school.',
       imageUrl:
         'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',

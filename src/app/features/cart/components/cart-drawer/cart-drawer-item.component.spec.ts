@@ -68,4 +68,26 @@ describe('CartDrawerItemComponent', () => {
 
     expect(emitted).toBe(true);
   });
+
+  it('should emit quantityChange event', () => {
+    let emittedQuantity: number | undefined;
+    component.quantityChange.subscribe((q) => {
+      emittedQuantity = q;
+    });
+
+    component.onUpdateQuantity(3);
+
+    expect(emittedQuantity).toBe(3);
+  });
+
+  it('should emit saveForLater event', () => {
+    let emitted = false;
+    component.saveForLater.subscribe(() => {
+      emitted = true;
+    });
+
+    component.onSaveForLater();
+
+    expect(emitted).toBe(true);
+  });
 });

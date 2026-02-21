@@ -1,4 +1,4 @@
-import { Component, input, output, ChangeDetectionStrategy } from '@angular/core';
+import { Component, input, output, ChangeDetectionStrategy, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -13,4 +13,16 @@ export class CheckoutDeliveryComponent {
   deliveryMethodChange = output<'standard' | 'express'>();
   continue = output<void>();
   back = output<void>();
+
+  standardDeliveryDate = computed(() => {
+    const d = new Date();
+    d.setDate(d.getDate() + 5);
+    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', weekday: 'short' });
+  });
+
+  expressDeliveryDate = computed(() => {
+    const d = new Date();
+    d.setDate(d.getDate() + 1);
+    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', weekday: 'short' });
+  });
 }

@@ -19,6 +19,7 @@ import { ProductGallery } from '../../components/product-gallery/product-gallery
 import { ProductDetails } from '../../components/product-details/product-details.component';
 import { ProductReviews } from '../../components/product-reviews/product-reviews.component';
 import { Breadcrumb } from '../../../../shared/components/breadcrumb/breadcrumb';
+import { ProductBundle } from '../../components/product-bundle/product-bundle.component';
 
 @Component({
   selector: 'app-product-overview',
@@ -31,6 +32,7 @@ import { Breadcrumb } from '../../../../shared/components/breadcrumb/breadcrumb'
     ProductDetails,
     ProductReviews,
     Breadcrumb,
+    ProductBundle,
   ],
   styles: [
     `
@@ -78,6 +80,14 @@ import { Breadcrumb } from '../../../../shared/components/breadcrumb/breadcrumb'
               [reviews]="mockReviews"
             />
 
+            <!-- Bundle Section -->
+            @if (bundleProducts().length > 0) {
+              <app-product-bundle
+                [products]="bundleProducts()"
+                (addAllToCart)="onAddAllToCart($event)"
+              />
+            }
+
             @if (relatedProducts().length > 0) {
               <div class="mt-16 border-t border-primary-200 pt-16">
                 <h2 class="text-2xl font-medium font-display tracking-tight text-primary-900">
@@ -100,7 +110,9 @@ import { Breadcrumb } from '../../../../shared/components/breadcrumb/breadcrumb'
 
             @if (recentlyViewedProducts().length > 0) {
               <div class="mt-16 border-t border-primary-200 pt-16">
-                <h2 class="text-2xl font-medium font-display tracking-tight text-primary-900">Recently Viewed</h2>
+                <h2 class="text-2xl font-medium font-display tracking-tight text-primary-900">
+                  Recently Viewed
+                </h2>
                 <div
                   class="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8"
                 >
@@ -130,7 +142,9 @@ import { Breadcrumb } from '../../../../shared/components/breadcrumb/breadcrumb'
         >
           <div class="flex items-center justify-between gap-4">
             <div class="flex-1 min-w-0">
-              <p class="text-sm font-medium text-primary-900 truncate font-display">{{ product.name }}</p>
+              <p class="text-sm font-medium text-primary-900 truncate font-display">
+                {{ product.name }}
+              </p>
               <p class="text-sm text-primary-500">{{ product.price | currency }}</p>
             </div>
             <button
@@ -165,6 +179,7 @@ export class ProductOverviewPage implements OnInit {
   selectedImage = signal<string>('');
   selectedColor = signal<string | null>(null);
   selectedQuickViewProduct = signal<Product | undefined>(undefined);
+  bundleProducts = signal<Product[]>([]);
 
   breadcrumbs = computed(() => {
     const p = this.product();
@@ -253,7 +268,19 @@ export class ProductOverviewPage implements OnInit {
         .filter((p) => ids.includes(p.id) && p.id !== currentId) // Exclude current
         .sort((a, b) => ids.indexOf(a.id) - ids.indexOf(b.id));
       this.recentlyViewedProducts.set(viewed);
+
+      // Populate bundle with 2-3 items from same category
+      if (currentId) {
+        const bundle = products
+          .filter((p) => p.category === this.product()?.category && p.id !== currentId)
+          .slice(0, 3);
+        this.bundleProducts.set(bundle);
+      }
     });
+  }
+
+  onAddAllToCart(products: Product[]) {
+    products.forEach((p) => this.cartService.addToCart(p));
   }
 
   addToCart(product: Product) {

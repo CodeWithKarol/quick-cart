@@ -130,4 +130,30 @@ describe('CheckoutPage', () => {
 
     vi.useRealTimers();
   });
+
+  it('should apply valid promo code and calculate discount', () => {
+    // cartTotal is mocked to 100
+    component.applyPromo('SAVE10');
+    expect(component.appliedPromo()).toBe('SAVE10');
+    expect(component.discount()).toBe(10.0);
+    expect(component.promoError()).toBeNull();
+    expect(component.total()).toBe(95.0); // 100 - 10 (discount) + 5 (shipping)
+  });
+
+  it('should show error for invalid promo code', () => {
+    component.applyPromo('INVALID');
+    expect(component.appliedPromo()).toBeNull();
+    expect(component.discount()).toBe(0);
+    expect(component.promoError()).toBe('Invalid promo code');
+    expect(component.total()).toBe(105.0);
+  });
+
+  it('should calculate estimated delivery dates', () => {
+    const dates = component.deliveryDates();
+    expect(dates).toContain('-'); // Basic check for range format
+
+    component.setDeliveryMethod('express');
+    const expressDates = component.deliveryDates();
+    expect(expressDates).not.toBe(dates);
+  });
 });

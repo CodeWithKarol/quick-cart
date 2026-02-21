@@ -1,0 +1,70 @@
+<section class="bg-white py-24 sm:py-32 border-t border-primary-50">
+  <div class="mx-auto max-w-7xl px-6 lg:px-8">
+    <div class="mx-auto max-w-4xl divide-y divide-primary-900/10">
+      <div class="mb-16">
+        <h2 class="text-base font-semibold leading-7 text-accent-600 tracking-widest uppercase">
+          Answers
+        </h2>
+        <p class="mt-2 text-3xl font-bold tracking-tight text-primary-900 sm:text-4xl font-display">
+          Common Questions
+        </p>
+      </div>
+      <dl class="mt-10 space-y-6 divide-y divide-primary-900/10">
+        @for (faq of faqs(); track faq.question; let i = $index) {
+          <div class="pt-6">
+            <dt>
+              <button
+                type="button"
+                class="flex w-full items-start justify-between text-left text-primary-900 group"
+                (click)="toggle(i)"
+              >
+                <span
+                  class="text-lg font-medium leading-7 font-display transition-colors group-hover:text-primary-600"
+                  >{{ faq.question }}</span
+                >
+                <span class="ml-6 flex h-7 items-center">
+                  @if (faq.open) {
+                    <svg
+                      class="h-6 w-6 text-primary-400"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="1.5"
+                        d="M18 12H6"
+                      />
+                    </svg>
+                  } @else {
+                    <svg
+                      class="h-6 w-6 text-primary-400 transition-transform group-hover:text-primary-600"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="1.5"
+                        d="M12 6v12m6-6H6"
+                      />
+                    </svg>
+                  }
+                </span>
+              </button>
+            </dt>
+            <dd
+              class="mt-4 pr-12 overflow-hidden transition-all duration-300"
+              [style.max-height]="faq.open ? '200px' : '0'"
+              [style.opacity]="faq.open ? '1' : '0'"
+            >
+              <p class="text-base leading-7 text-primary-600 font-light">{{ faq.answer }}</p>
+            </dd>
+          </div>
+        }
+      </dl>
+    </div>
+  </div>
+</section>

@@ -9,4 +9,6 @@ export interface Product {
   reviews: number;
   images?: string[];
   colors?: { name: string; class: string; selectedClass: string }[];
+  originalPrice?: number;
+  stockCount?: number;
 }

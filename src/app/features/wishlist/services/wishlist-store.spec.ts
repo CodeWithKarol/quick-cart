@@ -7,7 +7,12 @@ import { Product } from '../../products/models/product';
 
 describe('WishlistService', () => {
   let service: WishlistService;
-  let toastServiceSpy: { show: ReturnType<typeof vi.fn> };
+  let toastServiceSpy: {
+    show: ReturnType<typeof vi.fn>;
+    success: ReturnType<typeof vi.fn>;
+    info: ReturnType<typeof vi.fn>;
+    error: ReturnType<typeof vi.fn>;
+  };
   let productServiceSpy: { getProducts: ReturnType<typeof vi.fn> };
 
   const mockProducts: Product[] = [
@@ -36,6 +41,9 @@ describe('WishlistService', () => {
   beforeEach(() => {
     toastServiceSpy = {
       show: vi.fn(),
+      success: vi.fn(),
+      info: vi.fn(),
+      error: vi.fn(),
     };
 
     productServiceSpy = {
@@ -73,12 +81,18 @@ describe('WishlistService', () => {
 
   it('should load wishlist from localStorage on init and remove invalid product IDs', () => {
     // Both 1 and 99 are in localStorage. 99 is not in mockProducts.
-    localStorage.setItem('wishlist', JSON.stringify([1, 99]));
+    localStorage.setItem(
+      'wishlist_v2',
+      JSON.stringify([
+        { productId: 1, collection: 'All' },
+        { productId: 99, collection: 'All' },
+      ]),
+    );
 
     service = createService();
 
     // The constructor calls getProducts(), which filters out 99.
-    expect(service.wishlist()).toEqual([1]);
+    expect(service.wishlist()).toEqual([{ productId: 1, collection: 'All' }]);
   });
 
   it('should handle invalid JSON in localStorage gracefully', () => {
@@ -94,21 +108,21 @@ describe('WishlistService', () => {
     service.toggle(1);
     TestBed.flushEffects(); // trigger effect
 
-    expect(service.wishlist()).toEqual([1]);
-    expect(toastServiceSpy.show).toHaveBeenCalledWith('Added to wishlist', 'success');
-    expect(localStorage.getItem('wishlist')).toBe('[1]');
+    expect(service.wishlist()).toEqual([{ productId: 1, variant: undefined, collection: 'All' }]);
+    expect(toastServiceSpy.success).toHaveBeenCalledWith('Added to wishlist');
+    expect(localStorage.getItem('wishlist_v2')).toContain('"productId":1');
   });
 
   it('should toggle removing a product and save to localStorage via effect', () => {
-    localStorage.setItem('wishlist', JSON.stringify([1]));
+    localStorage.setItem('wishlist_v2', JSON.stringify([{ productId: 1, collection: 'All' }]));
     service = createService(); // Will load [1]
 
     service.toggle(1); // Should remove it
     TestBed.flushEffects();
 
     expect(service.wishlist()).toEqual([]);
-    expect(toastServiceSpy.show).toHaveBeenCalledWith('Removed from wishlist', 'info');
-    expect(localStorage.getItem('wishlist')).toBe('[]');
+    expect(toastServiceSpy.info).toHaveBeenCalledWith('Removed from wishlist');
+    expect(localStorage.getItem('wishlist_v2')).toBe('[]');
   });
 
   it('should return boolean for isInWishlist', () => {

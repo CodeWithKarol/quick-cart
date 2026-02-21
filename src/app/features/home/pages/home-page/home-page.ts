@@ -11,6 +11,10 @@ import { HomePhilosophyComponent } from '../../components/home-philosophy/home-p
 import { HomeFeaturesComponent } from '../../components/home-features/home-features.component';
 import { HomeFeaturedProductsComponent } from '../../components/home-featured-products/home-featured-products.component';
 import { HomeNewsletterComponent } from '../../components/home-newsletter/home-newsletter.component';
+import { HomeCategoriesComponent } from '../../components/home-categories/home-categories.component';
+import { HomeTestimonialsComponent } from '../../components/home-testimonials/home-testimonials.component';
+import { HomeRecentlyViewedComponent } from '../../components/home-recently-viewed/home-recently-viewed.component';
+import { HomeFaqComponent } from '../../components/home-faq/home-faq.component';
 
 @Component({
   selector: 'app-home-page',
@@ -22,6 +26,10 @@ import { HomeNewsletterComponent } from '../../components/home-newsletter/home-n
     HomeFeaturesComponent,
     HomeFeaturedProductsComponent,
     HomeNewsletterComponent,
+    HomeCategoriesComponent,
+    HomeTestimonialsComponent,
+    HomeRecentlyViewedComponent,
+    HomeFaqComponent,
   ],
   templateUrl: './home-page.html',
   styleUrl: './home-page.css',

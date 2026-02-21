@@ -7,7 +7,7 @@
     priority
     class="absolute inset-0 -z-10 h-full w-full object-cover opacity-80"
   />
-  
+
   <!-- Gradient Overlay -->
   <div
     class="absolute inset-0 -z-10 bg-gradient-to-r from-black/60 via-black/30 to-transparent"
@@ -17,22 +17,36 @@
   <div class="mx-auto max-w-7xl px-6 lg:px-8 h-full flex items-center">
     <div class="max-w-2xl animate-fade-in-up">
       <div class="border-l-4 border-secondary-400 pl-6 md:pl-8">
-        <h1 class="text-5xl font-bold tracking-tight text-secondary-50 sm:text-7xl font-display leading-tight">
-          curated <br/> <span class="italic text-secondary-200">living.</span>
+        <h1
+          class="text-5xl font-bold tracking-tight text-secondary-50 sm:text-7xl font-display leading-tight"
+        >
+          curated <br />
+          <span class="italic text-secondary-200">living.</span>
         </h1>
         <p class="mt-6 text-xl leading-8 text-secondary-100 font-light max-w-lg">
-          Embrace the art of slow living with our collection of ethically crafted, timeless home essentials.
+          Embrace the art of slow living with our collection of ethically crafted, timeless home
+          essentials.
         </p>
       </div>
-      
-      <div class="mt-10 flex items-center gap-x-8 pl-8">
+
+      <div
+        class="mt-10 flex flex-col sm:flex-row items-start sm:items-center gap-y-6 sm:gap-x-8 pl-8"
+      >
         <a
           routerLink="/shop"
           class="group text-sm font-semibold leading-6 text-white border-b border-secondary-400 pb-1 hover:border-white transition-colors duration-300"
         >
-          View Collection <span aria-hidden="true" class="group-hover:translate-x-1 inline-block transition-transform duration-300">→</span>
+          View Collection
+          <span
+            aria-hidden="true"
+            class="group-hover:translate-x-1 inline-block transition-transform duration-300"
+            >→</span
+          >
         </a>
-        <a routerLink="/about" class="text-sm font-semibold leading-6 text-secondary-300 hover:text-white transition-colors">
+        <a
+          routerLink="/about"
+          class="text-sm font-semibold leading-6 text-secondary-300 hover:text-white transition-colors"
+        >
           The Philosophy
         </a>
       </div>
@@ -41,6 +55,13 @@
 
   <!-- Scroll Indicator -->
   <div class="absolute bottom-10 left-1/2 -translate-x-1/2 text-white/50 animate-bounce">
-    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M19 14l-7 7m0 0l-7-7m7 7V3"
+      ></path>
+    </svg>
   </div>
 </div>

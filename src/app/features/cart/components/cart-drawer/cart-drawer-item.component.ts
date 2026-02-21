@@ -41,13 +41,55 @@ import { CartItem } from '../../models/cart-item';
           </p>
         </div>
         <div class="flex flex-1 items-end justify-between text-sm">
-          <p class="text-primary-500 font-light">Qty {{ item().quantity }}</p>
+          <div class="flex items-center border border-primary-200 rounded-md bg-white">
+            <button
+              type="button"
+              (click)="onUpdateQuantity(item().quantity - 1)"
+              [disabled]="item().quantity <= 1"
+              class="p-1 px-2 text-primary-400 hover:text-primary-900 disabled:opacity-30 transition-colors"
+            >
+              <span class="sr-only">Decrease quantity</span>
+              <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M20 12H4"
+                />
+              </svg>
+            </button>
+            <span class="px-1 text-xs font-medium text-primary-900 min-w-[24px] text-center">
+              {{ item().quantity }}
+            </span>
+            <button
+              type="button"
+              (click)="onUpdateQuantity(item().quantity + 1)"
+              class="p-1 px-2 text-primary-400 hover:text-primary-900 transition-colors"
+            >
+              <span class="sr-only">Increase quantity</span>
+              <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 4v16m8-8H4"
+                />
+              </svg>
+            </button>
+          </div>
 
-          <div class="flex">
+          <div class="flex space-x-4">
+            <button
+              type="button"
+              (click)="onSaveForLater()"
+              class="font-medium text-primary-500 hover:text-primary-900 transition-colors text-[10px] uppercase tracking-wider"
+            >
+              Save for later
+            </button>
             <button
               type="button"
               (click)="onRemove()"
-              class="font-medium text-primary-900 hover:text-accent-600 transition-colors text-xs uppercase tracking-widest"
+              class="font-medium text-primary-900 hover:text-accent-600 transition-colors text-[10px] uppercase tracking-wider"
             >
               Remove
             </button>
@@ -60,8 +102,18 @@ import { CartItem } from '../../models/cart-item';
 export class CartDrawerItemComponent {
   item = input.required<CartItem>();
   priority = input<boolean>(false);
+  quantityChange = output<number>();
+  saveForLater = output<void>();
   remove = output<void>();
   navigate = output<void>();
+
+  onUpdateQuantity(newQuantity: number) {
+    this.quantityChange.emit(newQuantity);
+  }
+
+  onSaveForLater() {
+    this.saveForLater.emit();
+  }
 
   onRemove() {
     this.remove.emit();
